@@ -238,9 +238,7 @@
     <ClInclude Include="include\impl\CharacterBodyNewton.h" />
     <ClInclude Include="include\impl\CollideShapeNewton.h" />
     <ClInclude Include="include\impl\FrameBufferGL.h" />
-    <ClInclude Include="include\impl\GamepadSDL.h" />
     <ClInclude Include="include\impl\GamepadSDL2.h" />
-    <ClInclude Include="include\impl\GamepadXInput.h" />
     <ClInclude Include="include\impl\GLSLProgram.h" />
     <ClInclude Include="include\impl\GLSLShader.h" />
     <ClInclude Include="include\impl\KeyboardSDL.h" />
@@ -254,7 +252,6 @@
     <ClInclude Include="include\impl\MeshLoaderMSH.h" />
     <ClInclude Include="include\impl\MouseSDL.h" />
     <ClInclude Include="include\impl\MutexSDL.h" />
-    <ClInclude Include="include\impl\MutexWin32.h" />
     <ClInclude Include="include\impl\OcclusionQueryOGL.h" />
     <ClInclude Include="include\impl\OpenALSoundChannel.h" />
     <ClInclude Include="include\impl\OpenALSoundData.h" />
@@ -279,7 +276,6 @@
     <ClInclude Include="include\impl\SqScript.h" />
     <ClInclude Include="include\impl\TaskKeyHook.h" />
     <ClInclude Include="include\impl\ThreadSDL.h" />
-    <ClInclude Include="include\impl\ThreadWin32.h" />
     <ClInclude Include="include\impl\TimerSDL.h" />
     <ClInclude Include="include\impl\tinyXML\tinystr.h" />
     <ClInclude Include="include\impl\tinyXML\tinyxml.h" />
@@ -541,9 +537,7 @@
     <ClCompile Include="sources\impl\CharacterBodyNewton.cpp" />
     <ClCompile Include="sources\impl\CollideShapeNewton.cpp" />
     <ClCompile Include="sources\impl\FrameBufferGL.cpp" />
-    <ClCompile Include="sources\impl\GamepadSDL.cpp" />
     <ClCompile Include="sources\impl\GamepadSDL2.cpp" />
-    <ClCompile Include="sources\impl\GamepadXInput.cpp" />
     <ClCompile Include="sources\impl\GLSLProgram.cpp" />
     <ClCompile Include="sources\impl\GLSLShader.cpp" />
     <ClCompile Include="sources\impl\KeyboardSDL.cpp" />
@@ -559,7 +553,6 @@
     <ClCompile Include="sources\impl\MeshLoaderMSH.cpp" />
     <ClCompile Include="sources\impl\MouseSDL.cpp" />
     <ClCompile Include="sources\impl\MutexSDL.cpp" />
-    <ClCompile Include="sources\impl\MutexWin32.cpp" />
     <ClCompile Include="sources\impl\OcclusionQueryOGL.cpp" />
     <ClCompile Include="sources\impl\OpenALSoundChannel.cpp" />
     <ClCompile Include="sources\impl\OpenALSoundData.cpp" />
@@ -585,7 +578,6 @@
     <ClCompile Include="sources\impl\SDLTexture.cpp" />
     <ClCompile Include="sources\impl\SqScript.cpp" />
     <ClCompile Include="sources\impl\ThreadSDL.cpp" />
-    <ClCompile Include="sources\impl\ThreadWin32.cpp" />
     <ClCompile Include="sources\impl\TimerSDL.cpp" />
     <ClCompile Include="sources\impl\tinyXml\tinystr.cpp" />
     <ClCompile Include="sources\impl\tinyXml\tinyxml.cpp" />

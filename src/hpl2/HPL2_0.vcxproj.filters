@@ -564,16 +564,10 @@
     <ClInclude Include="include\impl\LowLevelSystemSDL.h">
       <Filter>Impl\System</Filter>
     </ClInclude>
-    <ClInclude Include="include\impl\MutexWin32.h">
-      <Filter>Impl\System</Filter>
-    </ClInclude>
     <ClInclude Include="include\impl\scripthelper.h">
       <Filter>Impl\System</Filter>
     </ClInclude>
     <ClInclude Include="include\impl\SqScript.h">
-      <Filter>Impl\System</Filter>
-    </ClInclude>
-    <ClInclude Include="include\impl\ThreadWin32.h">
       <Filter>Impl\System</Filter>
     </ClInclude>
     <ClInclude Include="include\impl\TimerSDL.h">
@@ -941,9 +935,7 @@
     <ClInclude Include="..\..\deps\include\OpenAL\OAL_Stream.h" />
     <ClInclude Include="..\..\deps\include\OpenAL\OAL_Types.h" />
     <ClInclude Include="..\..\deps\include\OpenAL\OAL_WAVSample.h" />
-    <ClInclude Include="include\impl\GamepadSDL.h" />
     <ClInclude Include="include\impl\GamepadSDL2.h" />
-    <ClInclude Include="include\impl\GamepadXInput.h" />
     <ClInclude Include="include\impl\MutexSDL.h" />
     <ClInclude Include="include\impl\scriptarray.h" />
     <ClInclude Include="include\impl\scriptstdstring.h" />
@@ -1380,19 +1372,10 @@
     <ClCompile Include="sources\impl\LowLevelSystemSDL.cpp">
       <Filter>Impl\System</Filter>
     </ClCompile>
-    <ClCompile Include="sources\impl\MutexWin32.cpp">
-      <Filter>Impl\System</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\impl\PlatformWin32.cpp">
-      <Filter>Impl\System</Filter>
-    </ClCompile>
     <ClCompile Include="sources\impl\scripthelper.cpp">
       <Filter>Impl\System</Filter>
     </ClCompile>
     <ClCompile Include="sources\impl\SqScript.cpp">
-      <Filter>Impl\System</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\impl\ThreadWin32.cpp">
       <Filter>Impl\System</Filter>
     </ClCompile>
     <ClCompile Include="sources\impl\TimerSDL.cpp">
@@ -1713,13 +1696,12 @@
     <ClCompile Include="sources\impl\scriptarray.cpp" />
     <ClCompile Include="sources\impl\MutexSDL.cpp" />
     <ClCompile Include="sources\impl\GamepadSDL2.cpp" />
-    <ClCompile Include="sources\impl\GamepadXInput.cpp" />
-    <ClCompile Include="sources\impl\GamepadSDL.cpp" />
     <ClCompile Include="sources\input\ActionGamepadAxis.cpp" />
     <ClCompile Include="sources\input\ActionGamepadButton.cpp" />
     <ClCompile Include="sources\input\ActionGamepadHat.cpp" />
     <ClCompile Include="sources\input\Gamepad.cpp" />
     <ClCompile Include="sources\graphics\PostEffect_ColorGrading.cpp" />
     <ClCompile Include="sources\gui\GuiPopUpUIKeyboard.cpp" />
+    <ClCompile Include="sources\impl\PlatformWin32.cpp" />
   </ItemGroup>
 </Project>

@@ -35,21 +35,12 @@
 #include "impl/LowLevelResourcesSDL.h"
 #include "impl/LowLevelSystemSDL.h"
 #include "impl/LowLevelInputSDL.h"
-#include "impl/LowLevelSoundFmod.h"
 #include "impl/LowLevelSoundOpenAL.h"
 #include "impl/LowLevelPhysicsNewton.h"
 
-#ifdef INCLUDE_HAPTIC 
-	#include "impl/LowLevelHapticHaptX.h"
-#endif
-
-#if USE_SDL2
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_syswm.h"
-#else
-#include "SDL/SDL.h"
-#include "SDL/SDL_syswm.h"
-#endif
+
 #ifdef WIN32
 #include "Windows.h"
 #include "Dbt.h"
@@ -65,44 +56,14 @@ namespace hpl {
 
 	cSDLEngineSetup::cSDLEngineSetup(tFlag alHplSetupFlags)
 	{
-#if SDL_VERSION_ATLEAST(2,0,0)
 		SDL_SetHint(SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES, "0");
-#endif
 		if(alHplSetupFlags & (eHplSetup_Screen | eHplSetup_Video))
 		{
 			if(SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0) {
 				FatalError("Error Initializing Display: %s",SDL_GetError()); 
 				exit(1);
 			}
-#if SDL_VERSION_ATLEAST(2,0,0)
             SDL_DisableScreenSaver();
-#elif defined WIN32 // only on SDL1.2
-			// Set up device notifications!
-			// This is bad, cos it is actually Windows specific code, should not be here. TODO: move it, obviously
-			SDL_SysWMinfo info;
-			SDL_VERSION(&info.version);
-			if(SDL_GetWMInfo(&info))
-			{
-				DEV_BROADCAST_DEVICEINTERFACE notificationFilter;
-				ZeroMemory(&notificationFilter, sizeof(notificationFilter));
- 
-				// set up filtering, so we only get notified of input device changes
-				notificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
-				static const GUID GuidDevInterfaceHID = {0x745a17a0, 0x74d3, 0x11d0,
-															{ 0xb6, 0xfe, 0x00, 0xa0, 0xc9, 0x0f, 0x57, 0xda }};
-				notificationFilter.dbcc_classguid = GuidDevInterfaceHID;
-
-				notificationFilter.dbcc_size = sizeof(notificationFilter);
- 
-				HDEVNOTIFY hDevNotify;
-				hDevNotify = RegisterDeviceNotification(info.window, &notificationFilter,
-					DEVICE_NOTIFY_WINDOW_HANDLE |
-					DEVICE_NOTIFY_ALL_INTERFACE_CLASSES);
- 
-				if(hDevNotify == NULL) {
-				}
-			}
-#endif // WIN32
 		}
 		else
 		{
@@ -162,13 +123,8 @@ namespace hpl {
 		Log("  Graphics\n");
 		hplDelete(mpLowLevelGraphics);
 		Log("  Haptic\n");
-#ifdef INCLUDE_HAPTIC 	
-		hplDelete(mpLowLevelHaptic);
-#endif
 
-#if SDL_VERSION_ATLEAST(2,0,0)
         SDL_EnableScreenSaver();
-#endif
 		SDL_Quit();
 	}
 

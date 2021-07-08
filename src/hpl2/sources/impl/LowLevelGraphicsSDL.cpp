@@ -23,7 +23,6 @@
 //#pragma comment(lib, "GLaux.lib")
 #pragma comment(lib, "Cg.lib")
 #pragma comment(lib, "CgGL.lib")
-#pragma comment(lib, "SDL_ttf.lib")
 #pragma comment(lib, "TaskKeyHook.lib")
 #endif
 
@@ -37,8 +36,6 @@
 #include "impl/LowLevelGraphicsSDL.h"
 #include "impl/SDLFontData.h"
 #include "impl/SDLTexture.h"
-//#include "impl/CGShader.h"
-//#include "impl/CGProgram.h"
 #include "impl/GLSLShader.h"
 #include "impl/GLSLProgram.h"
 #include "impl/VertexBufferOGL_Array.h"
@@ -52,11 +49,7 @@
 #include <OpenGL/OpenGL.h>
 #endif
 
-#if USE_SDL2
 #include "SDL2/SDL_syswm.h"
-#else
-#include "SDL/SDL_syswm.h"
-#endif
 
 #ifdef WIN32
 #include "impl/TaskKeyHook.h"
@@ -135,13 +128,6 @@ namespace hpl {
 		//	if(mhKeyTrapper) FreeLibrary(mhKeyTrapper);
 		//#endif
 
-		if(mbInitHasBeenRun)
-		{
-#if !SDL_VERSION_ATLEAST(2, 0, 0)
-			SDL_SetGammaRamp(mvStartGammaArray[0],mvStartGammaArray[1],mvStartGammaArray[2]);
-#endif
-		}
-
 		hplFree(mpVertexArray);
 		hplFree(mpIndexArray);
 		for(int i=0;i<kMaxTextureUnits;i++)	hplFree(mpTexCoordArray[i]);
@@ -151,9 +137,7 @@ namespace hpl {
 		ExitCG();
 #endif
 		//TTF_Quit();
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         SDL_DestroyWindow(mpScreen);
-#endif
 	}
 
 	//-----------------------------------------------------------------------
@@ -213,7 +197,6 @@ namespace hpl {
 			}
 		}
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         unsigned int mlFlags = SDL_WINDOW_OPENGL;
         if (alWidth == 0 && alHeight == 0) {
             mvScreenSize = cVector2l(800,600);
@@ -254,57 +237,7 @@ namespace hpl {
             mvScreenSize = cVector2l(w, h);
         }
         mGLContext = SDL_GL_CreateContext(mpScreen);
-#else
-		unsigned int mlFlags = SDL_OPENGL;
-
-		if(abFullscreen) mlFlags |= SDL_FULLSCREEN;
-
-		// If caption set before engine creation, no chance for the "SDL_App" to appear for even a msec
-		SetWindowCaption(asWindowCaption);
-
-		Log(" Setting video mode: %d x %d - %d bpp\n",alWidth, alHeight, alBpp);
-		mpScreen = SDL_SetVideoMode( alWidth, alHeight, alBpp, mlFlags);
-		if(mpScreen==NULL){
-			Error("Could not set display mode setting a lower one!\n");
-			mvScreenSize = cVector2l(640,480);
-
-			mpScreen = SDL_SetVideoMode( mvScreenSize.x, mvScreenSize.y, alBpp, mlFlags);
-			if(mpScreen==NULL)
-			{
-				FatalError("Unable to initialize display!\n");
-				return false;
-			}
-			else
-			{
-				//SetWindowCaption(asWindowCaption);
-				cPlatform::CreateMessageBox(_W("Warning!"),_W("Could not set displaymode and 640x480 is used instead!\n"));
-			}
-		}
-		else
-		{
-			//SetWindowCaption(asWindowCaption);
-		}
-        // update with the screen size ACTUALLY obtained
-        mvScreenSize = cVector2l(mpScreen->w, mpScreen->h);
-#   ifdef WIN32
-		//////////////////////////////
-		// Set up window position
-		if(abFullscreen==false)
-		{
-			SDL_SysWMinfo pInfo;
-			SDL_VERSION(&pInfo.version);
-			SDL_GetWMInfo(&pInfo);
-            
-			RECT r;
-			GetWindowRect(pInfo.window, &r);
-			
-			if(avWindowPos.x >=0 && avWindowPos.y >=0)
-			{
-				SetWindowPos(pInfo.window, HWND_TOP, avWindowPos.x, avWindowPos.y, 0, 0,  SWP_NOSIZE);
-			}
-		}
-#   endif
-#endif
+		
         if (mbGrab) {
             SetWindowGrab(true);
         }
@@ -328,12 +261,6 @@ namespace hpl {
 			Error(" Couldn't init glew!\n");
 		}
 
-		///Setup up windows specifc context:
-#if defined(WIN32) && !SDL_VERSION_ATLEAST(2,0,0)
-		mGLContext = wglGetCurrentContext();
-		mDeviceContext = wglGetCurrentDC();
-#endif
-
 		//Check Multisample properties
 		CheckMultisampleCaps();
 
@@ -342,24 +269,13 @@ namespace hpl {
 
 		//Gamma
 		mfGammaCorrection = 1.0f;
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         SDL_SetWindowBrightness(mpScreen, mfGammaCorrection);
-#else
-		SDL_GetGammaRamp(mvStartGammaArray[0],mvStartGammaArray[1],mvStartGammaArray[2]);
-
-		SDL_SetGamma(mfGammaCorrection,mfGammaCorrection,mfGammaCorrection);
-#endif
 
 		//GL
 		Log(" Setting up OpenGL\n");
 		SetupGL();
-
-#if SDL_VERSION_ATLEAST(2, 0, 0)
+		
         SDL_GL_SwapWindow(mpScreen);
-#else
-		//Set the clear color
-		SDL_GL_SwapBuffers();
-#endif
 
 		mbInitHasBeenRun = true;
 
@@ -639,86 +555,41 @@ namespace hpl {
     void cLowLevelGraphicsSDL::SetWindowGrab(bool abX)
     {
         mbGrab = abX;
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         if (mpScreen) {
             SDL_SetWindowGrab(mpScreen, abX ? SDL_TRUE : SDL_FALSE);
         }
-#else
-		SDL_WM_GrabInput(abX ? SDL_GRAB_ON : SDL_GRAB_OFF);
-#endif
     }
 
 	void cLowLevelGraphicsSDL::SetRelativeMouse(bool abX)
 	{
-#if SDL_VERSION_ATLEAST(2, 0, 0)
 		SDL_SetRelativeMouseMode(abX ? SDL_TRUE : SDL_FALSE);
-#endif
 	}
 
     void cLowLevelGraphicsSDL::SetWindowCaption(const tString &asName)
     {
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         SDL_SetWindowTitle(mpScreen, asName.c_str());
-#else
-        SDL_WM_SetCaption(asName.c_str(), "");
-#endif
     }
 
     bool cLowLevelGraphicsSDL::GetWindowMouseFocus()
     {
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         return (SDL_GetWindowFlags(mpScreen) & SDL_WINDOW_MOUSE_FOCUS) != 0;
-#else
-        return (SDL_GetAppState() & SDL_APPMOUSEFOCUS) !=0;
-#endif
     }
 
     bool cLowLevelGraphicsSDL::GetWindowInputFocus()
     {
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         return (SDL_GetWindowFlags(mpScreen) & SDL_WINDOW_INPUT_FOCUS) != 0;
-#else
-        return (SDL_GetAppState() & SDL_APPINPUTFOCUS) !=0;
-#endif
     }
 
     bool cLowLevelGraphicsSDL::GetWindowIsVisible()
     {
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         return (SDL_GetWindowFlags(mpScreen) & SDL_WINDOW_SHOWN) != 0;
-#else
-        return (SDL_GetAppState() & SDL_APPACTIVE) !=0;
-#endif
     }
 
 	//-----------------------------------------------------------------------
 
 	void cLowLevelGraphicsSDL::SetVsyncActive(bool abX, bool abAdaptive)
 	{
-        ;
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         SDL_GL_SetSwapInterval(abX ? (abAdaptive ? -1 : 1) : 0);
-#elif defined(WIN32)
-		if(WGLEW_EXT_swap_control)
-		{
-			wglSwapIntervalEXT(abX ? (abAdaptive ? -1 : 1) : 0);
-		}
-#elif defined(__linux__)
-		if (GLX_SGI_swap_control)
-		{
-			GLXSWAPINTERVALPROC glXSwapInterval = (GLXSWAPINTERVALPROC)glXGetProcAddress((GLubyte*)"glXSwapIntervalSGI");
-			glXSwapInterval(abX ? (abAdaptive ? -1 : 1) : 0);
-		}
-		else if (GLX_MESA_swap_control)
-		{
-			GLXSWAPINTERVALPROC glXSwapInterval = (GLXSWAPINTERVALPROC)glXGetProcAddress((GLubyte*)"glXSwapIntervalMESA");
-			glXSwapInterval(abX ? (abAdaptive ? -1 : 1) : 0);
-		}
-#elif defined(__APPLE__)
-		CGLContextObj ctx = CGLGetCurrentContext();
-		GLint swap = abX ? 1 : 0;
-		CGLSetParameter(ctx, kCGLCPSwapInterval, &swap);
-#endif
 	}
 
 	//-----------------------------------------------------------------------
@@ -742,11 +613,7 @@ namespace hpl {
 		;
 
 		mfGammaCorrection = afX;
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         SDL_SetWindowBrightness(mpScreen, mfGammaCorrection);
-#else
-		SDL_SetGamma(mfGammaCorrection,mfGammaCorrection,mfGammaCorrection);
-#endif
 	}
 
 	float cLowLevelGraphicsSDL::GetGammaCorrection()
@@ -1077,12 +944,7 @@ namespace hpl {
 
 	void cLowLevelGraphicsSDL::SwapBuffers()
 	{
-		;
-#if SDL_VERSION_ATLEAST(2, 0, 0)
         SDL_GL_SwapWindow(mpScreen);
-#else
-		SDL_GL_SwapBuffers();
-#endif
 	}
 
 	//-----------------------------------------------------------------------

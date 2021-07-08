@@ -55,11 +55,7 @@ namespace hpl {
 		iLowLevelGraphics *mpLowLevelGraphics;
 		iLowLevelInput *mpLowLevelInput;
 		iLowLevelResources *mpLowLevelResources;
-//		#ifdef WIN32
-//			cLowLevelSoundFmod* mpLowLevelSound;
-//		#else
-			iLowLevelSound*	mpLowLevelSound;
-//		#endif
+		iLowLevelSound*	mpLowLevelSound;
 		iLowLevelPhysics* mpLowLevelPhysics;
 		iLowLevelHaptic* mpLowLevelHaptic;
 	};
