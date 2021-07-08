@@ -666,6 +666,7 @@
     <ClInclude Include="LuxAchievementHandler.h">
       <Filter>original</Filter>
     </ClInclude>
+    <ClInclude Include="LuxBasePersonal.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="pigs">
@@ -683,7 +684,6 @@
       <Filter>original</Filter>
     </None>
     <None Include="ClassDiagram1.cd" />
-    <None Include="..\..\..\ExeIcon\256x256\FG_AAMFP_exeIcon_256x256_mandusBorder.png" />
     <None Include="aamfp.ico" />
   </ItemGroup>
   <ItemGroup>

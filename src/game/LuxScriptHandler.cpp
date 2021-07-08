@@ -405,8 +405,21 @@ iLuxEntity* cLuxScriptHandler::GetEntity(const tString& asName, eLuxEntityType a
 
 //-----------------------------------------------------------------------
 
+void __stdcall GiveSanityBoostSmall() {
+}
+
+void __stdcall GiveSanityDamage(const unsigned int blah, const bool bleh) {
+}
+
+void __stdcall CheckPoint(const string& s1, const string& s2, const string& s3, const string& s4, const string& s5) {
+}
+
 void cLuxScriptHandler::InitScriptFunctions()
 {
+	AddFunc("void GiveSanityBoostSmall()", (void*)GiveSanityBoostSmall);
+	AddFunc("void GiveSanityDamage(const uint blah, const bool bleh)", (void*)GiveSanityDamage);
+	AddFunc("void CheckPoint(string &in asString1, string &in asString2, string &in asString3, string &in asString4, string &in asString5)", (void*)CheckPoint);
+
 	AddFunc("void Print(string &in asString)", (void *)Print);
 	AddFunc("void AddDebugMessage(string &in asString, bool abCheckForDuplicates)",(void *)AddDebugMessage);
 	AddFunc("void ProgLog(string &in asLevel, string &in asMessage)", (void *)ProgLog);

@@ -270,6 +270,7 @@
     <ClInclude Include="LuxAnimatedProp.h" />
     <ClInclude Include="LuxArea_ColorGrading.h" />
     <ClInclude Include="LuxBase.h" />
+    <ClInclude Include="LuxBasePersonal.h" />
     <ClInclude Include="LuxConfigHandler.h" />
     <ClInclude Include="LuxEnemy_Child.h" />
     <ClInclude Include="LuxEnemy_ManPig.h" />
@@ -379,7 +380,6 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\ExeIcon\256x256\FG_AAMFP_exeIcon_256x256_mandusBorder.png" />
     <None Include="aamfp.ico" />
     <None Include="ClassDiagram1.cd" />
     <None Include="Lux.ico" />
