@@ -1,17 +1,11 @@
 Amnesia: A Machine For Pigs Source Code
 =======================
+heya!! this is my fork of Amnesia: A Machine For Pigs and its HPL 2 engine.
 
-Currently the engine uses fbx sdk 2012 which isn't avalable anymore which means the engine wont compile. If you want to give a shot anyway you can find the sdk here:
-https://www.autodesk.com/fbx
+I'm still setting things here up.. my long-term goals are to upgrade the game engine to use more modern libraries, have Vulkan instead of OpenGL for rendering, and doing a bunch of optimization in general.
 
-
-Other than that, here is almost everything you need to build  Amnesia: A Machine For Pigs. Included are project files for Visual Studio 2010 and CMake for Linux & macOS.
-
-Contributing Code
------------------
-We encourage everyone to contribute code to this project, so just sign up for a github account, create a fork and hack away at the codebase.
+If you use this fork of the code, be sure to change the working directory to *your* install of Amnesia, because mine is at a weird path that yours probably won't be at!
 
 License Information
 -------------------
 All code is under the GPL Version 3 license. Read the LICENSE file for terms of use of the license.
-
