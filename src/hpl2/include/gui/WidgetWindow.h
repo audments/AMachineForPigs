@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -27,92 +27,89 @@
 
 namespace hpl {
 
-	class cGuiSkinFont;
-	class cWidgetButton;
+class cGuiSkinFont;
+class cWidgetButton;
 
+class cWidgetWindow : public iWidget {
+  public:
+    cWidgetWindow(cGuiSet *apSet, cGuiSkin *apSkin, tWidgetWindowButtonFlag alFlags = 0);
+    virtual ~cWidgetWindow();
 
-	class cWidgetWindow : public iWidget
-	{
-	public:
-		cWidgetWindow(cGuiSet *apSet, cGuiSkin *apSkin, tWidgetWindowButtonFlag alFlags = 0);
-		virtual ~cWidgetWindow();
+    void SetStatic(bool abX);
+    bool GetStatic() { return mbStatic; }
 
-		void SetStatic(bool abX);
-		bool GetStatic(){return mbStatic;}
+    void SetDrawLabel(bool abX);
 
-		void SetDrawLabel(bool abX);
-		
-		void SetCloseButtonDisablesWindow(bool abX){mbCloseButtonDisablesWindow = abX;}
-		bool GetCloseButtonDisablesWindow(){ return mbCloseButtonDisablesWindow;}
+    void SetCloseButtonDisablesWindow(bool abX) { mbCloseButtonDisablesWindow = abX; }
+    bool GetCloseButtonDisablesWindow() { return mbCloseButtonDisablesWindow; }
 
-		void SetEscapeKeyClosesWindow(bool abX) { mbCloseOnEscapeKey = abX; }
-		bool GetEscapeKeyClosesWindow() { return mbCloseOnEscapeKey; }
-		
-	protected:
+    void SetEscapeKeyClosesWindow(bool abX) { mbCloseOnEscapeKey = abX; }
+    bool GetEscapeKeyClosesWindow() { return mbCloseOnEscapeKey; }
 
-		/////////////////////////
-		// Window Button Callbacks
-		bool ButtonPressed(iWidget* apWidget, const cGuiMessageData& aData);
-		kGuiCallbackDeclarationEnd(ButtonPressed);
+  protected:
+    /////////////////////////
+    // Window Button Callbacks
+    bool ButtonPressed(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(ButtonPressed);
 
-		/////////////////////////
-		// Implemented functions
-		void OnInit();
-		void OnLoadGraphics();
-		void OnAttachChild(iWidget *apChild);
+    /////////////////////////
+    // Implemented functions
+    void OnInit();
+    void OnLoadGraphics();
+    void OnAttachChild(iWidget *apChild);
 
-		void OnChangeSize();
-		
-		void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
+    void OnChangeSize();
 
-		bool OnMouseMove(const cGuiMessageData& aData);
-		bool OnMouseDown(const cGuiMessageData& aData);
-		bool OnMouseUp(const cGuiMessageData& aData);
-		bool OnMouseEnter(const cGuiMessageData& aData);
-		bool OnMouseLeave(const cGuiMessageData& aData);
+    void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
 
-		bool OnKeyPress(const cGuiMessageData& aData);
+    bool OnMouseMove(const cGuiMessageData &aData);
+    bool OnMouseDown(const cGuiMessageData &aData);
+    bool OnMouseUp(const cGuiMessageData &aData);
+    bool OnMouseEnter(const cGuiMessageData &aData);
+    bool OnMouseLeave(const cGuiMessageData &aData);
 
-		bool OnGotFocus(const cGuiMessageData& aData);
-		bool OnLostFocus(const cGuiMessageData& aData);
+    bool OnKeyPress(const cGuiMessageData &aData);
 
-		void OnChildGotFocus(iWidget* apChild, const cGuiMessageData& aData);
-		void OnChildLostFocus(iWidget* apChild, const cGuiMessageData& aData);
+    bool OnGotFocus(const cGuiMessageData &aData);
+    bool OnLostFocus(const cGuiMessageData &aData);
 
-		/////////////////////////
-		// Data
-		cGuiSkinFont *mpLabelFont;
+    void OnChildGotFocus(iWidget *apChild, const cGuiMessageData &aData);
+    void OnChildLostFocus(iWidget *apChild, const cGuiMessageData &aData);
 
-		cWidgetButton* mvButtons[1];
+    /////////////////////////
+    // Data
+    cGuiSkinFont *mpLabelFont;
 
-		cGuiGfxElement *mpGfxBackground;
-		cGuiGfxElement *mpGfxLabel;
+    cWidgetButton *mvButtons[1];
 
-		cGuiGfxElement *mvGfxBorders[4];
-		cGuiGfxElement *mvGfxCorners[4];
+    cGuiGfxElement *mpGfxBackground;
+    cGuiGfxElement *mpGfxLabel;
 
-		cGuiGfxElement *mpGfxButtonCross;
+    cGuiGfxElement *mvGfxBorders[4];
+    cGuiGfxElement *mvGfxCorners[4];
 
-		cVector3f mvLabelTextOffset;
+    cGuiGfxElement *mpGfxButtonCross;
 
-		tWidgetWindowButtonFlag mlFlags;
+    cVector3f mvLabelTextOffset;
 
-		bool mbStatic;
-		bool mbCloseButtonDisablesWindow;
-		bool mbCloseOnEscapeKey;
+    tWidgetWindowButtonFlag mlFlags;
 
-		bool mbDrawLabel;
-		bool mbFocused;
+    bool mbStatic;
+    bool mbCloseButtonDisablesWindow;
+    bool mbCloseOnEscapeKey;
 
-		cVector3f mvRelMousePos;
-		bool mbMoving;
-		iWidget* mpPrevAttention;
-		cWidgetWindow* mpPrevTopMostWindow;
+    bool mbDrawLabel;
+    bool mbFocused;
 
-		float mfButtonSize;
+    cVector3f mvRelMousePos;
+    bool mbMoving;
+    iWidget *mpPrevAttention;
+    cWidgetWindow *mpPrevTopMostWindow;
 
-		bool mbDrawBordersOutside;
-	};
+    float mfButtonSize;
 
+    bool mbDrawBordersOutside;
 };
+
+};     // namespace hpl
 #endif // HPL_WIDGET_H

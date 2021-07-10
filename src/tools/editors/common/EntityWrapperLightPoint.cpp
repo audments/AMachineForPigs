@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,8 +20,8 @@
 #include "EntityWrapperLightPoint.h"
 #include "EntityWrapperLight.h"
 
-#include "EditorWorld.h"
 #include "EditorBaseClasses.h"
+#include "EditorWorld.h"
 
 #include "EditorWindowViewport.h"
 
@@ -29,40 +29,35 @@
 
 //---------------------------------------------------------------------------
 
-cIconEntityLightPoint::cIconEntityLightPoint(iEntityWrapper* apParent) : iIconEntityLight(apParent, "Point")
-{
+cIconEntityLightPoint::cIconEntityLightPoint(iEntityWrapper *apParent) : iIconEntityLight(apParent, "Point") {}
+
+bool cIconEntityLightPoint::Create(const tString &asName) {
+    cWorld *pWorld = mpParent->GetEditorWorld()->GetWorld();
+    mpEntity = pWorld->CreateLightPoint(asName);
+
+    return true;
 }
 
-bool cIconEntityLightPoint::Create(const tString& asName)
-{
-	cWorld* pWorld = mpParent->GetEditorWorld()->GetWorld();
-	mpEntity = pWorld->CreateLightPoint(asName);
-
-	return true;
+cEntityWrapperTypeLightPoint::cEntityWrapperTypeLightPoint()
+    : iEntityWrapperTypeLight("PointLight", eEditorEntityLightType_Point) {
+    mScaleType = eScaleType_None;
 }
 
-cEntityWrapperTypeLightPoint::cEntityWrapperTypeLightPoint() : iEntityWrapperTypeLight("PointLight", eEditorEntityLightType_Point)
-{
-	mScaleType = eScaleType_None;
-}
-
-iEntityWrapperData* cEntityWrapperTypeLightPoint::CreateSpecificData()
-{
-	return hplNew(cEntityWrapperDataLightPoint,(this));
+iEntityWrapperData *cEntityWrapperTypeLightPoint::CreateSpecificData() {
+    return hplNew(cEntityWrapperDataLightPoint, (this));
 }
 
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
 
-cEntityWrapperDataLightPoint::cEntityWrapperDataLightPoint(iEntityWrapperType* apType)  : iEntityWrapperDataLight(apType)
-{
-	SetName("PointLight");
+cEntityWrapperDataLightPoint::cEntityWrapperDataLightPoint(iEntityWrapperType *apType)
+    : iEntityWrapperDataLight(apType) {
+    SetName("PointLight");
 }
 
-iEntityWrapper* cEntityWrapperDataLightPoint::CreateSpecificEntity()
-{
-	return hplNew(cEntityWrapperLightPoint,(this));
+iEntityWrapper *cEntityWrapperDataLightPoint::CreateSpecificEntity() {
+    return hplNew(cEntityWrapperLightPoint, (this));
 }
 
 //---------------------------------------------------------------------------
@@ -73,23 +68,22 @@ iEntityWrapper* cEntityWrapperDataLightPoint::CreateSpecificEntity()
 
 //---------------------------------------------------------------------------
 
-cEntityWrapperLightPoint::cEntityWrapperLightPoint(iEntityWrapperData* apData) : iEntityWrapperLight(apData)/*apEditorWorld, 
-																										  alID, asName,
-																										  "LightPoint",
-																										  (iLight*)CreateEngineEntity(apEditorWorld, alID, asName),
-																										  eEditorEntityLightType_Point,
-																										  true, eScaleType_None)*/
+cEntityWrapperLightPoint::cEntityWrapperLightPoint(iEntityWrapperData *apData)
+    : iEntityWrapperLight(apData) /*apEditorWorld,
+                                alID, asName,
+                                "LightPoint",
+                                (iLight*)CreateEngineEntity(apEditorWorld, alID, asName),
+                                eEditorEntityLightType_Point,
+                                true, eScaleType_None)*/
 {
-	//mpLight = (cLightPoint*)mpEngineEntity;
+    // mpLight = (cLightPoint*)mpEngineEntity;
 
-	//SetDiffuseColor(cColor(1,1));
+    // SetDiffuseColor(cColor(1,1));
 }
 
 //---------------------------------------------------------------------------
 
-cEntityWrapperLightPoint::~cEntityWrapperLightPoint()
-{
-}
+cEntityWrapperLightPoint::~cEntityWrapperLightPoint() {}
 
 //---------------------------------------------------------------------------
 
@@ -99,29 +93,28 @@ cEntityWrapperLightPoint::~cEntityWrapperLightPoint()
 
 //---------------------------------------------------------------------------
 
-void cEntityWrapperLightPoint::SetGobo(const tString& asGoboFilename)
-{
-	cResources* pRes = GetEditorWorld()->GetEditor()->GetEngine()->GetResources();
-	
-	iTexture* pTex = NULL;
+void cEntityWrapperLightPoint::SetGobo(const tString &asGoboFilename) {
+    cResources *pRes = GetEditorWorld()->GetEditor()->GetEngine()->GetResources();
 
-	if(cEditorHelper::LoadTextureResource(eEditorTextureResourceType_CubeMap, msGoboFilename, &pTex))
-		msGoboFilename = asGoboFilename;
-	else
-		msGoboFilename = "";
+    iTexture *pTex = NULL;
 
-	((cLightPoint*)mpEngineEntity->GetEntity())->SetGoboTexture(pTex);	
+    if (cEditorHelper::LoadTextureResource(eEditorTextureResourceType_CubeMap, msGoboFilename, &pTex))
+        msGoboFilename = asGoboFilename;
+    else
+        msGoboFilename = "";
 
+    ((cLightPoint *)mpEngineEntity->GetEntity())->SetGoboTexture(pTex);
 }
 
 //---------------------------------------------------------------------------
 
-void cEntityWrapperLightPoint::DrawLightTypeSpecific(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, 
-													 iEditorEditMode* apEditMode, bool abIsSelected)
-{
-	if(abIsSelected==false) return;
-	
-	apFunctions->GetLowLevelGfx()->DrawSphere(mvPosition, mfRadius, mcolDiffuseColor);
+void cEntityWrapperLightPoint::DrawLightTypeSpecific(cEditorWindowViewport *apViewport,
+                                                     cRendererCallbackFunctions *apFunctions,
+                                                     iEditorEditMode *apEditMode, bool abIsSelected) {
+    if (abIsSelected == false)
+        return;
+
+    apFunctions->GetLowLevelGfx()->DrawSphere(mvPosition, mfRadius, mcolDiffuseColor);
 }
 
 //---------------------------------------------------------------------------
@@ -129,9 +122,9 @@ void cEntityWrapperLightPoint::DrawLightTypeSpecific(cEditorWindowViewport* apVi
 /*
 void cEntityWrapperLightPoint::SaveToElement(cXmlElement* apElement)
 {
-	apElement->SetValue("PointLight");
+    apElement->SetValue("PointLight");
 
-	cEntityWrapperLight::SaveToElement(apElement);
+    cEntityWrapperLight::SaveToElement(apElement);
 }
 */
 
@@ -143,10 +136,7 @@ void cEntityWrapperLightPoint::SaveToElement(cXmlElement* apElement)
 
 //---------------------------------------------------------------------------
 
-iEngineEntity* cEntityWrapperLightPoint::CreateSpecificEngineEntity()
-{
-	return hplNew(cIconEntityLightPoint,(this));
-}
+iEngineEntity *cEntityWrapperLightPoint::CreateSpecificEngineEntity() { return hplNew(cIconEntityLightPoint, (this)); }
 
 //---------------------------------------------------------------------------
 

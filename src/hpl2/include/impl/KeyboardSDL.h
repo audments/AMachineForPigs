@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,46 +20,45 @@
 #ifndef HPL_KEYBOARD_SDL_H
 #define HPL_KEYBOARD_SDL_H
 
-#include <vector>
-#include <list>
-#include "system/SystemTypes.h"
 #include "input/Keyboard.h"
+#include "system/SystemTypes.h"
+#include <list>
+#include <vector>
 
 namespace hpl {
 
 #define MAX_KEY_PRESSES (20)
 
-	class cLowLevelInputSDL;
-	
-	class cKeyboardSDL : public iKeyboard
-	{
-	public:
-		cKeyboardSDL(cLowLevelInputSDL *apLowLevelInputSDL);
+class cLowLevelInputSDL;
 
-		void Update();
+class cKeyboardSDL : public iKeyboard {
+  public:
+    cKeyboardSDL(cLowLevelInputSDL *apLowLevelInputSDL);
 
-		//Keyboard specific 
-		bool KeyIsDown(eKey aKey);
-		cKeyPress GetKey();
-		bool KeyIsPressed();
-		//int GetModifier();
-		bool KeyIsReleased();
-		cKeyPress GetReleasedKey();
+    void Update();
 
-	private:
-		eKey SDLToKey(int alKey);
-        void ClearKeyList();
-		eKey AsciiToKey(int alChar);
+    // Keyboard specific
+    bool KeyIsDown(eKey aKey);
+    cKeyPress GetKey();
+    bool KeyIsPressed();
+    // int GetModifier();
+    bool KeyIsReleased();
+    cKeyPress GetReleasedKey();
 
-		void AddKeyToList(int alSDLMod, eKey aKey, int alUnicode, std::list<cKeyPress>& alstKeys);
+  private:
+    eKey SDLToKey(int alKey);
+    void ClearKeyList();
+    eKey AsciiToKey(int alChar);
 
-		std::vector<bool> mvKeyArray;
-		std::list<cKeyPress> mlstKeysPressed;
-		std::list<cKeyPress> mlstKeysReleased;
+    void AddKeyToList(int alSDLMod, eKey aKey, int alUnicode, std::list<cKeyPress> &alstKeys);
 
-		cLowLevelInputSDL *mpLowLevelInputSDL;
-	};
+    std::vector<bool> mvKeyArray;
+    std::list<cKeyPress> mlstKeysPressed;
+    std::list<cKeyPress> mlstKeysReleased;
 
+    cLowLevelInputSDL *mpLowLevelInputSDL;
 };
+
+}; // namespace hpl
 
 #endif // HPL_KEYBOARD_SDL_H

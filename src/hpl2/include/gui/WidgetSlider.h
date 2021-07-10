@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -24,102 +24,100 @@
 
 namespace hpl {
 
-	class cGuiSkinFont;
+class cGuiSkinFont;
 
-	class cWidgetButton;
+class cWidgetButton;
 
-	//---------------------------------------------
+//---------------------------------------------
 
-	class cWidgetSlider : public iWidget
-	{
-	public:
-		cWidgetSlider(cGuiSet *apSet, cGuiSkin *apSkin, eWidgetSliderOrientation aOrientation);
-		virtual ~cWidgetSlider();
+class cWidgetSlider : public iWidget {
+  public:
+    cWidgetSlider(cGuiSet *apSet, cGuiSkin *apSkin, eWidgetSliderOrientation aOrientation);
+    virtual ~cWidgetSlider();
 
-		int GetValue(){ return mlValue;}
-		void SetValue(int alValue, bool abGenCallback=true);
-		
-		int GetMaxValue(){ return mlMaxValue;}
-		void SetMaxValue(int alMax);
-		
-		int GetButtonValueAdd(){ return mlButtonValueAdd; }
-		void SetButtonValueAdd(int alAdd);
+    int GetValue() { return mlValue; }
+    void SetValue(int alValue, bool abGenCallback = true);
 
-		int GetBarClickValueAdd() { return mlBarClickValueAdd; }
-		void SetBarClickValueAdd(int alAdd);
+    int GetMaxValue() { return mlMaxValue; }
+    void SetMaxValue(int alMax);
 
-		int GetBarValueSize(){ return mlBarValueSize;}
-		void SetBarValueSize(int alSize);
+    int GetButtonValueAdd() { return mlButtonValueAdd; }
+    void SetButtonValueAdd(int alAdd);
 
-		float GetButtonSize() const{return mfButtonSize;}
+    int GetBarClickValueAdd() { return mlBarClickValueAdd; }
+    void SetBarClickValueAdd(int alAdd);
 
-	protected:
-		/////////////////////////
-		// Own functions
-		void UpdateBarProperties();
+    int GetBarValueSize() { return mlBarValueSize; }
+    void SetBarValueSize(int alSize);
 
-		bool ArrowButtonDown(iWidget* apWidget, const cGuiMessageData& aData);
-		kGuiCallbackDeclarationEnd(ArrowButtonDown);		
+    float GetButtonSize() const { return mfButtonSize; }
 
-		/////////////////////////
-		// Implemented functions
-		void OnInit();
-		void OnLoadGraphics();
-		void OnChangeSize();
-		void OnChangePosition();
+  protected:
+    /////////////////////////
+    // Own functions
+    void UpdateBarProperties();
 
-		
-		void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
+    bool ArrowButtonDown(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(ArrowButtonDown);
 
-		bool OnMouseMove(const cGuiMessageData& aData);
-		bool OnMouseDown(const cGuiMessageData& aData);
-		bool OnMouseUp(const cGuiMessageData& aData);
-		bool OnMouseEnter(const cGuiMessageData& aData);
-		bool OnMouseLeave(const cGuiMessageData& aData);
+    /////////////////////////
+    // Implemented functions
+    void OnInit();
+    void OnLoadGraphics();
+    void OnChangeSize();
+    void OnChangePosition();
 
-		bool OnMouseDoubleClick(const cGuiMessageData& aData);
+    void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
 
-		bool OnLostFocus(const cGuiMessageData& aData);
+    bool OnMouseMove(const cGuiMessageData &aData);
+    bool OnMouseDown(const cGuiMessageData &aData);
+    bool OnMouseUp(const cGuiMessageData &aData);
+    bool OnMouseEnter(const cGuiMessageData &aData);
+    bool OnMouseLeave(const cGuiMessageData &aData);
 
-		bool OnUIArrowPress(const cGuiMessageData& aData);
-		bool OnUIArrowRelease(const cGuiMessageData& aData);
+    bool OnMouseDoubleClick(const cGuiMessageData &aData);
 
-		bool OnUIButtonPress(const cGuiMessageData& aData);
-		bool OnUIButtonRelease(const cGuiMessageData& aData);
+    bool OnLostFocus(const cGuiMessageData &aData);
 
-		/////////////////////////
-		// Data
-		eWidgetSliderOrientation mOrientation;
+    bool OnUIArrowPress(const cGuiMessageData &aData);
+    bool OnUIArrowRelease(const cGuiMessageData &aData);
 
-		bool mbPressed;
+    bool OnUIButtonPress(const cGuiMessageData &aData);
+    bool OnUIButtonRelease(const cGuiMessageData &aData);
 
-		float mfButtonSize;
+    /////////////////////////
+    // Data
+    eWidgetSliderOrientation mOrientation;
 
-		int mlValue;
-		int mlMaxValue;
-		int mlButtonValueAdd;
-		int mlBarClickValueAdd;
-		int mlBarValueSize; //This is how big the bar is compared to the max value of the slider
-		float mfValueStep;
+    bool mbPressed;
 
-		cVector3f mvBarPos;
-		cVector2f mvBarSize;
-		float mfSliderSize;
-		cRect2f mBarRect;
-		float mfMaxPos;
-		float mfMinPos;
+    float mfButtonSize;
 
-		cVector2f mvRelMousePos;
+    int mlValue;
+    int mlMaxValue;
+    int mlButtonValueAdd;
+    int mlBarClickValueAdd;
+    int mlBarValueSize; // This is how big the bar is compared to the max value of the slider
+    float mfValueStep;
 
-		cWidgetButton* mvButtons[2];
+    cVector3f mvBarPos;
+    cVector2f mvBarSize;
+    float mfSliderSize;
+    cRect2f mBarRect;
+    float mfMaxPos;
+    float mfMinPos;
 
-		cGuiGfxElement *mpGfxButtonBackground;
-		cGuiGfxElement *mvGfxBorders[4];
-		cGuiGfxElement *mvGfxCorners[4];
+    cVector2f mvRelMousePos;
 
-		cGuiGfxElement *mvGfxArrow[2];
-		cGuiGfxElement *mpGfxBackground;
-	};
+    cWidgetButton *mvButtons[2];
 
+    cGuiGfxElement *mpGfxButtonBackground;
+    cGuiGfxElement *mvGfxBorders[4];
+    cGuiGfxElement *mvGfxCorners[4];
+
+    cGuiGfxElement *mvGfxArrow[2];
+    cGuiGfxElement *mpGfxBackground;
 };
+
+};     // namespace hpl
 #endif // HPL_WIDGET_SLIDER_H

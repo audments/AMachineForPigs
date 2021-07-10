@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -22,61 +22,56 @@
 #include "EditorBaseClasses.h"
 
 #include "EditorEditModeSelect.h"
-#include "EditorWorld.h"
 #include "EditorSelection.h"
+#include "EditorWorld.h"
 #include "EntityWrapper.h"
 
 //-------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------------------
 
-cEditorActionSelectionTranslate::cEditorActionSelectionTranslate(cEditorEditModeSelect* apEditMode,
-																 const cVector3f& avTranslate,
-																 bool abUseSnap) : iEditorActionWorldModifier("Translate selection",apEditMode->GetEditorWorld())
-{
-	mpEditMode = apEditMode;
-	mpEditorWorld = mpEditMode->GetEditorWorld();
-	mbUseSnap = abUseSnap;
+cEditorActionSelectionTranslate::cEditorActionSelectionTranslate(cEditorEditModeSelect *apEditMode,
+                                                                 const cVector3f &avTranslate, bool abUseSnap)
+    : iEditorActionWorldModifier("Translate selection", apEditMode->GetEditorWorld()) {
+    mpEditMode = apEditMode;
+    mpEditorWorld = mpEditMode->GetEditorWorld();
+    mbUseSnap = abUseSnap;
 
-	mpSelection = mpEditorWorld->GetEditor()->GetSelection();
+    mpSelection = mpEditorWorld->GetEditor()->GetSelection();
 
-	mvTranslate = avTranslate;
+    mvTranslate = avTranslate;
 
-	mpSelection->FallToReferenceTransforms();
-	tEntityWrapperListIt it = mpSelection->GetEntities().begin();
-	for(;it!=mpSelection->GetEntities().end();++it)
-	{
-        iEntityWrapper* pEnt = *it;
+    mpSelection->FallToReferenceTransforms();
+    tEntityWrapperListIt it = mpSelection->GetEntities().begin();
+    for (; it != mpSelection->GetEntities().end(); ++it) {
+        iEntityWrapper *pEnt = *it;
 
-		mvEntityOldPos.push_back(pEnt->GetPosition());
-	}
+        mvEntityOldPos.push_back(pEnt->GetPosition());
+    }
 }
 
 //-------------------------------------------------------------------------------------
 
-void cEditorActionSelectionTranslate::DoModify()
-{
-	mpSelection->SetRelativeTranslation(mvTranslate, mbUseSnap);
-	mpSelection->UpdateReferenceTransforms();
+void cEditorActionSelectionTranslate::DoModify() {
+    mpSelection->SetRelativeTranslation(mvTranslate, mbUseSnap);
+    mpSelection->UpdateReferenceTransforms();
 }
 
 //-------------------------------------------------------------------------------------
 
-void cEditorActionSelectionTranslate::UndoModify()
-{
-	tEntityWrapperListIt it = mpSelection->GetEntities().begin();
+void cEditorActionSelectionTranslate::UndoModify() {
+    tEntityWrapperListIt it = mpSelection->GetEntities().begin();
 
-	int i=0;
-	for(;it!=mpSelection->GetEntities().end();++it)
-	{
-        iEntityWrapper* pEnt = *it;
+    int i = 0;
+    for (; it != mpSelection->GetEntities().end(); ++it) {
+        iEntityWrapper *pEnt = *it;
 
-		pEnt->SetAbsPosition(mvEntityOldPos[i]);
-		pEnt->UpdateEntity();
-		++i;
-	}
-	mpSelection->UpdateCenter();
-	mpSelection->UpdateReferenceTransforms();
+        pEnt->SetAbsPosition(mvEntityOldPos[i]);
+        pEnt->UpdateEntity();
+        ++i;
+    }
+    mpSelection->UpdateCenter();
+    mpSelection->UpdateReferenceTransforms();
 }
 
 //-------------------------------------------------------------------------------------
@@ -85,129 +80,114 @@ void cEditorActionSelectionTranslate::UndoModify()
 
 //-------------------------------------------------------------------------------------
 
+cEditorActionSelectionRotate::cEditorActionSelectionRotate(cEditorEditModeSelect *apEditMode,
+                                                           iEditorWorld *apEditorWorld, const cVector3f &avRotate,
+                                                           bool abUseSnap, bool abRelativeTransform)
+    : iEditorActionWorldModifier("Rotate selection", apEditorWorld) {
+    mpEditMode = apEditMode;
+    mpEditorWorld = apEditorWorld;
+    mvRotate = avRotate;
+    mbUseSnap = abUseSnap;
+    mbRelativeTransform = abRelativeTransform;
 
-cEditorActionSelectionRotate::cEditorActionSelectionRotate(cEditorEditModeSelect* apEditMode,
-														   iEditorWorld* apEditorWorld,
-														   const cVector3f& avRotate,
-														   bool abUseSnap,
-														   bool abRelativeTransform) : iEditorActionWorldModifier("Rotate selection", apEditorWorld)
-{
-	mpEditMode = apEditMode;
-	mpEditorWorld = apEditorWorld;
-	mvRotate = avRotate;
-	mbUseSnap = abUseSnap;
-	mbRelativeTransform = abRelativeTransform;
+    mpSelection = apEditMode->GetEditor()->GetSelection();
+    mvOldRotation = mpSelection->GetCenterOldRotation();
 
-	mpSelection = apEditMode->GetEditor()->GetSelection();
-	mvOldRotation = mpSelection->GetCenterOldRotation();
+    mpSelection->FallToReferenceTransforms();
 
-	mpSelection->FallToReferenceTransforms();
+    tEntityWrapperListIt it = mpSelection->GetEntities().begin();
 
-	tEntityWrapperListIt it = mpSelection->GetEntities().begin();
+    for (; it != mpSelection->GetEntities().end(); ++it) {
+        iEntityWrapper *pEnt = *it;
 
-	for(;it!=mpSelection->GetEntities().end();++it)
-	{
-        iEntityWrapper* pEnt = *it;
-
-		mvEntityOldRot.push_back(pEnt->GetRotation());
-	}
+        mvEntityOldRot.push_back(pEnt->GetRotation());
+    }
 }
 
 //-------------------------------------------------------------------------------------
 
-void cEditorActionSelectionRotate::DoModify()
-{
-	if(mbRelativeTransform)
-		mpSelection->SetRelativeRotation(mvRotate,mbUseSnap);
-	else
-	{
-		tEntityWrapperListIt it = mpSelection->GetEntities().begin();
-		for(;it!=mpSelection->GetEntities().end();++it)
-		{
-			iEntityWrapper* pEnt = *it;
+void cEditorActionSelectionRotate::DoModify() {
+    if (mbRelativeTransform)
+        mpSelection->SetRelativeRotation(mvRotate, mbUseSnap);
+    else {
+        tEntityWrapperListIt it = mpSelection->GetEntities().begin();
+        for (; it != mpSelection->GetEntities().end(); ++it) {
+            iEntityWrapper *pEnt = *it;
 
-			pEnt->SetAbsRotation(mvRotate);
-			pEnt->UpdateEntity();
-		}
-		mpSelection->SetCenterRotation(mvRotate);
-	}
+            pEnt->SetAbsRotation(mvRotate);
+            pEnt->UpdateEntity();
+        }
+        mpSelection->SetCenterRotation(mvRotate);
+    }
 
-	mpSelection->UpdateReferenceTransforms();
+    mpSelection->UpdateReferenceTransforms();
 }
 
 //-------------------------------------------------------------------------------------
 
-void cEditorActionSelectionRotate::UndoModify()
-{
-	tEntityWrapperListIt it = mpSelection->GetEntities().begin();
+void cEditorActionSelectionRotate::UndoModify() {
+    tEntityWrapperListIt it = mpSelection->GetEntities().begin();
 
-	int i=0;
-	for(;it!=mpSelection->GetEntities().end();++it)
-	{
-        iEntityWrapper* pEnt = *it;
+    int i = 0;
+    for (; it != mpSelection->GetEntities().end(); ++it) {
+        iEntityWrapper *pEnt = *it;
 
-		pEnt->SetAbsRotation(mvEntityOldRot[i]);
-		pEnt->UpdateEntity();
-		++i;
-	}
-	mpSelection->UpdateCenter();
-	mpSelection->SetCenterRotation(mvOldRotation);
+        pEnt->SetAbsRotation(mvEntityOldRot[i]);
+        pEnt->UpdateEntity();
+        ++i;
+    }
+    mpSelection->UpdateCenter();
+    mpSelection->SetCenterRotation(mvOldRotation);
 
-	mpSelection->UpdateReferenceTransforms();
+    mpSelection->UpdateReferenceTransforms();
 }
 
 //-------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 
-cEditorActionSelectionScale::cEditorActionSelectionScale(cEditorEditModeSelect* apEditMode,
-														 iEditorWorld* apEditorWorld,
-														 const cVector3f& avScale,
-														 bool abUseSnap) : iEditorActionWorldModifier("Scale selection", apEditorWorld)
-{
-	mpEditMode = apEditMode;
-	mpEditorWorld = apEditorWorld;
-	mvScale = avScale;
-	mbUseSnap = abUseSnap;
+cEditorActionSelectionScale::cEditorActionSelectionScale(cEditorEditModeSelect *apEditMode, iEditorWorld *apEditorWorld,
+                                                         const cVector3f &avScale, bool abUseSnap)
+    : iEditorActionWorldModifier("Scale selection", apEditorWorld) {
+    mpEditMode = apEditMode;
+    mpEditorWorld = apEditorWorld;
+    mvScale = avScale;
+    mbUseSnap = abUseSnap;
 
-	mpSelection = apEditorWorld->GetEditor()->GetSelection();
-	mpSelection->FallToReferenceTransforms();
+    mpSelection = apEditorWorld->GetEditor()->GetSelection();
+    mpSelection->FallToReferenceTransforms();
 
-	tEntityWrapperListIt it = mpSelection->GetEntities().begin();
+    tEntityWrapperListIt it = mpSelection->GetEntities().begin();
 
-	for(;it!=mpSelection->GetEntities().end();++it)
-	{
-        iEntityWrapper* pEnt = *it;
+    for (; it != mpSelection->GetEntities().end(); ++it) {
+        iEntityWrapper *pEnt = *it;
 
-		mvEntityOldScale.push_back(pEnt->GetScale());
-	}
+        mvEntityOldScale.push_back(pEnt->GetScale());
+    }
 }
 
 //-------------------------------------------------------------------------------------
 
-void cEditorActionSelectionScale::DoModify()
-{
-	mpSelection->SetRelativeScale(mvScale, mbUseSnap);
-	mpSelection->UpdateReferenceTransforms();
+void cEditorActionSelectionScale::DoModify() {
+    mpSelection->SetRelativeScale(mvScale, mbUseSnap);
+    mpSelection->UpdateReferenceTransforms();
 }
 
 //-------------------------------------------------------------------------------------
 
-void cEditorActionSelectionScale::UndoModify()
-{
-	tEntityWrapperListIt it = mpSelection->GetEntities().begin();
+void cEditorActionSelectionScale::UndoModify() {
+    tEntityWrapperListIt it = mpSelection->GetEntities().begin();
 
-	int i=0;
-	for(;it!=mpSelection->GetEntities().end();++it)
-	{
-        iEntityWrapper* pEnt = *it;
+    int i = 0;
+    for (; it != mpSelection->GetEntities().end(); ++it) {
+        iEntityWrapper *pEnt = *it;
 
-		pEnt->SetAbsScale(mvEntityOldScale[i]);
-		pEnt->UpdateEntity();
-		++i;
-	}
-	mpSelection->UpdateCenter();
-	mpSelection->UpdateReferenceTransforms();
+        pEnt->SetAbsScale(mvEntityOldScale[i]);
+        pEnt->UpdateEntity();
+        ++i;
+    }
+    mpSelection->UpdateCenter();
+    mpSelection->UpdateReferenceTransforms();
 }
 
 //-------------------------------------------------------------------------------------

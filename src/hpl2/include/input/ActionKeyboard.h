@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,32 +20,30 @@
 #ifndef HPL_ACTIONKEYBOARD_H
 #define HPL_ACTIONKEYBOARD_H
 
-
-#include "input/InputTypes.h"
 #include "input/Action.h"
+#include "input/InputTypes.h"
 
 namespace hpl {
-	
-	class cInput;
 
-	class cActionKeyboard : public iSubAction
-	{
-	public:
-		cActionKeyboard(cInput* apInput, eKey mKey);
+class cInput;
 
-		bool IsTriggerd();
-		float GetValue();
+class cActionKeyboard : public iSubAction {
+  public:
+    cActionKeyboard(cInput *apInput, eKey mKey);
 
-		tString GetInputName();
+    bool IsTriggerd();
+    float GetValue();
 
-		tString GetInputType(){return "Keyboard";}
+    tString GetInputName();
 
-		eKey GetKey(){ return mKey;}
+    tString GetInputType() { return "Keyboard"; }
 
-	private:
-		eKey mKey;
-		cInput *mpInput;
-	};
+    eKey GetKey() { return mKey; }
 
+  private:
+    eKey mKey;
+    cInput *mpInput;
 };
+
+};     // namespace hpl
 #endif // HPL_ACTIONKEYBOARD_H

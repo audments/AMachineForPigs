@@ -1,42 +1,42 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include "EditorWindowFactory.h"
 
-#include "EditorWindowViewport.h"
-#include "EditorWindowStaticObjects.h"
-#include "EditorWindowEntities.h"
-#include "EditorWindowSelect.h"
-#include "EditorWindowLights.h"
-#include "EditorWindowBodies.h"
-#include "EditorWindowJoints.h"
 #include "EditorWindowAreas.h"
 #include "EditorWindowBillboards.h"
-#include "EditorWindowSounds.h"
+#include "EditorWindowBodies.h"
+#include "EditorWindowEntities.h"
+#include "EditorWindowInputWorldName.h"
+#include "EditorWindowJoints.h"
+#include "EditorWindowLights.h"
 #include "EditorWindowParticleSystems.h"
 #include "EditorWindowPrimitives.h"
-#include "EditorWindowInputWorldName.h"
+#include "EditorWindowSelect.h"
+#include "EditorWindowSounds.h"
+#include "EditorWindowStaticObjects.h"
+#include "EditorWindowViewport.h"
 
-#include "EditorWindowEntityEditBoxStaticObject.h"
-#include "EditorWindowEntityEditBoxLight.h"
 #include "EditorWindowEntityEditBoxBodyShape.h"
 #include "EditorWindowEntityEditBoxGroup.h"
+#include "EditorWindowEntityEditBoxLight.h"
+#include "EditorWindowEntityEditBoxStaticObject.h"
 
 #include "EditorWindowEntitySearch.h"
 
@@ -56,325 +56,304 @@
 
 //--------------------------------------------------------
 
-cEditorWindowViewport* cEditorWindowFactory::CreateWindowViewport(iEditorBase* apEditor,
-																  iFrameBuffer* apFB,
-																  const cVector2l& avFBViewPos,
-																  const cVector2l& avFBViewSize,
-																  const cVector3f& avPosition, 
-																  const cVector2f& avSize,
-																  bool abAddViewMenu)
-{
-	////////////////////////////////////////
-	// Create viewport and set parameters
-	cEditorWindowViewport* pViewport = hplNew(cEditorWindowViewport,(apEditor, apFB, abAddViewMenu));
-	pViewport->SetEngineViewportPositionAndSize(avFBViewPos,avFBViewSize);
+cEditorWindowViewport *cEditorWindowFactory::CreateWindowViewport(iEditorBase *apEditor, iFrameBuffer *apFB,
+                                                                  const cVector2l &avFBViewPos,
+                                                                  const cVector2l &avFBViewSize,
+                                                                  const cVector3f &avPosition, const cVector2f &avSize,
+                                                                  bool abAddViewMenu) {
+    ////////////////////////////////////////
+    // Create viewport and set parameters
+    cEditorWindowViewport *pViewport = hplNew(cEditorWindowViewport, (apEditor, apFB, abAddViewMenu));
+    pViewport->SetEngineViewportPositionAndSize(avFBViewPos, avFBViewSize);
 
-	pViewport->Init();
+    pViewport->Init();
 
-	pViewport->SetPosition(avPosition);
-	pViewport->SetSize(avSize);
-	pViewport->UpdateViewport();
+    pViewport->SetPosition(avPosition);
+    pViewport->SetSize(avSize);
+    pViewport->UpdateViewport();
 
-	apEditor->AddWindow(pViewport);
+    apEditor->AddWindow(pViewport);
 
-	return pViewport;
+    return pViewport;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowStaticObjects* cEditorWindowFactory::CreateWindowStaticObjects(iEditorBase* apEditor, 
-																			const cVector3f& avPosition,
-																			const tWString& asBaseDir)
-{
-	/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowStaticObjects *cEditorWindowFactory::CreateWindowStaticObjects(iEditorBase *apEditor,
+                                                                            const cVector3f &avPosition,
+                                                                            const tWString &asBaseDir) {
+    /*
+    cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+    pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+    pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+    apEditor->AddWindow(pWindow);
+
+    return pWindow;
+    */
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowEntities* cEditorWindowFactory::CreateWindowEntities(iEditorBase* apEditor,
-																  const cVector3f& avPosition,
-																  const tWString& asBaseDir)
-{
-		/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowEntities *cEditorWindowFactory::CreateWindowEntities(iEditorBase *apEditor, const cVector3f &avPosition,
+                                                                  const tWString &asBaseDir) {
+    /*
+cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+apEditor->AddWindow(pWindow);
+
+return pWindow;
+*/
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowSelect* cEditorWindowFactory::CreateWindowSelect(iEditorBase* apEditor,
-															  const cVector3f& avPosition)
-{
-		/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowSelect *cEditorWindowFactory::CreateWindowSelect(iEditorBase *apEditor, const cVector3f &avPosition) {
+    /*
+cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+apEditor->AddWindow(pWindow);
+
+return pWindow;
+*/
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowEntityEditBox* cEditorWindowFactory::CreateEditBoxWindow(iEditorBase* apEditor,
-																	  cEditorEditModeSelect* apEditMode, 
-																	  const cVector3f& avPosition, 
-																	  tEntityWrapperList alstEntities)
-{	/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowEntityEditBox *cEditorWindowFactory::CreateEditBoxWindow(
+    iEditorBase *apEditor, cEditorEditModeSelect *apEditMode, const cVector3f &avPosition,
+    tEntityWrapperList
+        alstEntities) { /*
+                        cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+                        pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+                        pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+                        apEditor->AddWindow(pWindow);
+
+                        return pWindow;
+                        */
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowLights* cEditorWindowFactory::CreateWindowLights(iEditorBase* apEditor, const cVector3f& avPosition)
-{
-		/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowLights *cEditorWindowFactory::CreateWindowLights(iEditorBase *apEditor, const cVector3f &avPosition) {
+    /*
+cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+apEditor->AddWindow(pWindow);
+
+return pWindow;
+*/
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowBodies* cEditorWindowFactory::CreateWindowBodies(iEditorBase* apEditor, const cVector3f& avPosition)
-{
-	/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowBodies *cEditorWindowFactory::CreateWindowBodies(iEditorBase *apEditor, const cVector3f &avPosition) {
+    /*
+    cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+    pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+    pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+    apEditor->AddWindow(pWindow);
+
+    return pWindow;
+    */
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowJoints* cEditorWindowFactory::CreateWindowJoints( iEditorBase* apEditor,	const cVector3f& avPosition)
-{
-		/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowJoints *cEditorWindowFactory::CreateWindowJoints(iEditorBase *apEditor, const cVector3f &avPosition) {
+    /*
+cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+apEditor->AddWindow(pWindow);
+
+return pWindow;
+*/
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowAreas* cEditorWindowFactory::CreateWindowAreas( iEditorBase* apEditor, const cVector3f& avPosition)
-{
-		/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowAreas *cEditorWindowFactory::CreateWindowAreas(iEditorBase *apEditor, const cVector3f &avPosition) {
+    /*
+cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+apEditor->AddWindow(pWindow);
+
+return pWindow;
+*/
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowBillboards* cEditorWindowFactory::CreateWindowBillboards(iEditorBase* apEditor, const cVector3f& avPosition)
-{
-		/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowBillboards *cEditorWindowFactory::CreateWindowBillboards(iEditorBase *apEditor,
+                                                                      const cVector3f &avPosition) {
+    /*
+cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+apEditor->AddWindow(pWindow);
+
+return pWindow;
+*/
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowSounds* cEditorWindowFactory::CreateWindowSounds(iEditorBase* apEditor, const cVector3f& avPosition)
-{
-		/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowSounds *cEditorWindowFactory::CreateWindowSounds(iEditorBase *apEditor, const cVector3f &avPosition) {
+    /*
+cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+apEditor->AddWindow(pWindow);
+
+return pWindow;
+*/
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowParticleSystems* cEditorWindowFactory::CreateWindowParticleSystems(iEditorBase* apEditor,
-																	 const cVector3f& avPosition)
-{
-		/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowParticleSystems *cEditorWindowFactory::CreateWindowParticleSystems(iEditorBase *apEditor,
+                                                                                const cVector3f &avPosition) {
+    /*
+cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+apEditor->AddWindow(pWindow);
+
+return pWindow;
+*/
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowPrimitives* cEditorWindowFactory::CreateWindowPrimitives(iEditorBase* apEditor,
-																	  const cVector3f& avPosition)
-{
-		/*
-	cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
+cEditorWindowPrimitives *cEditorWindowFactory::CreateWindowPrimitives(iEditorBase *apEditor,
+                                                                      const cVector3f &avPosition) {
+    /*
+cEditorWindowStaticObjects* pWindow = hplNew(cEditorWindowStaticObjects,(apEditor, asBaseDir) );
 
-	pWindow->Init();
-	
-	pWindow->SetPosition(avPosition);
+pWindow->Init();
 
-	apEditor->AddWindow(pWindow);
+pWindow->SetPosition(avPosition);
 
-	return pWindow;
-	*/
-	return NULL;
+apEditor->AddWindow(pWindow);
+
+return pWindow;
+*/
+    return NULL;
 }
 
 //--------------------------------------------------------
 
-cEditorWindowEntitySearch* cEditorWindowFactory::CreateSearchWindow(iEditorBase* apEditor, cEditorEditModeSelect* apEditMode)
-{
-	cEditorWindowEntitySearch* pWindow = hplNew( cEditorWindowEntitySearch, (apEditor));
+cEditorWindowEntitySearch *cEditorWindowFactory::CreateSearchWindow(iEditorBase *apEditor,
+                                                                    cEditorEditModeSelect *apEditMode) {
+    cEditorWindowEntitySearch *pWindow = hplNew(cEditorWindowEntitySearch, (apEditor));
 
-	pWindow->Init();
-	pWindow->SetActive(false);
+    pWindow->Init();
+    pWindow->SetActive(false);
 
-	apEditor->AddWindow(pWindow);
-	
-	return pWindow;
+    apEditor->AddWindow(pWindow);
+
+    return pWindow;
 }
 //--------------------------------------------------------
 
-cEditorWindowTextureBrowser* cEditorWindowFactory::CreateTextureBrowserWindow(iEditorBase* apEditor)
-{
-	return NULL;
-	/*
-	cEditorWindowTextureBrowser* pWindow = hplNew( cEditorWindowTextureBrowser(apEditor, ));
+cEditorWindowTextureBrowser *cEditorWindowFactory::CreateTextureBrowserWindow(iEditorBase *apEditor) {
+    return NULL;
+    /*
+    cEditorWindowTextureBrowser* pWindow = hplNew( cEditorWindowTextureBrowser(apEditor, ));
 
-	pWindow->Init();
+    pWindow->Init();
 
-	cVector3f vCenter = cVector3f(apEditor->GetSet()->GetVirtualSize()*0.5f);
-	vCenter.z = 30;
+    cVector3f vCenter = cVector3f(apEditor->GetSet()->GetVirtualSize()*0.5f);
+    vCenter.z = 30;
 
-	pWindow->SetPosition(vCenter-cVector3f(400,260,0));
+    pWindow->SetPosition(vCenter-cVector3f(400,260,0));
 
-	apEditor->AddWindow(pWindow);
+    apEditor->AddWindow(pWindow);
 
-	return pWindow;*/
-}
-
-//--------------------------------------------------------
-
-cEditorWindowLoaderStatus* cEditorWindowFactory::CreateLoaderStatusWindow(iEditorBase* apEditor)
-{
-	cEditorWindowLoaderStatus* pWindow = hplNew( cEditorWindowLoaderStatus, (apEditor));
-	
-	pWindow->Init();
-	pWindow->SetCaption(_W("Loading"));
-	
-	apEditor->AddWindow(pWindow);
-
-	return pWindow;
+    return pWindow;*/
 }
 
 //--------------------------------------------------------
 
+cEditorWindowLoaderStatus *cEditorWindowFactory::CreateLoaderStatusWindow(iEditorBase *apEditor) {
+    cEditorWindowLoaderStatus *pWindow = hplNew(cEditorWindowLoaderStatus, (apEditor));
 
-//--------------------------------------------------------
+    pWindow->Init();
+    pWindow->SetCaption(_W("Loading"));
 
-cEditorWindowMaterialEditor* cEditorWindowFactory::CreateMaterialEditor(iEditorBase* apEditor, iFrameBuffer* apFB)
-{
-	cEditorWindowMaterialEditor* pWindow = hplNew(cEditorWindowMaterialEditor,(apEditor,apFB));
-	pWindow->Init();
-	apEditor->AddWindow(pWindow);
-	return pWindow;
+    apEditor->AddWindow(pWindow);
+
+    return pWindow;
 }
 
 //--------------------------------------------------------
 
-void cEditorWindowFactory::DestroyEditorWindow(iEditorWindow *apWindow)
-{
-	if(apWindow==NULL)
-		return;
+//--------------------------------------------------------
 
-	apWindow->GetEditor()->RemoveWindow(apWindow);
+cEditorWindowMaterialEditor *cEditorWindowFactory::CreateMaterialEditor(iEditorBase *apEditor, iFrameBuffer *apFB) {
+    cEditorWindowMaterialEditor *pWindow = hplNew(cEditorWindowMaterialEditor, (apEditor, apFB));
+    pWindow->Init();
+    apEditor->AddWindow(pWindow);
+    return pWindow;
+}
 
-	hplDelete(apWindow);
+//--------------------------------------------------------
+
+void cEditorWindowFactory::DestroyEditorWindow(iEditorWindow *apWindow) {
+    if (apWindow == NULL)
+        return;
+
+    apWindow->GetEditor()->RemoveWindow(apWindow);
+
+    hplDelete(apWindow);
 }
 
 //--------------------------------------------------------

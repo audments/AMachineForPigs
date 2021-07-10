@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -21,8 +21,8 @@
 
 #include "EditorWorld.h"
 
-#include "EditorBaseClasses.h"
 #include "EditorActionHandler.h"
+#include "EditorBaseClasses.h"
 
 #include "EditorWindowFactory.h"
 #include "EditorWindowStaticObjects.h"
@@ -33,7 +33,6 @@
 
 #include "../leveleditor/LevelEditor.h"
 
-
 //-----------------------------------------------------------------
 
 ///////////////////////////////////////////////////////////////////
@@ -42,12 +41,8 @@
 
 //-----------------------------------------------------------------
 
-cEditorEditModeStaticObjects::cEditorEditModeStaticObjects(iEditorBase* apEditor,
-														   iEditorWorld* apEditorWorld) : iEditorEditModeObjectCreator(apEditor,
-																													   "Static Objects",
-																													   apEditorWorld)
-{
-}
+cEditorEditModeStaticObjects::cEditorEditModeStaticObjects(iEditorBase *apEditor, iEditorWorld *apEditorWorld)
+    : iEditorEditModeObjectCreator(apEditor, "Static Objects", apEditorWorld) {}
 
 //-----------------------------------------------------------------
 
@@ -59,53 +54,49 @@ cEditorEditModeStaticObjects::cEditorEditModeStaticObjects(iEditorBase* apEditor
 
 //-----------------------------------------------------------------
 
-void cEditorEditModeStaticObjects::DrawObjectPreview(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, const cMatrixf& amtxTransform, bool abPreCreationActive)
-{
-	apFunctions->SetMatrix(NULL);
-	apFunctions->SetBlendMode(eMaterialBlendMode_Alpha);
-	apFunctions->SetTextureRange(NULL,0);
-	apFunctions->SetProgram(NULL);
-	
-	apFunctions->SetDepthTest(true);
-	apFunctions->SetDepthWrite(false);
+void cEditorEditModeStaticObjects::DrawObjectPreview(cEditorWindowViewport *apViewport,
+                                                     cRendererCallbackFunctions *apFunctions,
+                                                     const cMatrixf &amtxTransform, bool abPreCreationActive) {
+    apFunctions->SetMatrix(NULL);
+    apFunctions->SetBlendMode(eMaterialBlendMode_Alpha);
+    apFunctions->SetTextureRange(NULL, 0);
+    apFunctions->SetProgram(NULL);
 
-	apFunctions->GetLowLevelGfx()->DrawSphere(mpEditor->GetPosOnGridFromMousePos(),0.1f,cColor(1,0,0,1));
+    apFunctions->SetDepthTest(true);
+    apFunctions->SetDepthWrite(false);
 
-	cEditorWindowStaticObjects* pWin = (cEditorWindowStaticObjects*)mpWindow;
-	iEditorObjectIndexEntryMeshObject* pObj = pWin->GetSelectedObject();
+    apFunctions->GetLowLevelGfx()->DrawSphere(mpEditor->GetPosOnGridFromMousePos(), 0.1f, cColor(1, 0, 0, 1));
 
-	if(pObj)
-	{
-		const cVector3f& vBVMin = pObj->GetBVMin();
-		const cVector3f& vBVMax = pObj->GetBVMax();
+    cEditorWindowStaticObjects *pWin = (cEditorWindowStaticObjects *)mpWindow;
+    iEditorObjectIndexEntryMeshObject *pObj = pWin->GetSelectedObject();
 
-		apFunctions->SetMatrix((cMatrixf*)&amtxTransform);
-		cMeshEntity* pEnt = pWin->GetPreviewEntity();
-		if(pEnt)
-			pEnt->SetVisible(abPreCreationActive);
+    if (pObj) {
+        const cVector3f &vBVMin = pObj->GetBVMin();
+        const cVector3f &vBVMax = pObj->GetBVMax();
 
-		if(abPreCreationActive)
-		{
-			apFunctions->SetDepthTestFunc(eDepthTestFunc_Greater);
-			apFunctions->GetLowLevelGfx()->DrawBoxMinMax(vBVMin,vBVMax, cColor(1,0,0,0.6f));
-			apFunctions->SetDepthTestFunc(eDepthTestFunc_Less);
-			apFunctions->GetLowLevelGfx()->DrawBoxMinMax(vBVMin,vBVMax, cColor(0,1,0,0.6f));
-			
-			/////////////////////////////////////////
-			// Draw Textured Mesh
-			if(pEnt)
-			{
-				pEnt->SetMatrix(amtxTransform);
-			}
-		}
-		else
-		{
-			apFunctions->GetLowLevelGfx()->DrawBoxMinMax(vBVMin,vBVMax, cColor(1,0.5f));
-		}
-	}
+        apFunctions->SetMatrix((cMatrixf *)&amtxTransform);
+        cMeshEntity *pEnt = pWin->GetPreviewEntity();
+        if (pEnt)
+            pEnt->SetVisible(abPreCreationActive);
 
-	apFunctions->SetBlendMode(eMaterialBlendMode_None);
-	apFunctions->SetMatrix(NULL);	
+        if (abPreCreationActive) {
+            apFunctions->SetDepthTestFunc(eDepthTestFunc_Greater);
+            apFunctions->GetLowLevelGfx()->DrawBoxMinMax(vBVMin, vBVMax, cColor(1, 0, 0, 0.6f));
+            apFunctions->SetDepthTestFunc(eDepthTestFunc_Less);
+            apFunctions->GetLowLevelGfx()->DrawBoxMinMax(vBVMin, vBVMax, cColor(0, 1, 0, 0.6f));
+
+            /////////////////////////////////////////
+            // Draw Textured Mesh
+            if (pEnt) {
+                pEnt->SetMatrix(amtxTransform);
+            }
+        } else {
+            apFunctions->GetLowLevelGfx()->DrawBoxMinMax(vBVMin, vBVMax, cColor(1, 0.5f));
+        }
+    }
+
+    apFunctions->SetBlendMode(eMaterialBlendMode_None);
+    apFunctions->SetMatrix(NULL);
 }
 
 //-----------------------------------------------------------------
@@ -118,60 +109,53 @@ void cEditorEditModeStaticObjects::DrawObjectPreview(cEditorWindowViewport* apVi
 
 //-----------------------------------------------------------------
 
-iEditorWindow* cEditorEditModeStaticObjects::CreateSpecificWindow()
-{
-	tWStringVec vDirs = tWStringVec(1, mpEditor->GetFolderFullPath(eEditorDir_StaticObjects));
-	cLevelEditor* pEditor = (cLevelEditor*)mpEditor;
+iEditorWindow *cEditorEditModeStaticObjects::CreateSpecificWindow() {
+    tWStringVec vDirs = tWStringVec(1, mpEditor->GetFolderFullPath(eEditorDir_StaticObjects));
+    cLevelEditor *pEditor = (cLevelEditor *)mpEditor;
 
-	const tWStringVec& vExtraDirs = pEditor->GetStaticObjectExtraDirs();
-	vDirs.insert(vDirs.end(), vExtraDirs.begin(), vExtraDirs.end());
+    const tWStringVec &vExtraDirs = pEditor->GetStaticObjectExtraDirs();
+    vDirs.insert(vDirs.end(), vExtraDirs.begin(), vExtraDirs.end());
 
-	return hplNew(cEditorWindowStaticObjects,(this, vDirs));
+    return hplNew(cEditorWindowStaticObjects, (this, vDirs));
 }
 
 //-----------------------------------------------------------------
 
-bool cEditorEditModeStaticObjects::SetUpCreationData(iEntityWrapperData* apData)
-{
-	iEditorEditModeObjectCreator::SetUpCreationData(apData);
-	cEntityWrapperDataStaticObject* pData = (cEntityWrapperDataStaticObject*)apData;
-	cEditorWindowStaticObjects* pWin = (cEditorWindowStaticObjects*)mpWindow;
-	
-	iEditorObjectIndexEntry* pEntry = pWin->GetSelectedObject();
-	if(pEntry==NULL) return false;
+bool cEditorEditModeStaticObjects::SetUpCreationData(iEntityWrapperData *apData) {
+    iEditorEditModeObjectCreator::SetUpCreationData(apData);
+    cEntityWrapperDataStaticObject *pData = (cEntityWrapperDataStaticObject *)apData;
+    cEditorWindowStaticObjects *pWin = (cEditorWindowStaticObjects *)mpWindow;
 
-	///////////////////////////////////////
-	// Build name
-	tWString sRelPath = pEntry->GetDir()->GetRelPath();
-	if(sRelPath.empty()==false)
-		sRelPath = cString::AddSlashAtEndW(sRelPath, _W('_'));
-	tString sName = cString::To8Char(sRelPath) + pEntry->GetEntryName();
-	pData->SetName(sName);
+    iEditorObjectIndexEntry *pEntry = pWin->GetSelectedObject();
+    if (pEntry == NULL)
+        return false;
 
-	///////////////////////////////////////
-	// Set up filename
-	tString sFilename = cString::To8Char(pEntry->GetFileNameFullPath());
-	pData->SetString(eStaticObjectStr_Filename, sFilename);
+    ///////////////////////////////////////
+    // Build name
+    tWString sRelPath = pEntry->GetDir()->GetRelPath();
+    if (sRelPath.empty() == false)
+        sRelPath = cString::AddSlashAtEndW(sRelPath, _W('_'));
+    tString sName = cString::To8Char(sRelPath) + pEntry->GetEntryName();
+    pData->SetName(sName);
 
-	///////////////////////////////////////
-	// Set up file index
-	int lFileIndex = mpEditorWorld->AddFilenameToIndex("StaticObjects", sFilename);
-	pData->SetInt(eStaticObjectInt_FileIndex, lFileIndex);
+    ///////////////////////////////////////
+    // Set up filename
+    tString sFilename = cString::To8Char(pEntry->GetFileNameFullPath());
+    pData->SetString(eStaticObjectStr_Filename, sFilename);
 
-	return true;
+    ///////////////////////////////////////
+    // Set up file index
+    int lFileIndex = mpEditorWorld->AddFilenameToIndex("StaticObjects", sFilename);
+    pData->SetInt(eStaticObjectInt_FileIndex, lFileIndex);
+
+    return true;
 }
 
 //-----------------------------------------------------------------
 
-void cEditorEditModeStaticObjects::OnEditorUpdate(float afTimeStep)
-{
-}
+void cEditorEditModeStaticObjects::OnEditorUpdate(float afTimeStep) {}
 
 //-----------------------------------------------------------------
 
-void cEditorEditModeStaticObjects::CreateTypes()
-{
-	mvTypes.push_back(hplNew(cEntityWrapperTypeStaticObject,()));
-}
+void cEditorEditModeStaticObjects::CreateTypes() { mvTypes.push_back(hplNew(cEntityWrapperTypeStaticObject, ())); }
 //-----------------------------------------------------------------
-

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,138 +26,131 @@
 
 //----------------------------------------------
 
-class cLuxArea_Sticky_SaveData : public iLuxArea_SaveData
-{
-	kSerializableClassInit(cLuxArea_Sticky_SaveData)
-public:
-	iLuxArea* CreateArea(cLuxMap *apMap);
-	
-	tString msAttachFunction;
-	tString msDetachFunction;
+class cLuxArea_Sticky_SaveData : public iLuxArea_SaveData {
+    kSerializableClassInit(cLuxArea_Sticky_SaveData) public : iLuxArea *CreateArea(cLuxMap *apMap);
 
-	tString msAttachSound;
-	tString msDetachSound;
+    tString msAttachFunction;
+    tString msDetachFunction;
 
-	tString msAttachPS;
-	tString msDetachPS;
+    tString msAttachSound;
+    tString msDetachSound;
 
-	bool mbCanDetach;
+    tString msAttachPS;
+    tString msDetachPS;
 
-	float mfPoseTime;
+    bool mbCanDetach;
 
-	bool mbCheckCenterInArea;
+    float mfPoseTime;
 
-	tString msAttachableBodyName;
+    bool mbCheckCenterInArea;
 
-	int mlAttachedEntityID;
-	int mlAttachedBodyID;
-	
-	float mfAttachedBodyMass;
-	bool mbAttachedBodyGravity;
-	bool mbAttachedEntityFullGameSaved;
+    tString msAttachableBodyName;
 
-	float mfSetMtxTime;
+    int mlAttachedEntityID;
+    int mlAttachedBodyID;
+
+    float mfAttachedBodyMass;
+    bool mbAttachedBodyGravity;
+    bool mbAttachedEntityFullGameSaved;
+
+    float mfSetMtxTime;
 };
 
 //----------------------------------------------
 
-class cLuxArea_Sticky : public iLuxArea
-{
-typedef iLuxArea super_class;
-friend class cLuxAreaLoader_Sticky;
-public:	
-	cLuxArea_Sticky(const tString &asName, int alID, cLuxMap *apMap);
-	virtual ~cLuxArea_Sticky();
+class cLuxArea_Sticky : public iLuxArea {
+    typedef iLuxArea super_class;
+    friend class cLuxAreaLoader_Sticky;
 
-	//////////////////////
-	//General
-	void SetupAfterLoad(cWorld *apWorld);
-	void OnUpdate(float afTimeStep);
+  public:
+    cLuxArea_Sticky(const tString &asName, int alID, cLuxMap *apMap);
+    virtual ~cLuxArea_Sticky();
 
-	//////////////////////
-	//Actions
-	void AttachBody(iPhysicsBody *apBody);
-	void DetachBody();
+    //////////////////////
+    // General
+    void SetupAfterLoad(cWorld *apWorld);
+    void OnUpdate(float afTimeStep);
 
-	//////////////////////
-	//Properties
-	static void SetAllowAttachment(bool abX){ mbAllowAttachment = abX;}
+    //////////////////////
+    // Actions
+    void AttachBody(iPhysicsBody *apBody);
+    void DetachBody();
 
-	iPhysicsBody *GetAttachedBody(){ return mpAttachedBody;}
-	bool CanDetach(){ return mbCanDetach && mfSetMtxTime>=1;}
+    //////////////////////
+    // Properties
+    static void SetAllowAttachment(bool abX) { mbAllowAttachment = abX; }
 
-	//////////////////////
-	//Connection callbacks
-	void OnConnectionStateChange(iLuxEntity *apEntity, int alState){}
+    iPhysicsBody *GetAttachedBody() { return mpAttachedBody; }
+    bool CanDetach() { return mbCanDetach && mfSetMtxTime >= 1; }
 
-	//////////////////////
-	//Save data stuff
-	iLuxEntity_SaveData* CreateSaveData();
-	virtual void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
-	virtual void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
-	virtual void SetupSaveData(iLuxEntity_SaveData *apSaveData);
+    //////////////////////
+    // Connection callbacks
+    void OnConnectionStateChange(iLuxEntity *apEntity, int alState) {}
 
-private:
-	void UpdateAttachBody(float afTimeStep);
-	void UpdateCollision(float afTimeStep);
+    //////////////////////
+    // Save data stuff
+    iLuxEntity_SaveData *CreateSaveData();
+    virtual void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
+    virtual void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
+    virtual void SetupSaveData(iLuxEntity_SaveData *apSaveData);
 
-	
-	tString GetCallbackFunc(const tString &asFunc,iPhysicsBody *apBody);
-	
-	/////////////////////////
-	// Data
-	tString msAttachFunction;
-	tString msDetachFunction;
+  private:
+    void UpdateAttachBody(float afTimeStep);
+    void UpdateCollision(float afTimeStep);
 
-	tString msAttachSound;
-	tString msDetachSound;
+    tString GetCallbackFunc(const tString &asFunc, iPhysicsBody *apBody);
 
-	tString msAttachPS;
-	tString msDetachPS;
+    /////////////////////////
+    // Data
+    tString msAttachFunction;
+    tString msDetachFunction;
 
-	tString msAttachableBodyName;
+    tString msAttachSound;
+    tString msDetachSound;
 
-	bool mbMoveBody;
-	bool mbRotateBody;
+    tString msAttachPS;
+    tString msDetachPS;
 
-	bool mbCheckCenterInArea;
+    tString msAttachableBodyName;
 
-	bool mbCanDetach;
+    bool mbMoveBody;
+    bool mbRotateBody;
 
-	float mfPoseTime;
+    bool mbCheckCenterInArea;
 
-	/////////////////////////
-	// Variables
-	bool mbAttachedBodyGravity;
-	float mfAttachedBodyMass;
+    bool mbCanDetach;
 
-	bool mbAttachedEntityFullGameSaved;
+    float mfPoseTime;
 
-	iPhysicsBody *mpAttachedBody;
-	iPhysicsBody *mpLastAttachedBody;
+    /////////////////////////
+    // Variables
+    bool mbAttachedBodyGravity;
+    float mfAttachedBodyMass;
 
-	float mfSetMtxTime;
-	cMatrixf mtxAttachedStart;
+    bool mbAttachedEntityFullGameSaved;
 
-	static bool mbAllowAttachment;
+    iPhysicsBody *mpAttachedBody;
+    iPhysicsBody *mpLastAttachedBody;
+
+    float mfSetMtxTime;
+    cMatrixf mtxAttachedStart;
+
+    static bool mbAllowAttachment;
 };
 
 //----------------------------------------------
 
-class cLuxAreaLoader_Sticky : public iLuxAreaLoader
-{
-public:
-	cLuxAreaLoader_Sticky(const tString& asName);
-	~cLuxAreaLoader_Sticky();
+class cLuxAreaLoader_Sticky : public iLuxAreaLoader {
+  public:
+    cLuxAreaLoader_Sticky(const tString &asName);
+    ~cLuxAreaLoader_Sticky();
 
-	iLuxArea *CreateArea(const tString& asName, int alID, cLuxMap *apMap);
-	
-	void LoadVariables(iLuxArea *apArea, cWorld *apWorld);
-	void SetupArea(iLuxArea *apArea, cWorld *apWorld);
-	
+    iLuxArea *CreateArea(const tString &asName, int alID, cLuxMap *apMap);
+
+    void LoadVariables(iLuxArea *apArea, cWorld *apWorld);
+    void SetupArea(iLuxArea *apArea, cWorld *apWorld);
 };
 
 //----------------------------------------------
-
 
 #endif // LUX_AREA_STICKY_H

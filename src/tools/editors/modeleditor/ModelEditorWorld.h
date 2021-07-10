@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -41,134 +41,129 @@ typedef std::vector<cAnimationWrapper> tAnimWrapperVec;
 typedef tAnimWrapperVec::iterator tAnimWrapperVecIt;
 
 typedef std::map<tWString, tWString> tVarValueMap;
-typedef tVarValueMap::iterator		 tVarValueMapIt;
+typedef tVarValueMap::iterator tVarValueMapIt;
 
 //--------------------------------------------------------------------
 
-class cAnimationEventWrapper
-{
-public:
-	cAnimationEventWrapper();
+class cAnimationEventWrapper {
+  public:
+    cAnimationEventWrapper();
 
-	int GetIndex() { return mlIndex; }
+    int GetIndex() { return mlIndex; }
 
-	void Load(cXmlElement* apElement);
-	void Save(cXmlElement* apElement);
+    void Load(cXmlElement *apElement);
+    void Save(cXmlElement *apElement);
 
-	void SetTime(float afX) { mfTime = afX; }
-	float GetTime() { return mfTime; }
+    void SetTime(float afX) { mfTime = afX; }
+    float GetTime() { return mfTime; }
 
-	void SetType(const tString& asX) { msType = asX; }
-	const tString& GetType() { return msType; }
+    void SetType(const tString &asX) { msType = asX; }
+    const tString &GetType() { return msType; }
 
-	void SetValue(const tString& asX) { msValue = asX; }
-	const tString& GetValue() { return msValue; }
+    void SetValue(const tString &asX) { msValue = asX; }
+    const tString &GetValue() { return msValue; }
 
-	bool IsValid();
+    bool IsValid();
 
-protected:
-	static int mlIndices;
-	int mlIndex;
-	float mfTime;
-	tString msType;
-	tString msValue;
+  protected:
+    static int mlIndices;
+    int mlIndex;
+    float mfTime;
+    tString msType;
+    tString msValue;
 };
 
 //--------------------------------------------------------------------
 
-class cAnimationWrapper
-{
-public:
-	cAnimationWrapper();
+class cAnimationWrapper {
+  public:
+    cAnimationWrapper();
 
-	bool IsValid();
+    bool IsValid();
 
-	void Load(cXmlElement* apElement);
-	void Save(cXmlElement* apElement);
+    void Load(cXmlElement *apElement);
+    void Save(cXmlElement *apElement);
 
-	void SetName(const tString& asName) { msName = asName; }
-	const tString& GetName() { return msName; }
+    void SetName(const tString &asName) { msName = asName; }
+    const tString &GetName() { return msName; }
 
-	void SetFile(const tString& asFile) { msFile = asFile; }
-	const tString& GetFile() { return msFile; }
+    void SetFile(const tString &asFile) { msFile = asFile; }
+    const tString &GetFile() { return msFile; }
 
-	void SetSpeed(float afX) { mfSpeed = afX; }
-	float GetSpeed() { return mfSpeed; }
+    void SetSpeed(float afX) { mfSpeed = afX; }
+    float GetSpeed() { return mfSpeed; }
 
-	void SetSpecialEventTime(float afX) { mfSpecialEventTime = afX; }
-	float GetSpecialEventTime() { return mfSpecialEventTime; }
+    void SetSpecialEventTime(float afX) { mfSpecialEventTime = afX; }
+    float GetSpecialEventTime() { return mfSpecialEventTime; }
 
-	tAnimEventWrapperVec& GetEvents() { return mvEvents; }
-	cAnimationEventWrapper* GetEvent(int alIdx) { return &mvEvents[alIdx]; }
-	int AddEvent();
-	void RemoveEvent(int alIdx);
-	void ClearEvents();
+    tAnimEventWrapperVec &GetEvents() { return mvEvents; }
+    cAnimationEventWrapper *GetEvent(int alIdx) { return &mvEvents[alIdx]; }
+    int AddEvent();
+    void RemoveEvent(int alIdx);
+    void ClearEvents();
 
-protected:
-	tString msName;
-	tString msFile;
-	float mfSpeed;
-	float mfSpecialEventTime;
+  protected:
+    tString msName;
+    tString msFile;
+    float mfSpeed;
+    float mfSpecialEventTime;
 
-	tAnimEventWrapperVec mvEvents;
+    tAnimEventWrapperVec mvEvents;
 };
 
 //--------------------------------------------------------------------
 
-class cModelEditorWorld : public iEditorWorld
-{
-public:
-	cModelEditorWorld(iEditorBase* apEditor);
-	
-	void Reset();
+class cModelEditorWorld : public iEditorWorld {
+  public:
+    cModelEditorWorld(iEditorBase *apEditor);
 
-	cEntityWrapperTypeSubMesh* GetSubMeshType() { return mpTypeSubMesh; }
-	cEntityWrapperTypeBone*	   GetBoneType()	{ return mpTypeBone; }
-	
-	cMeshEntity* GetMesh();
-	tString GetMeshFilename();
+    void Reset();
 
-	///////////////////////////////////////////
-	// Mesh
-	void SetMeshFromElement(cXmlElement* apMeshElement, cXmlElement* apBonesElement);
+    cEntityWrapperTypeSubMesh *GetSubMeshType() { return mpTypeSubMesh; }
+    cEntityWrapperTypeBone *GetBoneType() { return mpTypeBone; }
 
-	///////////////////////////////////////////
-	// Animations
-	void SetAnimations(const tAnimWrapperVec& avAnims);
-	tAnimWrapperVec& GetAnimations() { return mvAnimations; }
+    cMeshEntity *GetMesh();
+    tString GetMeshFilename();
 
-	///////////////////////////////////////////
-	// User defined variables
-	void SetTempValues(tVarValueMap& amapX);
-	void SetType(cEditorUserClassSubType* apType, bool abKeepValues=true);
-	cEditorClassInstance* GetClass() { return mpClass; }
+    ///////////////////////////////////////////
+    // Mesh
+    void SetMeshFromElement(cXmlElement *apMeshElement, cXmlElement *apBonesElement);
 
-	cXmlElement* GetWorldDataElement(iXmlDocument* apXmlDoc);
-	void LoadWorldData(cXmlElement* apWorldDataElement);
-	cXmlElement* GetWorldObjectsElement(cXmlElement* apWorldDataElement);
+    ///////////////////////////////////////////
+    // Animations
+    void SetAnimations(const tAnimWrapperVec &avAnims);
+    tAnimWrapperVec &GetAnimations() { return mvAnimations; }
 
-	cXmlElement* CreateWorldDataElement(iXmlDocument* apXmlDoc);
-	cXmlElement* CreateWorldObjectsElement(cXmlElement* apWorldDataElement);
+    ///////////////////////////////////////////
+    // User defined variables
+    void SetTempValues(tVarValueMap &amapX);
+    void SetType(cEditorUserClassSubType *apType, bool abKeepValues = true);
+    cEditorClassInstance *GetClass() { return mpClass; }
 
-	void SaveWorldData(cXmlElement*);
+    cXmlElement *GetWorldDataElement(iXmlDocument *apXmlDoc);
+    void LoadWorldData(cXmlElement *apWorldDataElement);
+    cXmlElement *GetWorldObjectsElement(cXmlElement *apWorldDataElement);
 
-protected:
+    cXmlElement *CreateWorldDataElement(iXmlDocument *apXmlDoc);
+    cXmlElement *CreateWorldObjectsElement(cXmlElement *apWorldDataElement);
 
-	bool CustomCategorySaver(cXmlElement*);
-	bool CustomCategoryLoader(cXmlElement*, cXmlElement*);
+    void SaveWorldData(cXmlElement *);
 
-	cEntityWrapperTypeSubMesh* mpTypeSubMesh;
-	cEntityWrapperTypeBone*		mpTypeBone;
+  protected:
+    bool CustomCategorySaver(cXmlElement *);
+    bool CustomCategoryLoader(cXmlElement *, cXmlElement *);
 
-	///////////////////////
-	// Model Animations
-	tAnimWrapperVec mvAnimations;
+    cEntityWrapperTypeSubMesh *mpTypeSubMesh;
+    cEntityWrapperTypeBone *mpTypeBone;
 
-	///////////////////////
-	// User defined variables
-	cEditorClassInstance* mpClass;
-	tVarValueMap mmapTempValues;
+    ///////////////////////
+    // Model Animations
+    tAnimWrapperVec mvAnimations;
+
+    ///////////////////////
+    // User defined variables
+    cEditorClassInstance *mpClass;
+    tVarValueMap mmapTempValues;
 };
-
 
 #endif // MODEL_EDITOR_WORLD_H

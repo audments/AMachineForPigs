@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -24,73 +24,72 @@
 
 namespace hpl {
 
-	class cGuiSkinFont;
+class cGuiSkinFont;
 
-	class cWidgetButton : public iWidget
-	{
-	public:
-		cWidgetButton(cGuiSet *apSet, cGuiSkin *apSkin);
-		virtual ~cWidgetButton();
+class cWidgetButton : public iWidget {
+  public:
+    cWidgetButton(cGuiSet *apSet, cGuiSkin *apSkin);
+    virtual ~cWidgetButton();
 
-		void SetImage(cGuiGfxElement *apImage, bool abDestroyImage=true);
-		cGuiGfxElement *GetImage(){return mpImage;}
+    void SetImage(cGuiGfxElement *apImage, bool abDestroyImage = true);
+    cGuiGfxElement *GetImage() { return mpImage; }
 
-		void SetRepeatActive(bool abX) { mbRepeatActive = abX; }
-		bool GetRepeatActive() { return mbRepeatActive; }
-		
-		void SetRepeatFreq(float afFreq);
-		
-		void SetToggleable(bool abX) { mbToggleable = abX; }
-		bool IsToggleable() { return mbToggleable; }
+    void SetRepeatActive(bool abX) { mbRepeatActive = abX; }
+    bool GetRepeatActive() { return mbRepeatActive; }
 
-		void SetPressed(bool abX, bool abGenCallback=true);
-		bool IsPressed() { return mbPressed; }
-		
-	protected:
-		/////////////////////////
-		// Implemented functions
-		void OnLoadGraphics();
-		
-		void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
+    void SetRepeatFreq(float afFreq);
 
-		void OnUpdate(float afTimeStep);
+    void SetToggleable(bool abX) { mbToggleable = abX; }
+    bool IsToggleable() { return mbToggleable; }
 
-		bool OnMouseMove(const cGuiMessageData& aData);
-		bool OnMouseDown(const cGuiMessageData& aData);
-		bool OnMouseUp(const cGuiMessageData& aData);
-		bool OnMouseEnter(const cGuiMessageData& aData);
-		bool OnMouseLeave(const cGuiMessageData& aData);
+    void SetPressed(bool abX, bool abGenCallback = true);
+    bool IsPressed() { return mbPressed; }
 
-		bool OnMouseDoubleClick(const cGuiMessageData& aData) { return true; }
+  protected:
+    /////////////////////////
+    // Implemented functions
+    void OnLoadGraphics();
 
-		bool OnLostFocus(const cGuiMessageData& aData);
+    void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
 
-		bool OnUIButtonPress(const cGuiMessageData& aData);
-		bool OnUIButtonRelease(const cGuiMessageData& aData);
+    void OnUpdate(float afTimeStep);
 
-		/////////////////////////
-		// Data
-		bool mbPressed;
+    bool OnMouseMove(const cGuiMessageData &aData);
+    bool OnMouseDown(const cGuiMessageData &aData);
+    bool OnMouseUp(const cGuiMessageData &aData);
+    bool OnMouseEnter(const cGuiMessageData &aData);
+    bool OnMouseLeave(const cGuiMessageData &aData);
 
-		bool mbToggleable;
+    bool OnMouseDoubleClick(const cGuiMessageData &aData) { return true; }
 
-		cGuiGfxElement *mpImage;
-		bool mbDestroyImage;
+    bool OnLostFocus(const cGuiMessageData &aData);
 
-		float mfTimer;
-		bool mbRepeatActive;
-		float mfRepeatPeriod;
-		int mlRepeatTimes;
-		cGuiMessageData mPressedData;
+    bool OnUIButtonPress(const cGuiMessageData &aData);
+    bool OnUIButtonRelease(const cGuiMessageData &aData);
 
-		cGuiGfxElement *mpGfxBackgroundUp;
-		cGuiGfxElement *mvGfxBordersUp[4];
-		cGuiGfxElement *mvGfxCornersUp[4];
+    /////////////////////////
+    // Data
+    bool mbPressed;
 
-		cGuiGfxElement *mpGfxBackgroundDown;
-		cGuiGfxElement *mvGfxBordersDown[4];
-		cGuiGfxElement *mvGfxCornersDown[4];
-	};
+    bool mbToggleable;
 
+    cGuiGfxElement *mpImage;
+    bool mbDestroyImage;
+
+    float mfTimer;
+    bool mbRepeatActive;
+    float mfRepeatPeriod;
+    int mlRepeatTimes;
+    cGuiMessageData mPressedData;
+
+    cGuiGfxElement *mpGfxBackgroundUp;
+    cGuiGfxElement *mvGfxBordersUp[4];
+    cGuiGfxElement *mvGfxCornersUp[4];
+
+    cGuiGfxElement *mpGfxBackgroundDown;
+    cGuiGfxElement *mvGfxBordersDown[4];
+    cGuiGfxElement *mvGfxCornersDown[4];
 };
+
+};     // namespace hpl
 #endif // HPL_WIDGET_BUTTON_H

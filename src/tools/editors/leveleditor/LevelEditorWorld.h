@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -34,13 +34,15 @@ class cLevelEditorStaticObjectCombo;
 ///////////////////////////////////////////////////////////
 // cLevelEditorEntityExtData
 //	Extension Data for entities in LevelEditor
-class cLevelEditorEntityExtData
-{
-public:
-	cLevelEditorEntityExtData() { mlGroupID = 0; mlComboID = -1; }
+class cLevelEditorEntityExtData {
+  public:
+    cLevelEditorEntityExtData() {
+        mlGroupID = 0;
+        mlComboID = -1;
+    }
 
-	int mlGroupID;
-	int mlComboID;
+    int mlGroupID;
+    int mlComboID;
 };
 
 //---------------------------------------------------------------
@@ -48,54 +50,51 @@ public:
 ///////////////////////////////////////////////////////////
 // cLevelEditorWorld
 //	Scene data with specifics to LevelEditor
-class cLevelEditorWorld : public iEditorWorld
-{
-public:
-	cLevelEditorWorld(iEditorBase* apEditor);
-	~cLevelEditorWorld();
+class cLevelEditorWorld : public iEditorWorld {
+  public:
+    cLevelEditorWorld(iEditorBase *apEditor);
+    ~cLevelEditorWorld();
 
-	cXmlElement* GetWorldDataElement(iXmlDocument* apXmlDoc);
-	cXmlElement* GetWorldObjectsElement(cXmlElement* apWorldDataElement);
-	void LoadWorldObjects(cXmlElement* apWorldObjectsElement);
+    cXmlElement *GetWorldDataElement(iXmlDocument *apXmlDoc);
+    cXmlElement *GetWorldObjectsElement(cXmlElement *apWorldDataElement);
+    void LoadWorldObjects(cXmlElement *apWorldObjectsElement);
 
-	cXmlElement* CreateWorldDataElement(iXmlDocument* apXmlDoc);
-	cXmlElement* CreateWorldObjectsElement(cXmlElement* apWorldDataElement);
-	void SaveWorldObjects(cXmlElement* apWorldObjectsElement, tEntityWrapperList& alstEnts);
+    cXmlElement *CreateWorldDataElement(iXmlDocument *apXmlDoc);
+    cXmlElement *CreateWorldObjectsElement(cXmlElement *apWorldDataElement);
+    void SaveWorldObjects(cXmlElement *apWorldObjectsElement, tEntityWrapperList &alstEnts);
 
-	void Reset();
+    void Reset();
 
-	//////////////////////////////////////////
-	// StaticObject Combos management
-	int GetFreeComboID() { return mlComboID++; }
-	cLevelEditorStaticObjectCombo* CreateStaticObjectCombo(int alID);
+    //////////////////////////////////////////
+    // StaticObject Combos management
+    int GetFreeComboID() { return mlComboID++; }
+    cLevelEditorStaticObjectCombo *CreateStaticObjectCombo(int alID);
 
-	bool AddStaticObjectCombo(cLevelEditorStaticObjectCombo* apCombo);
-	void RemoveStaticObjectCombo(int alID);
-	void ClearStaticObjectCombos();
-	const tStaticObjectComboList& GetStaticObjectCombos() { return mlstStaticObjectCombos; }
+    bool AddStaticObjectCombo(cLevelEditorStaticObjectCombo *apCombo);
+    void RemoveStaticObjectCombo(int alID);
+    void ClearStaticObjectCombos();
+    const tStaticObjectComboList &GetStaticObjectCombos() { return mlstStaticObjectCombos; }
 
-	cLevelEditorStaticObjectCombo* GetStaticObjectCombo(int alComboId);
-	int GetStaticObjectComboNum();
+    cLevelEditorStaticObjectCombo *GetStaticObjectCombo(int alComboId);
+    int GetStaticObjectComboNum();
 
-	////////////////////////////////////////////
-	// Level Editor specific code
-	void CreateDataCallback(iEntityWrapperData* apData);
-	void CopyDataFromEntityCallback(iEntityWrapperData* apData, iEntityWrapper* apEnt);
-	void CopyDataToEntityCallback(iEntityWrapperData* apData, iEntityWrapper* apEnt, int alCopyStep);
-	void DestroyDataCallback(iEntityWrapperData* apData);
+    ////////////////////////////////////////////
+    // Level Editor specific code
+    void CreateDataCallback(iEntityWrapperData *apData);
+    void CopyDataFromEntityCallback(iEntityWrapperData *apData, iEntityWrapper *apEnt);
+    void CopyDataToEntityCallback(iEntityWrapperData *apData, iEntityWrapper *apEnt, int alCopyStep);
+    void DestroyDataCallback(iEntityWrapperData *apData);
 
-	void SaveDataCallback(iEntityWrapperData* apData, cXmlElement* apElement);
-	void LoadDataCallback(iEntityWrapperData* apData, cXmlElement* apElement);
+    void SaveDataCallback(iEntityWrapperData *apData, cXmlElement *apElement);
+    void LoadDataCallback(iEntityWrapperData *apData, cXmlElement *apElement);
 
-	void DestroyEntityWrapperCallback(iEntityWrapper* apEnt);
+    void DestroyEntityWrapperCallback(iEntityWrapper *apEnt);
 
-protected:
-
-	int mlComboID;
-	tStaticObjectComboList mlstStaticObjectCombos;
+  protected:
+    int mlComboID;
+    tStaticObjectComboList mlstStaticObjectCombos;
 };
 
 //---------------------------------------------------------------
 
 #endif // HPLEDITOR_LEVEL_EDITOR_WORLD_H
-

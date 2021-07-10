@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,40 +26,38 @@
 
 //----------------------------------------------
 
-class cLuxMoveState_ClimbLedge : public iLuxMoveState
-{
-public:	
-	cLuxMoveState_ClimbLedge(cLuxPlayer *apPlayer);
-	~cLuxMoveState_ClimbLedge();
-	
-	void OnMapEnter();
+class cLuxMoveState_ClimbLedge : public iLuxMoveState {
+  public:
+    cLuxMoveState_ClimbLedge(cLuxPlayer *apPlayer);
+    ~cLuxMoveState_ClimbLedge();
 
-	void OnEnterState(eLuxMoveState aPrevState);
-	void OnLeaveState(eLuxMoveState aNewState);
+    void OnMapEnter();
 
-	void OnUpdate(float afTimeStep);
+    void OnEnterState(eLuxMoveState aPrevState);
+    void OnLeaveState(eLuxMoveState aNewState);
 
-	bool GetAllowsInteraction();
+    void OnUpdate(float afTimeStep);
 
-	bool OnMove(eCharDir aDir, float afMul);
-	bool OnAddYaw(float afAmount);
-	bool OnAddPitch(float afAmount);
+    bool GetAllowsInteraction();
 
-	void OnRun(bool abActive);
-	void OnCrouch(bool abActive);
-	void OnJump(bool abActive);
+    bool OnMove(eCharDir aDir, float afMul);
+    bool OnAddYaw(float afAmount);
+    bool OnAddPitch(float afAmount);
 
-	void OnDraw(float afFrameTime);
-	
-private:
-	float mfHeadMoveSpeed;
-	float mfHeadMoveSlowdownDist;
-	float mfGivePlayerControlDist;
-	float mfMovePitchFactor;
-	float mfMaxMovePitchSpeed;
+    void OnRun(bool abActive);
+    void OnCrouch(bool abActive);
+    void OnJump(bool abActive);
+
+    void OnDraw(float afFrameTime);
+
+  private:
+    float mfHeadMoveSpeed;
+    float mfHeadMoveSlowdownDist;
+    float mfGivePlayerControlDist;
+    float mfMovePitchFactor;
+    float mfMaxMovePitchSpeed;
 };
 
 //----------------------------------------------
-
 
 #endif // LUX_MOVE_STATE_CLIMB_LEDGE_H

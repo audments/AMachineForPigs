@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -40,44 +40,43 @@ class cEditorEditModeDecals;
 
 //------------------------------------------------------------
 
-class cEditorEditModeDecals : public iEditorEditModeObjectCreator
-{
-	friend class cEditorDecalCreator;
-public:
-	cEditorEditModeDecals(iEditorBase* apEditor,
-						  iEditorWorld* apEditorWorld);
-	~cEditorEditModeDecals();
+class cEditorEditModeDecals : public iEditorEditModeObjectCreator {
+    friend class cEditorDecalCreator;
 
-	void DrawPostGrid(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, const cVector3f& avPos);
+  public:
+    cEditorEditModeDecals(iEditorBase *apEditor, iEditorWorld *apEditorWorld);
+    ~cEditorEditModeDecals();
 
-	void OnViewportMouseDown(int alButtons);
-	void OnViewportMouseUp(int alButtons);
+    void DrawPostGrid(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions,
+                      const cVector3f &avPos);
 
-	void OnEditorUpdate(float afTimeStep);
+    void OnViewportMouseDown(int alButtons);
+    void OnViewportMouseUp(int alButtons);
 
-	void Reset(){}
+    void OnEditorUpdate(float afTimeStep);
 
-	void SetCurrentSubDiv(int alX) { mlCurrentSubDiv = alX; }
+    void Reset() {}
 
-	void UpdateDecalRotation();
-	void UpdateDecalSize();
+    void SetCurrentSubDiv(int alX) { mlCurrentSubDiv = alX; }
 
-protected:
-	void OnSetCurrent(bool abX);
-	void UpdateDecalParams();
+    void UpdateDecalRotation();
+    void UpdateDecalSize();
 
-	bool SetUpCreationData(iEntityWrapperData* apData);
-	void CreateTypes();
+  protected:
+    void OnSetCurrent(bool abX);
+    void UpdateDecalParams();
 
-	iEditorWindow* CreateSpecificWindow();
+    bool SetUpCreationData(iEntityWrapperData *apData);
+    void CreateTypes();
 
-	int mlCurrentSubDiv;
-	float mfOffset;
+    iEditorWindow *CreateSpecificWindow();
 
-	tIntVec mvAffectedEntIDs;
+    int mlCurrentSubDiv;
+    float mfOffset;
+
+    tIntVec mvAffectedEntIDs;
 };
 
 //------------------------------------------------------------
 
 #endif // HPLEDITOR_EDITOR_EDIT_MODE_DECALS_H
-

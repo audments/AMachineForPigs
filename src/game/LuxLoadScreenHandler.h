@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -24,120 +24,116 @@
 
 #include "LuxBase.h"
 
-enum eLuxLoadScreenState
-{
-	eLuxLoadScreenState_Game,
-	eLuxLoadScreenState_LastEnum
-};
+enum eLuxLoadScreenState { eLuxLoadScreenState_Game, eLuxLoadScreenState_LastEnum };
 
 //----------------------------------------
 
-class cLuxLoadScreenHandler : public iLuxUpdateable
-{
-friend class cLuxLoadScreenHandler_SaveData;
-public:	
-	cLuxLoadScreenHandler();
-	~cLuxLoadScreenHandler();
-	
-	void LoadFonts();
+class cLuxLoadScreenHandler : public iLuxUpdateable {
+    friend class cLuxLoadScreenHandler_SaveData;
 
-	void OnStart();
-	void Reset();
+  public:
+    cLuxLoadScreenHandler();
+    ~cLuxLoadScreenHandler();
 
-	void Update(float afTimeStep);
+    void LoadFonts();
 
-	void OnEnterContainer(const tString& asOldContainer);
-	void OnLeaveContainer(const tString& asNewContainer);
+    void OnStart();
+    void Reset();
 
-	void OnDraw(float afFrameTime);
+    void Update(float afTimeStep);
 
-	/**
-	* Called when game loading is done. Must be called after DrawGameScreen has been called!
-	*/
-	void GameScreenLoadDone(const tString& asEndSound, float afLoadTime);
-	
-	void DrawGameScreen();
-	void DrawMenuScreen();
-	void DrawBlankScreen();
+    void OnEnterContainer(const tString &asOldContainer);
+    void OnLeaveContainer(const tString &asNewContainer);
 
-	void ExitPressed();
+    void OnDraw(float afFrameTime);
 
-	/////////////////////
-	//Properties
-	/**
-	* If alRandomNum > 1, then it will randomize between 1 and alRandom for each LoadScreen giving entry the suffix XX (eg 01). If <=1 then no suffix is added
-	*/
-	void SetupLoadText(const tString& asCat, const tString& asEntry, int alRandomNum, const tString& asImage);
-	
-	const tString& GetLoadTextCat(){ return msLoadTextCat;}
-	const tString& GetLoadTextEntry(){ return msLoadTextEntry;}
-	const tString& GetLoadTextImage(){ return msLoadTextImage;}
-	int GetLoadTextEntryRandomNum(){ return mlTextRandomNum; }
+    /**
+     * Called when game loading is done. Must be called after DrawGameScreen has been called!
+     */
+    void GameScreenLoadDone(const tString &asEndSound, float afLoadTime);
 
-private:
-	void Exit();
-	tString GetGameScreenTextEntry();
-	void LoadCurrentImage(const tString &asImage);
-	    
-	void UpdateGameState(float afTimeStep);
-	void DrawGameState(float afFrameTime);
-	void DrawGameScreen(cGuiSet *apSet);
-	
-	//////////////////
-	// Data
-	cGui *mpGui;
-	cScene *mpScene;
-	cGraphics *mpGraphics;
+    void DrawGameScreen();
+    void DrawMenuScreen();
+    void DrawBlankScreen();
 
-	cViewport *mpViewport;
-	cGuiSkin *mpGuiSkin;
-	cGuiSet *mpGuiSet;
+    void ExitPressed();
 
-	cGuiGfxElement* mpWhiteGfx;
-	
-	cVector2f mvScreenSize;
-	cVector2f mvGuiSetCenterSize;//Size of the part that is inside a 4:3 ratio!
-	cVector2f mvGuiSetSize;
-	cVector2f mvGuiSetOffset;
-	cVector3f mvGuiSetStartPos;
+    /////////////////////
+    // Properties
+    /**
+     * If alRandomNum > 1, then it will randomize between 1 and alRandom for each LoadScreen giving entry the suffix XX
+     * (eg 01). If <=1 then no suffix is added
+     */
+    void SetupLoadText(const tString &asCat, const tString &asEntry, int alRandomNum, const tString &asImage);
 
-	iFontData *mpFontDefault;
+    const tString &GetLoadTextCat() { return msLoadTextCat; }
+    const tString &GetLoadTextEntry() { return msLoadTextEntry; }
+    const tString &GetLoadTextImage() { return msLoadTextImage; }
+    int GetLoadTextEntryRandomNum() { return mlTextRandomNum; }
 
-	cVector2f mvLoadingFontSize;
+  private:
+    void Exit();
+    tString GetGameScreenTextEntry();
+    void LoadCurrentImage(const tString &asImage);
+
+    void UpdateGameState(float afTimeStep);
+    void DrawGameState(float afFrameTime);
+    void DrawGameScreen(cGuiSet *apSet);
+
+    //////////////////
+    // Data
+    cGui *mpGui;
+    cScene *mpScene;
+    cGraphics *mpGraphics;
+
+    cViewport *mpViewport;
+    cGuiSkin *mpGuiSkin;
+    cGuiSet *mpGuiSet;
+
+    cGuiGfxElement *mpWhiteGfx;
+
+    cVector2f mvScreenSize;
+    cVector2f mvGuiSetCenterSize; // Size of the part that is inside a 4:3 ratio!
+    cVector2f mvGuiSetSize;
+    cVector2f mvGuiSetOffset;
+    cVector3f mvGuiSetStartPos;
+
+    iFontData *mpFontDefault;
+
+    cVector2f mvLoadingFontSize;
     cColor mLoadingFontColor;
-	cVector2f mvTextFontSize;
+    cVector2f mvTextFontSize;
     cColor mTextFontColor;
-	float mfLoadingY;
-	float mfTextWithImageY;
-	float mfTextAloneY;
-	float mfImageY;
-	float mfTextMaxWidth;
+    float mfLoadingY;
+    float mfTextWithImageY;
+    float mfTextAloneY;
+    float mfImageY;
+    float mfTextMaxWidth;
 
-	float mfFadeOutTime;
-	float mfTextDurationMul;
+    float mfFadeOutTime;
+    float mfTextDurationMul;
 
-	//////////////////
-	// Variables
-	cGuiGfxElement* mpCurrentImage;
-	tString msCurrentImage;
-	
-	tString msLoadTextCat;
-	tString msLoadTextEntry;
-	tString msLoadTextImage;
-	int mlTextRandomNum;
-	int mlPrevTextNumBitFlags;
+    //////////////////
+    // Variables
+    cGuiGfxElement *mpCurrentImage;
+    tString msCurrentImage;
 
-	tString msGameScreenEndSound;
+    tString msLoadTextCat;
+    tString msLoadTextEntry;
+    tString msLoadTextImage;
+    int mlTextRandomNum;
+    int mlPrevTextNumBitFlags;
 
-	float mfLoadingAlpha;
+    tString msGameScreenEndSound;
+
+    float mfLoadingAlpha;
     float mfAlpha;
-	float mfExtraTime;
-	eLuxLoadScreenState mState;
-	tString msCurrentGameScreenTextEntry;
-	tString msCurrentGameScreenImage;
+    float mfExtraTime;
+    eLuxLoadScreenState mState;
+    tString msCurrentGameScreenTextEntry;
+    tString msCurrentGameScreenImage;
 };
 
 //----------------------------------------------
-
 
 #endif // LUX_LOAD_SCREEN_HANDLER_H

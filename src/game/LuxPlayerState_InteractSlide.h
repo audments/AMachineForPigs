@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -32,75 +32,70 @@ class cLuxInteractData_Slide;
 
 //------------------------------------
 
-class cLuxPlayerState_InteractSlide_SaveData : public iLuxPlayerState_Interact_SaveData
-{
-	kSerializableClassInit(cLuxPlayerState_InteractSlide_SaveData)
-public:
+class cLuxPlayerState_InteractSlide_SaveData : public iLuxPlayerState_Interact_SaveData {
+    kSerializableClassInit(cLuxPlayerState_InteractSlide_SaveData) public:
 };
 
 //------------------------------------
 
+class cLuxPlayerState_InteractSlide : public iLuxPlayerState_Interact {
+    typedef iLuxPlayerState_Interact super_class;
 
-class cLuxPlayerState_InteractSlide : public iLuxPlayerState_Interact
-{
-typedef iLuxPlayerState_Interact super_class;
-public:	
-	cLuxPlayerState_InteractSlide(cLuxPlayer *apPlayer);
-	virtual ~cLuxPlayerState_InteractSlide();
+  public:
+    cLuxPlayerState_InteractSlide(cLuxPlayer *apPlayer);
+    virtual ~cLuxPlayerState_InteractSlide();
 
-	void OnEnterState(eLuxPlayerState aPrevState);
-	void OnLeaveState(eLuxPlayerState aNewState);
+    void OnEnterState(eLuxPlayerState aPrevState);
+    void OnLeaveState(eLuxPlayerState aNewState);
 
-	void Update(float afTimeStep);
-	void PostUpdate(float afTimeStep);
+    void Update(float afTimeStep);
+    void PostUpdate(float afTimeStep);
 
-	bool OnDoAction(eLuxPlayerAction aAction,bool abPressed);
+    bool OnDoAction(eLuxPlayerAction aAction, bool abPressed);
 
-	bool OnAddYaw(float afAmount);
-	bool OnAddPitch(float afAmount);
+    bool OnAddYaw(float afAmount);
+    bool OnAddPitch(float afAmount);
 
-	bool OnMove(eCharDir aDir, float afMul);
+    bool OnMove(eCharDir aDir, float afMul);
 
-	cGuiGfxElement* GetCrosshair();
+    cGuiGfxElement *GetCrosshair();
 
-	void OnSaveBody(iPhysicsBody *apBody, float &afMass, bool &abCollideCharacter);
+    void OnSaveBody(iPhysicsBody *apBody, float &afMass, bool &abCollideCharacter);
 
-	float DrawDebug(cGuiSet *apSet,iFontData *apFont, float afStartY);
-	
-	void RenderSolid(cRendererCallbackFunctions* apFunctions);
+    float DrawDebug(cGuiSet *apSet, iFontData *apFont, float afStartY);
 
-	/////////////////////////////////
-	//Save data stuff
-	virtual bool IsSaved(){ return true; }
-	iLuxPlayerState_SaveData* CreateSaveData();
+    void RenderSolid(cRendererCallbackFunctions *apFunctions);
 
-	void SaveToSaveData(iLuxPlayerState_SaveData* apSaveData);
-	void LoadFromSaveDataBeforeEnter(cLuxMap *apMap,iLuxPlayerState_SaveData* apSaveData);
-	void LoadFromSaveDataAfterEnter(cLuxMap *apMap, iLuxPlayerState_SaveData* apSaveData);
+    /////////////////////////////////
+    // Save data stuff
+    virtual bool IsSaved() { return true; }
+    iLuxPlayerState_SaveData *CreateSaveData();
 
-protected:
-	cLuxInteractData_Slide *mpSlideData;
+    void SaveToSaveData(iLuxPlayerState_SaveData *apSaveData);
+    void LoadFromSaveDataBeforeEnter(cLuxMap *apMap, iLuxPlayerState_SaveData *apSaveData);
+    void LoadFromSaveDataAfterEnter(cLuxMap *apMap, iLuxPlayerState_SaveData *apSaveData);
 
-	cPidController<cVector3f> mForcePid;
+  protected:
+    cLuxInteractData_Slide *mpSlideData;
 
-	iPhysicsJoint *mpCurrentJoint;
-	bool mbHasGravity;
+    cPidController<cVector3f> mForcePid;
 
-	float mfMaxDistance;
-	cVector3f mvLocalInteractPos;
+    iPhysicsJoint *mpCurrentJoint;
+    bool mbHasGravity;
 
-	cVector2f mvMouseAdd;
-	cVector2f mvLastMouseAdd;
-	cVector3f mvLastForce;
+    float mfMaxDistance;
+    cVector3f mvLocalInteractPos;
 
-	float mfSlideSpeed;
+    cVector2f mvMouseAdd;
+    cVector2f mvLastMouseAdd;
+    cVector3f mvLastForce;
 
-	float mfMoveToMouseAddFactor;
-	float mfMaxForce;
-	
+    float mfSlideSpeed;
+
+    float mfMoveToMouseAddFactor;
+    float mfMaxForce;
 };
 
 //----------------------------------------------
-
 
 #endif // LUX_PLAYER_STATE_INTERACT_SLIDE_H

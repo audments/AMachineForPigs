@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -24,91 +24,86 @@
 
 //---------------------------------------------------------------------
 
-class cIconEntityLightBox : public iIconEntityLight
-{
-public:
-	cIconEntityLightBox(iEntityWrapper* apParent);
+class cIconEntityLightBox : public iIconEntityLight {
+  public:
+    cIconEntityLightBox(iEntityWrapper *apParent);
 
-	bool Create(const tString&);
+    bool Create(const tString &);
 };
 
 //---------------------------------------------------------------------
 
 #define LightBoxPropIdStart 80
 
-enum eLightBoxInt
-{
-	eLightBoxInt_BlendFunc = LightBoxPropIdStart,
-	eLightBoxInt_Priority,
+enum eLightBoxInt {
+    eLightBoxInt_BlendFunc = LightBoxPropIdStart,
+    eLightBoxInt_Priority,
 
-	eLightBoxInt_LastEnum,
+    eLightBoxInt_LastEnum,
 };
 
-enum eLightBoxVec3f
-{
-	eLightBoxVec3f_Size = LightBoxPropIdStart,
+enum eLightBoxVec3f {
+    eLightBoxVec3f_Size = LightBoxPropIdStart,
 
-	eLightBoxVec3f_LastEnum
-};
-
-//---------------------------------------------------------------------
-
-class cEntityWrapperTypeLightBox : public iEntityWrapperTypeLight
-{
-public:
-	cEntityWrapperTypeLightBox();
-
-	iEntityWrapperData* CreateSpecificData();
+    eLightBoxVec3f_LastEnum
 };
 
 //---------------------------------------------------------------------
 
-class cEntityWrapperDataLightBox : public iEntityWrapperDataLight
-{
-public:
-	cEntityWrapperDataLightBox(iEntityWrapperType*);
+class cEntityWrapperTypeLightBox : public iEntityWrapperTypeLight {
+  public:
+    cEntityWrapperTypeLightBox();
 
-protected:
-	iEntityWrapper* CreateSpecificEntity();
+    iEntityWrapperData *CreateSpecificData();
 };
 
 //---------------------------------------------------------------------
 
-class cEntityWrapperLightBox : public iEntityWrapperLight
-{
-public:
-	cEntityWrapperLightBox(iEntityWrapperData*);
-	~cEntityWrapperLightBox();
+class cEntityWrapperDataLightBox : public iEntityWrapperDataLight {
+  public:
+    cEntityWrapperDataLightBox(iEntityWrapperType *);
 
-	bool SetProperty(int, const int&);
-	bool SetProperty(int, const cVector3f&);
+  protected:
+    iEntityWrapper *CreateSpecificEntity();
+};
 
-	bool GetProperty(int, int&);
-	bool GetProperty(int, cVector3f&);
+//---------------------------------------------------------------------
 
-	void SetSize(const cVector3f& avSize);
-	cVector3f& GetSize() { return mvSize; }
+class cEntityWrapperLightBox : public iEntityWrapperLight {
+  public:
+    cEntityWrapperLightBox(iEntityWrapperData *);
+    ~cEntityWrapperLightBox();
 
-	void SetBlendFunc(eLightBoxBlendFunc aeFunc);
-	eLightBoxBlendFunc GetBlendFunc() { return mBlendFunc; }
+    bool SetProperty(int, const int &);
+    bool SetProperty(int, const cVector3f &);
 
-	void SetAbsScale(const cVector3f& avScale, int alAxis=-1);
+    bool GetProperty(int, int &);
+    bool GetProperty(int, cVector3f &);
 
-	void SetPriority(int alX);
-	int GetPriority() { return mlPriority; }
-	
-	void DrawLightTypeSpecific(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, iEditorEditMode* apEditMode, bool abIsSelected);
+    void SetSize(const cVector3f &avSize);
+    cVector3f &GetSize() { return mvSize; }
 
-	void SaveToElement(cXmlElement* apElement);
+    void SetBlendFunc(eLightBoxBlendFunc aeFunc);
+    eLightBoxBlendFunc GetBlendFunc() { return mBlendFunc; }
 
-protected:
-	iEngineEntity* CreateSpecificEngineEntity();
+    void SetAbsScale(const cVector3f &avScale, int alAxis = -1);
 
-	//////////////////////
-	// Data
-	cVector3f mvSize;
-	eLightBoxBlendFunc mBlendFunc;
-	int mlPriority;
+    void SetPriority(int alX);
+    int GetPriority() { return mlPriority; }
+
+    void DrawLightTypeSpecific(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions,
+                               iEditorEditMode *apEditMode, bool abIsSelected);
+
+    void SaveToElement(cXmlElement *apElement);
+
+  protected:
+    iEngineEntity *CreateSpecificEngineEntity();
+
+    //////////////////////
+    // Data
+    cVector3f mvSize;
+    eLightBoxBlendFunc mBlendFunc;
+    int mlPriority;
 };
 
 //---------------------------------------------------------------------

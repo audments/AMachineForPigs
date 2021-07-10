@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,102 +20,101 @@
 #ifndef HPL_ROPE_ENTITY_H
 #define HPL_ROPE_ENTITY_H
 
-#include "math/MathTypes.h"
 #include "graphics/GraphicsTypes.h"
+#include "math/MathTypes.h"
 #include "system/SystemTypes.h"
 
 #include "graphics/Renderable.h"
 
 namespace hpl {
 
-	class cMaterialManager;
-	class cGraphics;
-	class cResources;
-	class iLowLevelGraphics;
-	class cMaterial;
-	class iVertexBuffer;
-	class iPhysicsRope;
-	
-	//------------------------------------------
+class cMaterialManager;
+class cGraphics;
+class cResources;
+class iLowLevelGraphics;
+class cMaterial;
+class iVertexBuffer;
+class iPhysicsRope;
 
-	class cRopeEntity : public iRenderable
-	{
-	public:
-		cRopeEntity(const tString& asName, cResources *apResources,cGraphics *apGraphics, iPhysicsRope *apRope, int alMaxSegments);
-		~cRopeEntity();
+//------------------------------------------
 
-		const tString& GetName(){return msName;}
+class cRopeEntity : public iRenderable {
+  public:
+    cRopeEntity(const tString &asName, cResources *apResources, cGraphics *apGraphics, iPhysicsRope *apRope,
+                int alMaxSegments);
+    ~cRopeEntity();
 
-		iPhysicsRope *GetPhysicsRope(){ return mpRope;}
+    const tString &GetName() { return msName; }
 
-		void SetMaterial(cMaterial * apMaterial);
-		
-		void SetColor(const cColor &aColor);
-		const cColor& GetColor(){ return mColor;}
+    iPhysicsRope *GetPhysicsRope() { return mpRope; }
 
-		void SetMultiplyAlphaWithColor(bool abX);
-		bool GetMultiplyAlphaWithColor(){ return mbMultiplyAlphaWithColor;}
+    void SetMaterial(cMaterial *apMaterial);
 
-		void SetRadius(float afX){ mfRadius = afX;}
-		float GetRadius(){ return mfRadius;}
-		
-		int GetMaxSegments(){ return mlMaxSegments;}
+    void SetColor(const cColor &aColor);
+    const cColor &GetColor() { return mColor; }
 
-		/**
-		 * Only used when segment size > 0
-		 */
-		void SetLengthTileAmount(float afX){ mfLengthTileAmount = afX;}
-		float GetLengthTileAmount(){ return mfLengthTileAmount;}
+    void SetMultiplyAlphaWithColor(bool abX);
+    bool GetMultiplyAlphaWithColor() { return mbMultiplyAlphaWithColor; }
 
-		/**
-		* Only used when segment size = 0
-		*/
-		void SetLengthTileSize(float afX){ mfLengthTileSize = afX;}
-		float GetLengthTileSize(){ return mfLengthTileSize;}
+    void SetRadius(float afX) { mfRadius = afX; }
+    float GetRadius() { return mfRadius; }
 
-		
-		/////////////////////////////////
-		//Entity implementation
-		tString GetEntityType(){ return "RopeEntity";}
+    int GetMaxSegments() { return mlMaxSegments; }
 
-		bool IsVisible();
-		
-		/////////////////////////////////
-		//Renderable implementations
-		cMaterial *GetMaterial(){ return mpMaterial;}
-		iVertexBuffer* GetVertexBuffer(){return mpVtxBuffer;}
+    /**
+     * Only used when segment size > 0
+     */
+    void SetLengthTileAmount(float afX) { mfLengthTileAmount = afX; }
+    float GetLengthTileAmount() { return mfLengthTileAmount; }
 
-        void UpdateGraphicsForFrame(float afFrameTime);
-		bool UpdateGraphicsForViewport(cFrustum *apFrustum,float afFrameTime);
+    /**
+     * Only used when segment size = 0
+     */
+    void SetLengthTileSize(float afX) { mfLengthTileSize = afX; }
+    float GetLengthTileSize() { return mfLengthTileSize; }
 
-		cBoundingVolume* GetBoundingVolume();
+    /////////////////////////////////
+    // Entity implementation
+    tString GetEntityType() { return "RopeEntity"; }
 
-		cMatrixf* GetModelMatrix(cFrustum *apFrustum);
+    bool IsVisible();
 
-		int GetMatrixUpdateCount();
+    /////////////////////////////////
+    // Renderable implementations
+    cMaterial *GetMaterial() { return mpMaterial; }
+    iVertexBuffer *GetVertexBuffer() { return mpVtxBuffer; }
 
+    void UpdateGraphicsForFrame(float afFrameTime);
+    bool UpdateGraphicsForViewport(cFrustum *apFrustum, float afFrameTime);
 
-		eRenderableType GetRenderType(){ return eRenderableType_Rope;}
-	private:
-		cMaterialManager* mpMaterialManager;
-		iLowLevelGraphics* mpLowLevelGraphics;
+    cBoundingVolume *GetBoundingVolume();
 
-		iPhysicsRope *mpRope;
-		
-		cMaterial *mpMaterial;
-		iVertexBuffer* mpVtxBuffer;
+    cMatrixf *GetModelMatrix(cFrustum *apFrustum);
 
-		int mlMaxSegments;
+    int GetMatrixUpdateCount();
 
-		float mfRadius;
-		float mfLengthTileAmount;
-		float mfLengthTileSize;
-		
-		cColor mColor;
-		bool mbMultiplyAlphaWithColor;
+    eRenderableType GetRenderType() { return eRenderableType_Rope; }
 
-		int mlLastUpdateCount;
-	};
+  private:
+    cMaterialManager *mpMaterialManager;
+    iLowLevelGraphics *mpLowLevelGraphics;
 
+    iPhysicsRope *mpRope;
+
+    cMaterial *mpMaterial;
+    iVertexBuffer *mpVtxBuffer;
+
+    int mlMaxSegments;
+
+    float mfRadius;
+    float mfLengthTileAmount;
+    float mfLengthTileSize;
+
+    cColor mColor;
+    bool mbMultiplyAlphaWithColor;
+
+    int mlLastUpdateCount;
 };
+
+};     // namespace hpl
 #endif // HPL_ROPE_ENTITY_H

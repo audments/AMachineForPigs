@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -37,51 +37,50 @@ class cEntitySelectorHighlighter;
 
 //----------------------------------------------------------------------
 
-class cEditorWindowEntityEditBoxBillboard : public cEditorWindowEntityEditBox
-{
-public:
-	cEditorWindowEntityEditBoxBillboard(cEditorEditModeSelect* apEditMode,cEntityWrapperBillboard* apArea);
-	virtual ~cEditorWindowEntityEditBoxBillboard();
+class cEditorWindowEntityEditBoxBillboard : public cEditorWindowEntityEditBox {
+  public:
+    cEditorWindowEntityEditBoxBillboard(cEditorEditModeSelect *apEditMode, cEntityWrapperBillboard *apArea);
+    virtual ~cEditorWindowEntityEditBoxBillboard();
 
-	void Create();
-protected:
-	void AddPropertySetBillboard(cWidgetTab* apParentTab);
+    void Create();
 
-	void OnUpdate(float afTimeStep);
+  protected:
+    void AddPropertySetBillboard(cWidgetTab *apParentTab);
 
-	bool InputCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputCallback);
+    void OnUpdate(float afTimeStep);
 
-	bool HighlighterCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(HighlighterCallback);
+    bool InputCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputCallback);
 
-	bool WindowSpecificInputCallback(iEditorInput* apInput);
+    bool HighlighterCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(HighlighterCallback);
 
-	tWStringVec mvLoadedFiles;
-	tWString msLastPath;
+    bool WindowSpecificInputCallback(iEditorInput *apInput);
 
-	cWidgetTab* mpTabGeneral;
-	cWidgetTab* mpTabBillboard;
+    tWStringVec mvLoadedFiles;
+    tWString msLastPath;
 
-	cEntityWrapperBillboard* mpEntity;
+    cWidgetTab *mpTabGeneral;
+    cWidgetTab *mpTabBillboard;
 
-	cEditorInputEnum* mpInpType;
-	cEditorInputNumber* mpInpOffset;
-	cEditorInputVec2* mpInpSize;
-	cEditorInputColorFrame* mpInpColor;
+    cEntityWrapperBillboard *mpEntity;
 
-	cEditorInputFile* mpInpMaterial;
+    cEditorInputEnum *mpInpType;
+    cEditorInputNumber *mpInpOffset;
+    cEditorInputVec2 *mpInpSize;
+    cEditorInputColorFrame *mpInpColor;
 
-	cEditorInputText* mpInpConnectedLight;
-	cWidgetButton* mpBConnectLight;
+    cEditorInputFile *mpInpMaterial;
 
-	cEditorInputBool* mpInpHalo;
-	cEditorInputVec3* mpInpHaloSourceSize;
+    cEditorInputText *mpInpConnectedLight;
+    cWidgetButton *mpBConnectLight;
 
-	cEntitySelectorHighlighter* mpLightHighlighter;
+    cEditorInputBool *mpInpHalo;
+    cEditorInputVec3 *mpInpHaloSourceSize;
+
+    cEntitySelectorHighlighter *mpLightHighlighter;
 };
 
 //----------------------------------------------------------------------
-
 
 #endif // HPLEDITOR_EDITOR_WINDOW_ENTITY_EDIT_BOX_BILLBOARD_H

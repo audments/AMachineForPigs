@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -30,99 +30,97 @@ class cLuxCustomStorySettings;
 
 //----------------------------------------------
 
-class cLuxMainMenu_CustomStory : public iLuxMainMenuWindow
-{
-public:
-	cLuxMainMenu_CustomStory(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin);
-	~cLuxMainMenu_CustomStory();
+class cLuxMainMenu_CustomStory : public iLuxMainMenuWindow {
+  public:
+    cLuxMainMenu_CustomStory(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin);
+    ~cLuxMainMenu_CustomStory();
 
-	void CreateGui();
+    void CreateGui();
 
-	void ExitPressed() {}
+    void ExitPressed() {}
 
-	void SetCurrentStory(cLuxCustomStorySettings* apStory);
+    void SetCurrentStory(cLuxCustomStorySettings *apStory);
 
-private:
-	void OnSetActive(bool abX);
+  private:
+    void OnSetActive(bool abX);
 
-	bool PressContinue(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressContinue);
-	
-	bool PressStart(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressStart);
+    bool PressContinue(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressContinue);
 
-	bool PressLoadGame(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressLoadGame);
+    bool PressStart(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressStart);
 
-	bool PressBack(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressBack);
+    bool PressLoadGame(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressLoadGame);
 
-	void RepositionButtons();
+    bool PressBack(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressBack);
 
-	cVector2f mvWindowSize;
+    void RepositionButtons();
 
-	cLuxCustomStorySettings* mpStory;
+    cVector2f mvWindowSize;
 
-	cWidgetImage* mpIPicture;
+    cLuxCustomStorySettings *mpStory;
 
-	cWidgetLabel* mpLAuthor;
-	cWidgetLabel* mpLDesc;
+    cWidgetImage *mpIPicture;
 
-	std::vector<cWidgetButton*> mvButtons;
+    cWidgetLabel *mpLAuthor;
+    cWidgetLabel *mpLDesc;
+
+    std::vector<cWidgetButton *> mvButtons;
 };
 
 //----------------------------------------------
 
-class cLuxMainMenu_CustomStoryList : public iLuxMainMenuWindow
-{
-public:
-	cLuxMainMenu_CustomStoryList(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin, cLuxMainMenu_CustomStory* apWindow);
-	~cLuxMainMenu_CustomStoryList();
+class cLuxMainMenu_CustomStoryList : public iLuxMainMenuWindow {
+  public:
+    cLuxMainMenu_CustomStoryList(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin, cLuxMainMenu_CustomStory *apWindow);
+    ~cLuxMainMenu_CustomStoryList();
 
-	void CreateGui();
+    void CreateGui();
 
-	void ExitPressed();
+    void ExitPressed();
 
-private:
-	void OnSetActive(bool abX);
+  private:
+    void OnSetActive(bool abX);
 
-	void PopulateStoryList();
+    void PopulateStoryList();
 #ifdef USERDIR_RESOURCES
-	void PopulateUserDirStoryList();
+    void PopulateUserDirStoryList();
 #endif
-	void ClearStoryList();
+    void ClearStoryList();
 
-	////////////////////////
-	// Properties
-	cVector2f mvWindowSize;
+    ////////////////////////
+    // Properties
+    cVector2f mvWindowSize;
 
-	cLuxMainMenu_CustomStory* mpStoryWindow;
+    cLuxMainMenu_CustomStory *mpStoryWindow;
 
-	////////////////////////
-	// Layout
-	cWidgetListBox* mpLBStories;
+    ////////////////////////
+    // Layout
+    cWidgetListBox *mpLBStories;
 
-	////////////////////////
-	// Callbacks
-	void LoadStory(int alIdx);
+    ////////////////////////
+    // Callbacks
+    void LoadStory(int alIdx);
 
-	bool WindowOnUpdate(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(WindowOnUpdate);
+    bool WindowOnUpdate(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(WindowOnUpdate);
 
-	bool SelectStory(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(SelectStory);
+    bool SelectStory(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(SelectStory);
 
-	bool PressOK(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressOK);
+    bool PressOK(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressOK);
 
-	bool PressCancel(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressCancel);
+    bool PressCancel(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressCancel);
 
-	bool LoadStoryCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(LoadStoryCallback);
+    bool LoadStoryCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(LoadStoryCallback);
 
-	bool ExitCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(ExitCallback);
+    bool ExitCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(ExitCallback);
 };
 
 //----------------------------------------------

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,110 +26,102 @@
 
 namespace hpl {
 
+class iWidgetMenu;
 
-	class iWidgetMenu;
+class cGuiSet;
+class cGuiSkin;
 
-	class cGuiSet;
-	class cGuiSkin;
+//----------------------------
 
+class cWidgetMenuItem : public iWidget {
+  public:
+    cWidgetMenuItem(iWidgetMenu *apParent);
+    virtual ~cWidgetMenuItem();
 
+    cWidgetMenuItem *AddMenuItem(const tWString &asText, const tWString &asIconFilename = _W(""));
+    void AddSeparator();
+    void ClearMenuItems();
 
-	//----------------------------
+    bool IsParent() { return (mpChildMenu != NULL); }
+    bool IsChecked() { return mbChecked; }
+    void SetChecked(bool abX) { mbChecked = abX; }
+    bool IsDefault() { return mbDefault; }
+    void SetDefault(bool abX) { mbDefault = abX; }
 
-	class cWidgetMenuItem : public iWidget
-	{
-	public:
-		cWidgetMenuItem(iWidgetMenu* apParent);
-		virtual ~cWidgetMenuItem();
+    iWidgetMenu *GetParentMenu() { return (iWidgetMenu *)mpParent; }
+    iWidgetMenu *GetChildMenu() { return mpChildMenu; }
 
-		cWidgetMenuItem* AddMenuItem(const tWString &asText, const tWString &asIconFilename = _W(""));
-		void AddSeparator();
-		void ClearMenuItems();
+    bool IsMenuOpen();
 
-		bool IsParent() { return (mpChildMenu != NULL); }
-		bool IsChecked()	{ return mbChecked; }
-		void SetChecked(bool abX) { mbChecked = abX; }
-		bool IsDefault()	{ return mbDefault; }
-		void SetDefault(bool abX) { mbDefault = abX; }
-		
-		iWidgetMenu*	GetParentMenu()	{ return (iWidgetMenu*)mpParent; }
-		iWidgetMenu*	GetChildMenu() { return mpChildMenu; }
+    bool IsSeparator() { return (msText == _W("")); }
 
-		bool IsMenuOpen();
+    cGuiGlobalShortcut *AddShortcut(int alKeyModifiers, eKey aKey, eGuiMessage aMsg = eGuiMessage_ButtonPressed,
+                                    bool abBypassVisibility = true, bool abBypassEnabled = true);
 
-		bool IsSeparator() { return (msText==_W(""));}
+    const tWString &GetShortcutText() { return msShortcutText; }
 
-		cGuiGlobalShortcut* AddShortcut(int alKeyModifiers, eKey aKey, eGuiMessage aMsg=eGuiMessage_ButtonPressed, 
-						 bool abBypassVisibility=true, bool abBypassEnabled=true);
+    float GetTextLength();
 
-		const tWString& GetShortcutText() { return msShortcutText; }
+  protected:
+    /////////////////////////
+    // Own functions
+    void ShowSubMenu();
+    /////////////////////////
+    // Implemented functions
+    void OnInit();
+    void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
+    void OnUpdate(float afTimeStep);
 
-		float GetTextLength();
+    void OnChangeSize();
 
-	protected:
+    bool OnMouseDown(const cGuiMessageData &aData);
+    bool OnMouseUp(const cGuiMessageData &aData);
+    bool OnMouseEnter(const cGuiMessageData &aData);
+    bool OnMouseLeave(const cGuiMessageData &aData);
 
-		/////////////////////////
-		// Own functions
-		void ShowSubMenu();
-		/////////////////////////
-		// Implemented functions
-		void OnInit();
-		void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
-		void OnUpdate(float afTimeStep);
-		
-		void OnChangeSize();
+    bool OnMouseMove(const cGuiMessageData &aData);
 
+    bool OnKeyPress(const cGuiMessageData &aData);
 
-		bool OnMouseDown(const cGuiMessageData& aData);
-		bool OnMouseUp(const cGuiMessageData& aData);
-		bool OnMouseEnter(const cGuiMessageData& aData);
-		bool OnMouseLeave(const cGuiMessageData& aData);
+    bool OnLostFocus(const cGuiMessageData &aData);
+    bool OnGotFocus(const cGuiMessageData &aData);
 
-		bool OnMouseMove(const cGuiMessageData& aData);
+    void OnLoadGraphics();
 
-		bool OnKeyPress(const cGuiMessageData& aData);
+    //////////////////////////
+    // Data
+    eWidgetType mItemType;
 
-		bool OnLostFocus(const cGuiMessageData& aData);
-		bool OnGotFocus(const cGuiMessageData& aData);
+    bool mbChecked;
+    bool mbDefault;
 
-		void OnLoadGraphics();
+    float mfTimer;
+    float mfOpenMenuTime;
 
+    bool mbPressed;
 
-		//////////////////////////
-		// Data
-		eWidgetType mItemType;
+    iWidgetMenu *mpChildMenu;
 
-		bool	mbChecked;
-		bool	mbDefault;
+    cGuiGfxElement *mpGfxSelection;
+    cGuiGfxElement *mpGfxSubMenuArrow;
+    cGuiGfxElement *mpGfxChecked[2];
 
-		float	mfTimer;
-		float	mfOpenMenuTime;
+    cGuiGfxElement *mpGfxLine;
 
-		bool	mbPressed;
+    float mfItemHPadding;
+    float mfItemTextLeftPadding;
+    float mfItemTextRightPadding;
+    float mfItemVPadding;
+    float mfItemSeparation;
+    float mfItemArrowIconSize;
+    float mfItemCheckIconSize;
 
-		iWidgetMenu*	mpChildMenu;
+    float mfSeparatorPadding;
+    float mfSeparatorHeight;
 
-		cGuiGfxElement*	mpGfxSelection;
-		cGuiGfxElement*	mpGfxSubMenuArrow;
-		cGuiGfxElement* mpGfxChecked[2];
-
-		cGuiGfxElement* mpGfxLine;
-
-		float mfItemHPadding;
-		float mfItemTextLeftPadding;
-		float mfItemTextRightPadding;
-		float mfItemVPadding;
-		float mfItemSeparation;
-		float mfItemArrowIconSize;
-		float mfItemCheckIconSize;
-
-		float mfSeparatorPadding;
-		float mfSeparatorHeight;
-
-		tWString msShortcutText;
-	};
-
-	
+    tWString msShortcutText;
 };
 
-#endif	// HPL_WIDGET_MENU_ITEM
+}; // namespace hpl
+
+#endif // HPL_WIDGET_MENU_ITEM

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -24,98 +24,114 @@
 #include "system/SystemTypes.h"
 
 namespace hpl {
-	
-	class iUpdateable
-	{
-	public:
-		iUpdateable(const tString& asName) : msName(asName){}
-		virtual ~iUpdateable() {}
 
-		virtual void OnPostBufferSwap(){}
+class iUpdateable {
+  public:
+    iUpdateable(const tString &asName) : msName(asName) {}
+    virtual ~iUpdateable() {}
 
-		virtual void OnStart(){}
+    virtual void OnPostBufferSwap() {}
 
-		virtual void OnDraw(float afFrameTime){}
-		virtual void OnPostRender(float afFrameTime){}
-		
-		virtual void PreUpdate(float afTimeStep){}
-		virtual void Update(float afTimeStep){}
-		virtual void PostUpdate(float afTimeStep){}
+    virtual void OnStart() {}
 
-		virtual void OnPauseUpdate(float afTimeStep){}
+    virtual void OnDraw(float afFrameTime) {}
+    virtual void OnPostRender(float afFrameTime) {}
 
-		virtual void OnQuit(){}
-		virtual void OnExit(){}
+    virtual void PreUpdate(float afTimeStep) {}
+    virtual void Update(float afTimeStep) {}
+    virtual void PostUpdate(float afTimeStep) {}
 
-		virtual void Reset(){}
+    virtual void OnPauseUpdate(float afTimeStep) {}
 
-		virtual void OnEnterContainer(const tString& asOldContainer){}
-		virtual void OnLeaveContainer(const tString& asNewContainer){}
+    virtual void OnQuit() {}
+    virtual void OnExit() {}
 
-		virtual void AppGotInputFocus(){}
-		virtual void AppGotMouseFocus(){}
-		virtual void AppGotVisibility(){}
+    virtual void Reset() {}
 
-		virtual void AppLostInputFocus(){}
-		virtual void AppLostMouseFocus(){}
-		virtual void AppLostVisibility(){}
+    virtual void OnEnterContainer(const tString &asOldContainer) {}
+    virtual void OnLeaveContainer(const tString &asNewContainer) {}
 
-		virtual void AppDeviceWasPlugged(){}
-		virtual void AppDeviceWasRemoved(){}
+    virtual void AppGotInputFocus() {}
+    virtual void AppGotMouseFocus() {}
+    virtual void AppGotVisibility() {}
 
-		void RunMessage(eUpdateableMessage aMessage, float afX)
-		{
-			switch(aMessage)
-			{
-				case eUpdateableMessage_OnPostBufferSwap:
-					OnPostBufferSwap(); break;
-				case eUpdateableMessage_OnStart:
-					OnStart(); break;
-				case eUpdateableMessage_OnDraw:
-					OnDraw(afX); break;
-				case eUpdateableMessage_OnPostRender:
-					OnPostRender(afX); break;
-				case eUpdateableMessage_PreUpdate:
-					PreUpdate(afX); break;
-				case eUpdateableMessage_Update:
-					Update(afX); break;
-				case eUpdateableMessage_PostUpdate:
-					PostUpdate(afX); break;
-				case eUpdateableMessage_OnQuit:
-					OnQuit(); break;
-				case eUpdateableMessage_OnExit:
-					OnExit(); break;
-				case eUpdateableMessage_Reset:
-					Reset(); break;
-				case eUpdateableMessage_OnPauseUpdate:
-					OnPauseUpdate(afX);break;
-				
-				case eUpdateableMessage_AppGotInputFocus:
-					AppGotInputFocus();break;
-				case eUpdateableMessage_AppGotMouseFocus:
-					AppGotMouseFocus();break;
-				case eUpdateableMessage_AppGotVisibility:
-					AppGotVisibility();break;
+    virtual void AppLostInputFocus() {}
+    virtual void AppLostMouseFocus() {}
+    virtual void AppLostVisibility() {}
 
-				case eUpdateableMessage_AppLostInputFocus:
-					AppLostInputFocus();break;
-				case eUpdateableMessage_AppLostMouseFocus:
-					AppLostMouseFocus();break;
-				case eUpdateableMessage_AppLostVisibility:
-					AppLostVisibility();break;
+    virtual void AppDeviceWasPlugged() {}
+    virtual void AppDeviceWasRemoved() {}
 
-				case eUpdateableMessage_AppDeviceWasPlugged:
-					AppDeviceWasPlugged();break;
-				case eUpdateableMessage_AppDeviceWasRemoved:
-					AppDeviceWasRemoved();break;
-			};
-		}
-		
-		const tString& GetName(){ return msName;}
+    void RunMessage(eUpdateableMessage aMessage, float afX) {
+        switch (aMessage) {
+        case eUpdateableMessage_OnPostBufferSwap:
+            OnPostBufferSwap();
+            break;
+        case eUpdateableMessage_OnStart:
+            OnStart();
+            break;
+        case eUpdateableMessage_OnDraw:
+            OnDraw(afX);
+            break;
+        case eUpdateableMessage_OnPostRender:
+            OnPostRender(afX);
+            break;
+        case eUpdateableMessage_PreUpdate:
+            PreUpdate(afX);
+            break;
+        case eUpdateableMessage_Update:
+            Update(afX);
+            break;
+        case eUpdateableMessage_PostUpdate:
+            PostUpdate(afX);
+            break;
+        case eUpdateableMessage_OnQuit:
+            OnQuit();
+            break;
+        case eUpdateableMessage_OnExit:
+            OnExit();
+            break;
+        case eUpdateableMessage_Reset:
+            Reset();
+            break;
+        case eUpdateableMessage_OnPauseUpdate:
+            OnPauseUpdate(afX);
+            break;
 
-	private:
-		tString msName;
-	};
+        case eUpdateableMessage_AppGotInputFocus:
+            AppGotInputFocus();
+            break;
+        case eUpdateableMessage_AppGotMouseFocus:
+            AppGotMouseFocus();
+            break;
+        case eUpdateableMessage_AppGotVisibility:
+            AppGotVisibility();
+            break;
+
+        case eUpdateableMessage_AppLostInputFocus:
+            AppLostInputFocus();
+            break;
+        case eUpdateableMessage_AppLostMouseFocus:
+            AppLostMouseFocus();
+            break;
+        case eUpdateableMessage_AppLostVisibility:
+            AppLostVisibility();
+            break;
+
+        case eUpdateableMessage_AppDeviceWasPlugged:
+            AppDeviceWasPlugged();
+            break;
+        case eUpdateableMessage_AppDeviceWasRemoved:
+            AppDeviceWasRemoved();
+            break;
+        };
+    }
+
+    const tString &GetName() { return msName; }
+
+  private:
+    tString msName;
 };
+}; // namespace hpl
 
 #endif // HPL_UPDATEABLE_H

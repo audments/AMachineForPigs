@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,92 +26,85 @@
 
 //----------------------------------------------
 
-class cLuxProp_EmotionStone_SaveData : public iLuxProp_SaveData
-{
-	kSerializableClassInit(cLuxProp_EmotionStone_SaveData)
-public:
-	tString msDescCat;
-	tString msDescEntry;
+class cLuxProp_EmotionStone_SaveData : public iLuxProp_SaveData {
+    kSerializableClassInit(cLuxProp_EmotionStone_SaveData) public : tString msDescCat;
+    tString msDescEntry;
 
-	tString msTextCat;
-	tString msTextEntry;
+    tString msTextCat;
+    tString msTextEntry;
 
-	tString msSound;
+    tString msSound;
 };
 
 //----------------------------------------------
 
+class cLuxProp_EmotionStone : public iLuxProp {
+    typedef iLuxProp super_class;
+    friend class cLuxPropLoader_EmotionStone;
 
-class cLuxProp_EmotionStone : public iLuxProp
-{
-typedef iLuxProp super_class;
-friend class cLuxPropLoader_EmotionStone;
-public:	
-	cLuxProp_EmotionStone(const tString &asName, int alID, cLuxMap *apMap);
-	virtual ~cLuxProp_EmotionStone();
+  public:
+    cLuxProp_EmotionStone(const tString &asName, int alID, cLuxMap *apMap);
+    virtual ~cLuxProp_EmotionStone();
 
-	//////////////////////
-	//General
-	bool CanInteract(iPhysicsBody *apBody);
-	bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
-	
-	void OnSetupAfterLoad(cWorld *apWorld);
+    //////////////////////
+    // General
+    bool CanInteract(iPhysicsBody *apBody);
+    bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
 
-	void OnResetProperties();
+    void OnSetupAfterLoad(cWorld *apWorld);
 
-	void UpdatePropSpecific(float afTimeStep);
-	
-	void BeforePropDestruction();
+    void OnResetProperties();
 
-	eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
-	tWString GetFocusText();
+    void UpdatePropSpecific(float afTimeStep);
 
-	//////////////////////
-	//Properties
-	
-	//////////////////////
-	//Connection callbacks
-	void OnConnectionStateChange(iLuxEntity *apEntity, int alState);
+    void BeforePropDestruction();
 
+    eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
+    tWString GetFocusText();
 
-	//////////////////////
-	//Save data stuff
-	iLuxEntity_SaveData* CreateSaveData();
-	void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
-	void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
-	void SetupSaveData(iLuxEntity_SaveData *apSaveData);
+    //////////////////////
+    // Properties
 
-private:
-	//////////////////////
-	// Data
-		
-	//////////////////////
-	// Variables
-	tString msDescCat;
-	tString msDescEntry;
+    //////////////////////
+    // Connection callbacks
+    void OnConnectionStateChange(iLuxEntity *apEntity, int alState);
 
-	tString msTextCat;
-	tString msTextEntry;
+    //////////////////////
+    // Save data stuff
+    iLuxEntity_SaveData *CreateSaveData();
+    void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
+    void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
+    void SetupSaveData(iLuxEntity_SaveData *apSaveData);
 
-	tString msSound;
+  private:
+    //////////////////////
+    // Data
+
+    //////////////////////
+    // Variables
+    tString msDescCat;
+    tString msDescEntry;
+
+    tString msTextCat;
+    tString msTextEntry;
+
+    tString msSound;
 };
 
 //----------------------------------------------
 
-class cLuxPropLoader_EmotionStone : public iLuxPropLoader
-{
-public:
-	cLuxPropLoader_EmotionStone(const tString& asName);
-	virtual ~cLuxPropLoader_EmotionStone(){}
+class cLuxPropLoader_EmotionStone : public iLuxPropLoader {
+  public:
+    cLuxPropLoader_EmotionStone(const tString &asName);
+    virtual ~cLuxPropLoader_EmotionStone() {}
 
-	iLuxProp *CreateProp(const tString& asName, int alID, cLuxMap *apMap);
-	void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem);
-	void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars);
+    iLuxProp *CreateProp(const tString &asName, int alID, cLuxMap *apMap);
+    void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem);
+    void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars);
 
-private:
+  private:
 };
 
 //----------------------------------------------
-
 
 #endif // LUX_PROP_EMOTION_STONE_H

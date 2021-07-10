@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,274 +26,274 @@
 
 //----------------------------------------------
 
-class cLuxOption_ExtData
-{
-public:
-	cLuxOption_ExtData(bool abNeedsRestart, const tWString& asMessage) { mbNeedsRestart = abNeedsRestart; msMessage = asMessage; }
+class cLuxOption_ExtData {
+  public:
+    cLuxOption_ExtData(bool abNeedsRestart, const tWString &asMessage) {
+        mbNeedsRestart = abNeedsRestart;
+        msMessage = asMessage;
+    }
 
-	bool mbNeedsRestart;
-	tWString msMessage;
+    bool mbNeedsRestart;
+    tWString msMessage;
 };
 
-typedef std::vector<cLuxOption_ExtData*> tOptionDataVec;
-typedef tOptionDataVec::iterator		 tOptionDataVecIt;
+typedef std::vector<cLuxOption_ExtData *> tOptionDataVec;
+typedef tOptionDataVec::iterator tOptionDataVecIt;
 
 //----------------------------------------------
 
-class cLuxMainMenu_Options : public iLuxMainMenuWindow
-{
-public:	
-	cLuxMainMenu_Options(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin);
-	~cLuxMainMenu_Options();
-	
-	void CreateGui();
+class cLuxMainMenu_Options : public iLuxMainMenuWindow {
+  public:
+    cLuxMainMenu_Options(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin);
+    ~cLuxMainMenu_Options();
 
-	void ExitPressed();
-	
-private:
-	void OnSetActive(bool abX);
+    void CreateGui();
 
-	void CreateMainGui();
+    void ExitPressed();
 
-	void AddGameOptions(cWidgetTab* apTab);
-	void AddGraphicsOptions(cWidgetTab* apTab);
-	void AddInputOptions(cWidgetTab* apTab);
-	void AddSoundOptions(cWidgetTab* apTab);
+  private:
+    void OnSetActive(bool abX);
 
-	void AddBasicGfxOptions(cWidgetDummy* apDummy);
-	void AddAdvancedGfxOptions(cWidgetDummy* apDummy);
+    void CreateMainGui();
 
-	void SetInputValues(cResourceVarsObject& pObj);
+    void AddGameOptions(cWidgetTab *apTab);
+    void AddGraphicsOptions(cWidgetTab *apTab);
+    void AddInputOptions(cWidgetTab *apTab);
+    void AddSoundOptions(cWidgetTab *apTab);
 
-	void SetUpInput(cWidgetLabel* apLabel, iWidget* apInput, bool abNeedsRestart, const tWString& asMessage);
-	cLuxOption_ExtData* AddOptionData(bool abNeedsRestart, const tWString& asMessage);
-	void SetCurrentTipWidget(iWidget* apWidget);
+    void AddBasicGfxOptions(cWidgetDummy *apDummy);
+    void AddAdvancedGfxOptions(cWidgetDummy *apDummy);
 
-	void ApplyChanges();
+    void SetInputValues(cResourceVarsObject &pObj);
 
-	float GetGamma() { return GetSliderValue(mpSGamma, mfGammaMin, mfGammaMax); }
-	float GetSensitivity() { return GetSliderValue(mpSMouseSensitivity, mfMouseSensitivityMin, mfMouseSensitivityMax); }
+    void SetUpInput(cWidgetLabel *apLabel, iWidget *apInput, bool abNeedsRestart, const tWString &asMessage);
+    cLuxOption_ExtData *AddOptionData(bool abNeedsRestart, const tWString &asMessage);
+    void SetCurrentTipWidget(iWidget *apWidget);
+
+    void ApplyChanges();
+
+    float GetGamma() { return GetSliderValue(mpSGamma, mfGammaMin, mfGammaMax); }
+    float GetSensitivity() { return GetSliderValue(mpSMouseSensitivity, mfMouseSensitivityMin, mfMouseSensitivityMax); }
 #ifdef USE_GAMEPAD
-	float GetGamepadLookSensitivity() { return GetSliderValue(mpSGamepadLookSensitivity, mfGamepadLookSensitivityMin, mfGamepadLookSensitivityMax); }
+    float GetGamepadLookSensitivity() {
+        return GetSliderValue(mpSGamepadLookSensitivity, mfGamepadLookSensitivityMin, mfGamepadLookSensitivityMax);
+    }
 #endif
-	float GetVolume() { return GetSliderValue(mpSVolume, mfVolumeMin, mfVolumeMax); }
+    float GetVolume() { return GetSliderValue(mpSVolume, mfVolumeMin, mfVolumeMax); }
 
-	void SetGammaLabelString(float afX);
-	void SetSensitivityLabelString(float afX);
-	void SetGamepadLookSensitivityLabelString(float afX);
-	void SetVolumeLabelString(float afX);
+    void SetGammaLabelString(float afX);
+    void SetSensitivityLabelString(float afX);
+    void SetGamepadLookSensitivityLabelString(float afX);
+    void SetVolumeLabelString(float afX);
 
-	bool ChangeLanguage(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(ChangeLanguage);
+    bool ChangeLanguage(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(ChangeLanguage);
 
-	void PopulateLanguageList();
-	
-	void PopulateSoundDevices();
+    void PopulateLanguageList();
 
-	////////////////////////
-	// Slider value helpers
-	void SetUpSlider(cWidgetSlider* apSlider, float afMinValue, float afMaxValue, float afStepValue, 
-						tGuiCallbackFunc apCallback=NULL, cWidgetLabel** apValueDisplay=NULL);
-	void SetSliderValue(cWidgetSlider* apSlider, float afValue, bool abGenCallback, float afMinValue, float afMaxValue);
-	float GetSliderValue(cWidgetSlider* apSlider, float afMinValue, float afMaxValue);
+    void PopulateSoundDevices();
 
-	void SetSliderLabelString(cWidgetLabel* apLabel, float afValue,
-							  float afMinValue, float afMaxValue,
-							  const tWString& asMin=_W(""), const tWString& asMax=_W(""));
+    ////////////////////////
+    // Slider value helpers
+    void SetUpSlider(cWidgetSlider *apSlider, float afMinValue, float afMaxValue, float afStepValue,
+                     tGuiCallbackFunc apCallback = NULL, cWidgetLabel **apValueDisplay = NULL);
+    void SetSliderValue(cWidgetSlider *apSlider, float afValue, bool abGenCallback, float afMinValue, float afMaxValue);
+    float GetSliderValue(cWidgetSlider *apSlider, float afMinValue, float afMaxValue);
 
-	////////////////////////
-	// Persistence of vars
-	void DumpInitialValues(cResourceVarsObject& aObj);
-	void DumpCurrentValues(cResourceVarsObject& aObj);
+    void SetSliderLabelString(cWidgetLabel *apLabel, float afValue, float afMinValue, float afMaxValue,
+                              const tWString &asMin = _W(""), const tWString &asMax = _W(""));
 
-	////////////////////////
-	// Callbacks
-	bool TabFrame_OnPageChange(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(TabFrame_OnPageChange);
+    ////////////////////////
+    // Persistence of vars
+    void DumpInitialValues(cResourceVarsObject &aObj);
+    void DumpCurrentValues(cResourceVarsObject &aObj);
 
+    ////////////////////////
+    // Callbacks
+    bool TabFrame_OnPageChange(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(TabFrame_OnPageChange);
 
-	void SetTabNavigation(cWidgetTab* apTab, bool abSetFocus);
+    void SetTabNavigation(cWidgetTab *apTab, bool abSetFocus);
 
-	////////////////////////
-	// Properties
-	cVector2f mvWindowSize;
-	
-	///////////////////////
-	// Data and variables
-	iWidget *mpShoulderHint[2];
+    ////////////////////////
+    // Properties
+    cVector2f mvWindowSize;
 
-	tWStringVec mvLangFiles;
+    ///////////////////////
+    // Data and variables
+    iWidget *mpShoulderHint[2];
 
-	cWidgetTab *mpTabGame;
-	cWidgetTab *mpTabGraphics;
-	cWidgetTab *mpTabInput;
-	cWidgetTab *mpTabSound;
+    tWStringVec mvLangFiles;
 
-	cWidgetButton* mpBOK;
-	cWidgetButton* mpBCancel;
+    cWidgetTab *mpTabGame;
+    cWidgetTab *mpTabGraphics;
+    cWidgetTab *mpTabInput;
+    cWidgetTab *mpTabSound;
 
-	// Tip Label
-	cWidgetLabel *mpLTip;
+    cWidgetButton *mpBOK;
+    cWidgetButton *mpBCancel;
 
-	// Game
-	cWidgetCheckBox *mpChBShowSubtitles;
-	cWidgetComboBox *mpCBLanguage;
-	cWidgetCheckBox *mpChBShowHints;
-	//cWidgetCheckBox *mpChBShowDeathHints;
-	cWidgetCheckBox *mpChBShowCrosshair;
-	cWidgetComboBox *mpCBFocusIconStyle;
-	
-	// Graphics;
-	cWidgetDummy	*mpDBasicGfxOptions;
-	cWidgetComboBox *mpCBResolution;
-	cWidgetCheckBox *mpChBFullScreen;
-	cWidgetCheckBox *mpChBVSync;
-	cWidgetCheckBox *mpChBAdaptiveVSync;
+    // Tip Label
+    cWidgetLabel *mpLTip;
 
-	cWidgetComboBox *mpCBTextureSizeLevel;
+    // Game
+    cWidgetCheckBox *mpChBShowSubtitles;
+    cWidgetComboBox *mpCBLanguage;
+    cWidgetCheckBox *mpChBShowHints;
+    // cWidgetCheckBox *mpChBShowDeathHints;
+    cWidgetCheckBox *mpChBShowCrosshair;
+    cWidgetComboBox *mpCBFocusIconStyle;
 
-	cWidgetButton	*mpBToggleShowGfxOptions;
-	cWidgetDummy	*mpDAdvancedGfxOptions;
-	cWidgetComboBox *mpCBTextureFilter;
+    // Graphics;
+    cWidgetDummy *mpDBasicGfxOptions;
+    cWidgetComboBox *mpCBResolution;
+    cWidgetCheckBox *mpChBFullScreen;
+    cWidgetCheckBox *mpChBVSync;
+    cWidgetCheckBox *mpChBAdaptiveVSync;
 
-	cWidgetCheckBox *mpChBShadows;
-	cWidgetComboBox *mpCBShadowQuality;
-	cWidgetComboBox *mpCBShadowRes;
+    cWidgetComboBox *mpCBTextureSizeLevel;
 
-	cWidgetCheckBox *mpChBWorldReflection;
-	cWidgetCheckBox *mpChBRefraction;
+    cWidgetButton *mpBToggleShowGfxOptions;
+    cWidgetDummy *mpDAdvancedGfxOptions;
+    cWidgetComboBox *mpCBTextureFilter;
 
-	cWidgetComboBox *mpCBAnisotropy;
-	cWidgetCheckBox *mpChBParallax;
-	cWidgetComboBox *mpCBParallaxQuality;
-	
-	cWidgetCheckBox *mpChEdgeSmooth;
+    cWidgetCheckBox *mpChBShadows;
+    cWidgetComboBox *mpCBShadowQuality;
+    cWidgetComboBox *mpCBShadowRes;
 
-	cWidgetCheckBox	*mpChBBloom;
-	cWidgetCheckBox *mpChBImageTrail;
-	cWidgetCheckBox *mpChBSepia;
-	cWidgetCheckBox *mpChBRadialBlur;
-	cWidgetCheckBox *mpChBColorGrading;
+    cWidgetCheckBox *mpChBWorldReflection;
+    cWidgetCheckBox *mpChBRefraction;
 
-	cWidgetCheckBox *mpChBSSAO;
-	cWidgetComboBox *mpCBSSAOSamples;
-	cWidgetComboBox *mpCBSSAOResolution;
+    cWidgetComboBox *mpCBAnisotropy;
+    cWidgetCheckBox *mpChBParallax;
+    cWidgetComboBox *mpCBParallaxQuality;
 
-	cWidgetLabel	*mpLGamma;
-	cWidgetSlider	*mpSGamma;
+    cWidgetCheckBox *mpChEdgeSmooth;
 
-	iWidget* mpLastFocusedWidget;
-	bool mbHideWindow;
+    cWidgetCheckBox *mpChBBloom;
+    cWidgetCheckBox *mpChBImageTrail;
+    cWidgetCheckBox *mpChBSepia;
+    cWidgetCheckBox *mpChBRadialBlur;
+    cWidgetCheckBox *mpChBColorGrading;
 
-	// Input
-	cWidgetCheckBox *mpChBInvertMouse;
-	cWidgetCheckBox *mpChBSmoothMouse;
+    cWidgetCheckBox *mpChBSSAO;
+    cWidgetComboBox *mpCBSSAOSamples;
+    cWidgetComboBox *mpCBSSAOResolution;
 
-	cWidgetLabel	*mpLMouseSensitivity;
-	cWidgetSlider	*mpSMouseSensitivity;
+    cWidgetLabel *mpLGamma;
+    cWidgetSlider *mpSGamma;
 
-#ifdef USE_GAMEPAD
-	cWidgetCheckBox *mpChBGamepadInvertLook;
-	cWidgetLabel	*mpLGamepadLookSensitivity;
-	cWidgetSlider	*mpSGamepadLookSensitivity;
-#endif
+    iWidget *mpLastFocusedWidget;
+    bool mbHideWindow;
 
-	cWidgetButton	*mpBKeyConfig;
+    // Input
+    cWidgetCheckBox *mpChBInvertMouse;
+    cWidgetCheckBox *mpChBSmoothMouse;
 
-	// Sound
-	cWidgetLabel  *mpLVolume;
-	cWidgetSlider *mpSVolume;
-
-	cWidgetLabel  *mpLSndDevice;
-	cWidgetComboBox *mpCBSndDevice;
-
-	float mfGammaMin;
-	float mfGammaMax;
-	float mfGammaStep;
-
-	float mfMouseSensitivityMin;
-	float mfMouseSensitivityMax;
-	float mfMouseSensitivityStep;
-	
-#ifdef USE_GAMEPAD
-	float mfGamepadLookSensitivityMin;
-	float mfGamepadLookSensitivityMax;
-	float mfGamepadLookSensitivityStep;
-#endif
-
-	float mfVolumeMin;
-	float mfVolumeMax;
-	float mfVolumeStep;
-
-	// Old values
-	tString msOldLanguage;
-	float mfOldGamma;
-	float mfOldSensitivity;
-	float mfOldVolume;
-
-	bool mbTipFadeRestart;
-	bool mbTipWidgetUpdated;
-	bool mbTipTextReset;
-	iWidget* mpCurrentTipWidget;
-	tOptionDataVec mvOptionData;
-
-	bool mbSettingInitialValues;
-
-	bool mbKeyConfigOpen;
-
-	tVideoModeVec mvScreenSizes;
-
-	tSoundDeviceVec mvSoundDevices;
-
-	// Initial config
-	static cResourceVarsObject mInitialValues;
-	static cResourceVarsObject mCurrentValues;
-
-	///////////////////////
-	// Widget callbacks
-	bool Window_OnUpdate(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(Window_OnUpdate);
-
-	bool Option_OnMouseOver(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(Option_OnMouseOver);
-	
-	bool Option_OnChangeValue(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(Option_OnChangeValue);	
-
-	bool GammaSlider_OnMove(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(GammaSlider_OnMove);
-
-	bool MouseSensitivitySlider_OnMove(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(MouseSensitivitySlider_OnMove);
+    cWidgetLabel *mpLMouseSensitivity;
+    cWidgetSlider *mpSMouseSensitivity;
 
 #ifdef USE_GAMEPAD
-	bool GamepadLookSensitivitySlider_OnMove(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(GamepadLookSensitivitySlider_OnMove);
+    cWidgetCheckBox *mpChBGamepadInvertLook;
+    cWidgetLabel *mpLGamepadLookSensitivity;
+    cWidgetSlider *mpSGamepadLookSensitivity;
 #endif
 
-	bool SoundSlider_OnMove(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(SoundSlider_OnMove);
+    cWidgetButton *mpBKeyConfig;
 
-	bool PressToggleShowGfxOptions(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressToggleShowGfxOptions);
+    // Sound
+    cWidgetLabel *mpLVolume;
+    cWidgetSlider *mpSVolume;
 
-	bool PressKeyConfig(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressKeyConfig);
+    cWidgetLabel *mpLSndDevice;
+    cWidgetComboBox *mpCBSndDevice;
 
-	bool PressOK(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressOK);
+    float mfGammaMin;
+    float mfGammaMax;
+    float mfGammaStep;
 
-	bool PressCancel(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressCancel);
+    float mfMouseSensitivityMin;
+    float mfMouseSensitivityMax;
+    float mfMouseSensitivityStep;
 
-	bool UIPressCancel(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(UIPressCancel);
+#ifdef USE_GAMEPAD
+    float mfGamepadLookSensitivityMin;
+    float mfGamepadLookSensitivityMax;
+    float mfGamepadLookSensitivityStep;
+#endif
 
-	bool MessageBoxCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(MessageBoxCallback);
+    float mfVolumeMin;
+    float mfVolumeMax;
+    float mfVolumeStep;
+
+    // Old values
+    tString msOldLanguage;
+    float mfOldGamma;
+    float mfOldSensitivity;
+    float mfOldVolume;
+
+    bool mbTipFadeRestart;
+    bool mbTipWidgetUpdated;
+    bool mbTipTextReset;
+    iWidget *mpCurrentTipWidget;
+    tOptionDataVec mvOptionData;
+
+    bool mbSettingInitialValues;
+
+    bool mbKeyConfigOpen;
+
+    tVideoModeVec mvScreenSizes;
+
+    tSoundDeviceVec mvSoundDevices;
+
+    // Initial config
+    static cResourceVarsObject mInitialValues;
+    static cResourceVarsObject mCurrentValues;
+
+    ///////////////////////
+    // Widget callbacks
+    bool Window_OnUpdate(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(Window_OnUpdate);
+
+    bool Option_OnMouseOver(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(Option_OnMouseOver);
+
+    bool Option_OnChangeValue(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(Option_OnChangeValue);
+
+    bool GammaSlider_OnMove(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(GammaSlider_OnMove);
+
+    bool MouseSensitivitySlider_OnMove(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(MouseSensitivitySlider_OnMove);
+
+#ifdef USE_GAMEPAD
+    bool GamepadLookSensitivitySlider_OnMove(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(GamepadLookSensitivitySlider_OnMove);
+#endif
+
+    bool SoundSlider_OnMove(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(SoundSlider_OnMove);
+
+    bool PressToggleShowGfxOptions(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressToggleShowGfxOptions);
+
+    bool PressKeyConfig(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressKeyConfig);
+
+    bool PressOK(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressOK);
+
+    bool PressCancel(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressCancel);
+
+    bool UIPressCancel(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(UIPressCancel);
+
+    bool MessageBoxCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(MessageBoxCallback);
 };
 
 //----------------------------------------------
-
 
 #endif // LUX_MAIN_MENU_OPTIONS_H

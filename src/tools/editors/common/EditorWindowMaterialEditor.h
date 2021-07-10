@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,9 +20,9 @@
 #ifndef HPLEDITOR_EDITOR_WINDOW_MATERIAL_EDITOR_H
 #define HPLEDITOR_EDITOR_WINDOW_MATERIAL_EDITOR_H
 
-#include "EditorWindow.h"
-#include "EditorViewport.h"
 #include "EditorVar.h"
+#include "EditorViewport.h"
+#include "EditorWindow.h"
 
 class cEditorWindowMaterialEditor;
 class cTextureUnitWrapper;
@@ -31,343 +31,340 @@ class cMaterialWrapper;
 
 //-------------------------------------------------------------------
 
-class cEditorClassMaterial : public iEditorClass
-{
-public:
-	cEditorClassMaterial(cEditorWindowMaterialEditor* apWindow);
+class cEditorClassMaterial : public iEditorClass {
+  public:
+    cEditorClassMaterial(cEditorWindowMaterialEditor *apWindow);
 
-	bool Create(void* apData);
+    bool Create(void *apData);
 
-	cEditorClassInstance* CreateInstance();
+    cEditorClassInstance *CreateInstance();
 
-protected:
-
-	cEditorWindowMaterialEditor* mpWindow;
-	tEditorVarVec mvVariables;
+  protected:
+    cEditorWindowMaterialEditor *mpWindow;
+    tEditorVarVec mvVariables;
 };
 
 //-------------------------------------------------------------------
 
-class cTextureWrapper
-{
-	friend class cMaterialWrapper;
-public:
-	cTextureWrapper(cMaterialWrapper* apMat, eMaterialTexture aUnit);
-	~cTextureWrapper();
+class cTextureWrapper {
+    friend class cMaterialWrapper;
 
-	iTexture* GetTexture() { return mpTexture; }
+  public:
+    cTextureWrapper(cMaterialWrapper *apMat, eMaterialTexture aUnit);
+    ~cTextureWrapper();
 
-	void Reset();
+    iTexture *GetTexture() { return mpTexture; }
 
-	void Load(cXmlElement* apElement);
-	void Save(cXmlElement* apElement);
+    void Reset();
 
-	void Reload();
-	void Update();
+    void Load(cXmlElement *apElement);
+    void Save(cXmlElement *apElement);
 
-	void CreateFromTexture(iTexture* apTexture);
+    void Reload();
+    void Update();
 
-	bool CheckFileIsUpdated();
+    void CreateFromTexture(iTexture *apTexture);
 
-	void SetEnabled(bool abX);
-	void SetNeedsReload() { mbNeedsReload = true; }
-	void SetUpdated() {mbUpdated = true; }
+    bool CheckFileIsUpdated();
 
-	bool IsValid() { return mbValid; }
-	bool IsEnabled() { return mbEnabled; }
+    void SetEnabled(bool abX);
+    void SetNeedsReload() { mbNeedsReload = true; }
+    void SetUpdated() { mbUpdated = true; }
 
-	const tWString& GetFile() { return msFile; }
-	const tString& GetWrap() { return msWrap; }
-	const tString& GetAnimMode() { return msAnimMode; }
-	float GetFrameTime() { return mfFrameTime; }
-	const tString& GetType() { return msType; }
+    bool IsValid() { return mbValid; }
+    bool IsEnabled() { return mbEnabled; }
 
-	bool GetCompressed() { return mbCompressed; }
-	bool GetUseMipMaps() { return mbMipMaps; }
+    const tWString &GetFile() { return msFile; }
+    const tString &GetWrap() { return msWrap; }
+    const tString &GetAnimMode() { return msAnimMode; }
+    float GetFrameTime() { return mfFrameTime; }
+    const tString &GetType() { return msType; }
 
-	void SetFile(const tWString& asX);
-	void SetWrap(const tWString& asX);
-	void SetAnimMode(const tWString& asX);
-	void SetFrameTime(float afX);
+    bool GetCompressed() { return mbCompressed; }
+    bool GetUseMipMaps() { return mbMipMaps; }
 
-	void SetCompressed(bool abX);
-	void SetUseMipMaps(bool abX);
+    void SetFile(const tWString &asX);
+    void SetWrap(const tWString &asX);
+    void SetAnimMode(const tWString &asX);
+    void SetFrameTime(float afX);
 
-protected:
-	static eTextureType GetTextureTypeFromBitmap(cBitmap* apBmp);
-	cMaterialWrapper* mpMat;
-	eMaterialTexture mUnit;
+    void SetCompressed(bool abX);
+    void SetUseMipMaps(bool abX);
 
-	bool mbValid;
-	bool mbEnabled;
-	bool mbNeedsReload;
-	bool mbUpdated;
+  protected:
+    static eTextureType GetTextureTypeFromBitmap(cBitmap *apBmp);
+    cMaterialWrapper *mpMat;
+    eMaterialTexture mUnit;
 
-	tWString msFile;
-	bool mbMipMaps;
-	bool mbCompressed;
-	tString msWrap;
-	tString msType;
-	tString msAnimMode;
-	float mfFrameTime;
+    bool mbValid;
+    bool mbEnabled;
+    bool mbNeedsReload;
+    bool mbUpdated;
 
-	iTexture* mpTexture;
-	cDate mTimeStamp;
+    tWString msFile;
+    bool mbMipMaps;
+    bool mbCompressed;
+    tString msWrap;
+    tString msType;
+    tString msAnimMode;
+    float mfFrameTime;
+
+    iTexture *mpTexture;
+    cDate mTimeStamp;
 };
 
 //-------------------------------------------------------------------
 
-class cMaterialWrapper
-{
-	friend class cTextureWrapper;
-public:
-	cMaterialWrapper(cEditorWindowMaterialEditor* apWindow);
-	~cMaterialWrapper();
+class cMaterialWrapper {
+    friend class cTextureWrapper;
 
-	bool IsSaveable();
+  public:
+    cMaterialWrapper(cEditorWindowMaterialEditor *apWindow);
+    ~cMaterialWrapper();
 
-	void Reset();
+    bool IsSaveable();
 
-	void Load(const tWString& asFilename);
-	void Save(const tWString& asFilename);
+    void Reset();
 
-	cMaterial* GetPreviewMaterial();
+    void Load(const tWString &asFilename);
+    void Save(const tWString &asFilename);
 
-	cTextureWrapper* GetTextureWrapper(eMaterialTexture aUnit) { return mvTextures[aUnit]; }
+    cMaterial *GetPreviewMaterial();
 
-	cEditorClassInstance* GetClass() { return mpClass; }
+    cTextureWrapper *GetTextureWrapper(eMaterialTexture aUnit) { return mvTextures[aUnit]; }
 
-	void SetType(const tWString& asType);
-	void SetPhysicsMaterial(const tWString& asMat);
-	void SetDepthTest(bool abX);
-	void SetUseAlpha(bool abX);
-	void SetBlendMode(const tWString& asMode);
-	void SetHeightMapScale(float afX);
-	void SetHeightMapBias(float afX);
+    cEditorClassInstance *GetClass() { return mpClass; }
 
-	void AddUVAnim(eMaterialUvAnimation aType, float afSpeed, float afAmp, eMaterialAnimationAxis aAxis);
-	void RemoveUVAnim(int alIdx);
-	cMaterialUvAnimation* GetUVAnim(int alIdx);
-	int GetUVAnimNum() { return (int)mvUVAnimations.size(); }
-	void ClearUVAnims();
+    void SetType(const tWString &asType);
+    void SetPhysicsMaterial(const tWString &asMat);
+    void SetDepthTest(bool abX);
+    void SetUseAlpha(bool abX);
+    void SetBlendMode(const tWString &asMode);
+    void SetHeightMapScale(float afX);
+    void SetHeightMapBias(float afX);
 
-	const tWString& GetType() { return msType; }
-	const tWString& GetPhysicsMat() { return msPhysicsMat; }
-	bool GetDepthTest() { return mbDepthTest; }
-	bool GetUseAlpha() { return mbUseAlpha; }
-	const tWString& GetBlendMode() { return msBlendMode; }
+    void AddUVAnim(eMaterialUvAnimation aType, float afSpeed, float afAmp, eMaterialAnimationAxis aAxis);
+    void RemoveUVAnim(int alIdx);
+    cMaterialUvAnimation *GetUVAnim(int alIdx);
+    int GetUVAnimNum() { return (int)mvUVAnimations.size(); }
+    void ClearUVAnims();
 
-	iMaterialType* GetTypePointer();
-	void SetTextureUnitEnabled(eMaterialTexture aIdx, bool abX) { mvTextures[aIdx]->mbEnabled = abX; }
-	void SetTextureUnitUpdated(eMaterialTexture aIdx) { mvTextures[aIdx]->mbUpdated = true; }
-	void SetTextureUnitNeedsReload(eMaterialTexture aIdx) { mvTextures[aIdx]->mbNeedsReload = true; }
+    const tWString &GetType() { return msType; }
+    const tWString &GetPhysicsMat() { return msPhysicsMat; }
+    bool GetDepthTest() { return mbDepthTest; }
+    bool GetUseAlpha() { return mbUseAlpha; }
+    const tWString &GetBlendMode() { return msBlendMode; }
 
-	void UpdateMaterialInMemory(const tString& asName);
+    iMaterialType *GetTypePointer();
+    void SetTextureUnitEnabled(eMaterialTexture aIdx, bool abX) { mvTextures[aIdx]->mbEnabled = abX; }
+    void SetTextureUnitUpdated(eMaterialTexture aIdx) { mvTextures[aIdx]->mbUpdated = true; }
+    void SetTextureUnitNeedsReload(eMaterialTexture aIdx) { mvTextures[aIdx]->mbNeedsReload = true; }
 
-	bool ReloadTextures();
+    void UpdateMaterialInMemory(const tString &asName);
 
+    bool ReloadTextures();
 
-	void SetUpdated() { mbPreviewUpdated = true; }
+    void SetUpdated() { mbPreviewUpdated = true; }
 
-protected:
-	cEditorWindowMaterialEditor* mpMatEditor;
+  protected:
+    cEditorWindowMaterialEditor *mpMatEditor;
 
-	tWString msType;
-	tWString msPhysicsMat;
-	bool mbDepthTest;
-	bool mbUseAlpha;
-	tWString msBlendMode;
+    tWString msType;
+    tWString msPhysicsMat;
+    bool mbDepthTest;
+    bool mbUseAlpha;
+    tWString msBlendMode;
 
-	std::vector<cTextureWrapper*> mvTextures;
-	std::vector<iTexture*> mvDefaultTextures;
+    std::vector<cTextureWrapper *> mvTextures;
+    std::vector<iTexture *> mvDefaultTextures;
 
-	std::vector<cMaterialUvAnimation> mvUVAnimations;
+    std::vector<cMaterialUvAnimation> mvUVAnimations;
 
-	cEditorClassMaterial* mpMatClass;
-	cEditorClassInstance* mpClass;
+    cEditorClassMaterial *mpMatClass;
+    cEditorClassInstance *mpClass;
 
-	bool mbPreviewUpdated;
-	bool mbTypeChanged;
-	cMaterial* mpPreviewMat;
+    bool mbPreviewUpdated;
+    bool mbTypeChanged;
+    cMaterial *mpPreviewMat;
 
-	bool mbUpdateMaterialInMemory;
+    bool mbUpdateMaterialInMemory;
 };
 
 //-------------------------------------------------------------------
 
-class cTextureUnitPanel
-{
-	friend class cEditorWindowMaterialEditor;
-public:
-	cTextureUnitPanel(cEditorWindowMaterialEditor* apWin, eMaterialTexture aUnit);
-	~cTextureUnitPanel();
+class cTextureUnitPanel {
+    friend class cEditorWindowMaterialEditor;
 
-	void Reset();
-	void Update();
+  public:
+    cTextureUnitPanel(cEditorWindowMaterialEditor *apWin, eMaterialTexture aUnit);
+    ~cTextureUnitPanel();
 
-	iWidget* GetHandle() { return mpHandle; }
-protected:
-	bool PanelSpecificInputCallback(iEditorInput* apInput);
-	void UpdateTexture();
+    void Reset();
+    void Update();
 
-	cEditorWindowMaterialEditor* mpWindow;
+    iWidget *GetHandle() { return mpHandle; }
 
-	eMaterialTexture mUnit;
-	cTextureWrapper* mpTextureWrapper;
+  protected:
+    bool PanelSpecificInputCallback(iEditorInput *apInput);
+    void UpdateTexture();
 
-	cWidgetDummy* mpHandle;
-	cWidgetLabel* mpLUnit;
-	
-	cWidgetDummy* mpInputs;
-    cEditorInputFile* mpInpFile;
-	cEditorInputEnum* mpInpAnimMode;
-	cEditorInputNumber* mpInpFrameTime;
-	cEditorInputBool* mpInpMipMaps;
-	cEditorInputEnum* mpInpWrap;
-	cEditorInputEnum* mpInpType;
-	
+    cEditorWindowMaterialEditor *mpWindow;
 
-	cWidgetFrame* mpFThumb;
-	cWidgetImage* mpImgThumb;
+    eMaterialTexture mUnit;
+    cTextureWrapper *mpTextureWrapper;
 
-	tWString msLastPath;
+    cWidgetDummy *mpHandle;
+    cWidgetLabel *mpLUnit;
+
+    cWidgetDummy *mpInputs;
+    cEditorInputFile *mpInpFile;
+    cEditorInputEnum *mpInpAnimMode;
+    cEditorInputNumber *mpInpFrameTime;
+    cEditorInputBool *mpInpMipMaps;
+    cEditorInputEnum *mpInpWrap;
+    cEditorInputEnum *mpInpType;
+
+    cWidgetFrame *mpFThumb;
+    cWidgetImage *mpImgThumb;
+
+    tWString msLastPath;
 };
 
 //-------------------------------------------------------------------
 
-class cEditorWindowMaterialEditor : public iEditorWindowPopUp, public iEditorViewport
-{
-	friend class cTextureUnitPanel;
-public:
-	cEditorWindowMaterialEditor(iEditorBase* apEditor, iFrameBuffer* apFB, const tWString& asMatFile=_W(""), cEditorInputFile* apInput=NULL, bool abStandAlone=false);
-	~cEditorWindowMaterialEditor();
+class cEditorWindowMaterialEditor : public iEditorWindowPopUp, public iEditorViewport {
+    friend class cTextureUnitPanel;
 
-	cWidgetFrame* GetFrameUnits() { return mpFUnits; }
+  public:
+    cEditorWindowMaterialEditor(iEditorBase *apEditor, iFrameBuffer *apFB, const tWString &asMatFile = _W(""),
+                                cEditorInputFile *apInput = NULL, bool abStandAlone = false);
+    ~cEditorWindowMaterialEditor();
 
-	cMaterialWrapper* GetMaterial() { return mpMaterial; }
+    cWidgetFrame *GetFrameUnits() { return mpFUnits; }
 
-	void SetUpUnits();
-	void SetUpPanels();
-	void SetUpVars();
+    cMaterialWrapper *GetMaterial() { return mpMaterial; }
 
-	void Command_New();
-	void Command_Open();
-	void Command_Save();
-	void Command_SaveAs();
+    void SetUpUnits();
+    void SetUpPanels();
+    void SetUpVars();
 
-	void Reset();
+    void Command_New();
+    void Command_Open();
+    void Command_Save();
+    void Command_SaveAs();
 
-	bool LoadMaterial(const tWString& asFilename);
-	void SaveMaterial(const tWString& asFilename);
+    void Reset();
 
-	void SetPreviewUpdated() { mbPreviewNeedsUpdate = true; }
+    bool LoadMaterial(const tWString &asFilename);
+    void SaveMaterial(const tWString &asFilename);
 
-protected:
-	void CreateMaterial(const tString& asMat="");
-	void UpdatePreview(cMaterial* apMat);
+    void SetPreviewUpdated() { mbPreviewNeedsUpdate = true; }
 
-	bool FilePickerSave(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(FilePickerSave);
+  protected:
+    void CreateMaterial(const tString &asMat = "");
+    void UpdatePreview(cMaterial *apMat);
 
-	bool FilePickerLoad(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(FilePickerLoad);
+    bool FilePickerSave(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(FilePickerSave);
 
-	bool ButtonPressed(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(ButtonPressed);
+    bool FilePickerLoad(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(FilePickerLoad);
 
-	void UpdateUVAnimInputs();
+    bool ButtonPressed(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(ButtonPressed);
 
-	void SetWindowCaption(const tWString& asCaption);
+    void UpdateUVAnimInputs();
 
+    void SetWindowCaption(const tWString &asCaption);
 
-	void OnInit();
-	void OnInitLayout();
-	void PostInitLayout();
+    void OnInit();
+    void OnInitLayout();
+    void PostInitLayout();
 
-	void OnSetActive(bool abX);
+    void OnSetActive(bool abX);
 
-	void OnUpdate(float afTimeStep);
+    void OnUpdate(float afTimeStep);
 
-	bool OnViewportUpdate(const cGuiMessageData& aData);
-	bool OnViewportMouseMove(const cGuiMessageData& aData);
-	bool OnViewportMouseDown(const cGuiMessageData& aData);
-	bool OnViewportMouseUp(const cGuiMessageData& aData);
+    bool OnViewportUpdate(const cGuiMessageData &aData);
+    bool OnViewportMouseMove(const cGuiMessageData &aData);
+    bool OnViewportMouseDown(const cGuiMessageData &aData);
+    bool OnViewportMouseUp(const cGuiMessageData &aData);
 
-	bool MenuCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(MenuCallback);
+    bool MenuCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(MenuCallback);
 
-	bool WindowSpecificInputCallback(iEditorInput* apInput);
+    bool WindowSpecificInputCallback(iEditorInput *apInput);
 
-	/////////////////////////////////////////
-	// World stuff
-	cWorld* mpMatWorld;
-	cMeshEntity* mpCurrentPreviewEntity;
-	std::vector<cMeshEntity*> mvPreviewEntities;
-	bool mbRotationEnabled;
-	cMatrixf mmtxRotation;
-	cLightPoint* mpFixedLight;
-	cLightPoint* mpMovableLight;
+    /////////////////////////////////////////
+    // World stuff
+    cWorld *mpMatWorld;
+    cMeshEntity *mpCurrentPreviewEntity;
+    std::vector<cMeshEntity *> mvPreviewEntities;
+    bool mbRotationEnabled;
+    cMatrixf mmtxRotation;
+    cLightPoint *mpFixedLight;
+    cLightPoint *mpMovableLight;
 
-	bool mbMoveLight;
-	bool mbMoveCamera;
+    bool mbMoveLight;
+    bool mbMoveCamera;
 
-	/////////////////////////////////////////
-	// GUI stuff
+    /////////////////////////////////////////
+    // GUI stuff
 
-	// Menu
-	cWidgetMenuItem* mpMenuNew;
-	cWidgetMenuItem* mpMenuOpen;
-	cWidgetMenuItem* mpMenuSave;
-	cWidgetMenuItem* mpMenuSaveAs;
-	cWidgetMenuItem* mpMenuExit;
+    // Menu
+    cWidgetMenuItem *mpMenuNew;
+    cWidgetMenuItem *mpMenuOpen;
+    cWidgetMenuItem *mpMenuSave;
+    cWidgetMenuItem *mpMenuSaveAs;
+    cWidgetMenuItem *mpMenuExit;
 
-	// General settings
-    cEditorInputEnum* mpInpMatType;
-	cEditorInputEnum* mpInpPhysicsMat;
-	cEditorInputBool* mpInpDepthTest;
-	cEditorInputNumber* mpInpValue;
-	cEditorInputEnum* mpInpBlendMode;
+    // General settings
+    cEditorInputEnum *mpInpMatType;
+    cEditorInputEnum *mpInpPhysicsMat;
+    cEditorInputBool *mpInpDepthTest;
+    cEditorInputNumber *mpInpValue;
+    cEditorInputEnum *mpInpBlendMode;
 
-	// UV Animations
-	cEditorInputEnum* mpInpUVAnimation;
-	cWidgetButton* mpBAddAnim;
-	cWidgetButton* mpBRemAnim;
-	cEditorInputEnum* mpInpUVAnimType;
-	cEditorInputEnum* mpInpUVAnimAxis;
-	cEditorInputNumber* mpInpUVAnimSpeed;
-	cEditorInputNumber* mpInpUVAnimAmp;
+    // UV Animations
+    cEditorInputEnum *mpInpUVAnimation;
+    cWidgetButton *mpBAddAnim;
+    cWidgetButton *mpBRemAnim;
+    cEditorInputEnum *mpInpUVAnimType;
+    cEditorInputEnum *mpInpUVAnimAxis;
+    cEditorInputNumber *mpInpUVAnimSpeed;
+    cEditorInputNumber *mpInpUVAnimAmp;
 
-	// Preview window
-	cEditorInputEnum* mpInpPreviewModel;
-	cEditorInputEnum* mpInpBGType;
-	cEditorInputFile* mpInpBGCubeMap;
-	cEditorInputColorFrame* mpInpBGColor;
-	cEditorInputBool* mpInpRotateModel;
-	cEditorInputColorFrame* mpInpFixedLightColor;
-	cEditorInputColorFrame* mpInpMovableLightColor;
+    // Preview window
+    cEditorInputEnum *mpInpPreviewModel;
+    cEditorInputEnum *mpInpBGType;
+    cEditorInputFile *mpInpBGCubeMap;
+    cEditorInputColorFrame *mpInpBGColor;
+    cEditorInputBool *mpInpRotateModel;
+    cEditorInputColorFrame *mpInpFixedLightColor;
+    cEditorInputColorFrame *mpInpMovableLightColor;
 
-	// Texture units
-	cWidgetFrame* mpFUnits;
-	std::vector<cEditorInputBool*> mvUnitSwitches;
-	std::vector<cTextureUnitPanel*> mvUnitPanels;
+    // Texture units
+    cWidgetFrame *mpFUnits;
+    std::vector<cEditorInputBool *> mvUnitSwitches;
+    std::vector<cTextureUnitPanel *> mvUnitPanels;
 
-	// Material Variables
-	cWidgetFrame* mpFMaterialVars;
-	cEditorVarInputPanel* mpInputPanel;
+    // Material Variables
+    cWidgetFrame *mpFMaterialVars;
+    cEditorVarInputPanel *mpInputPanel;
 
-	cMaterialWrapper* mpMaterial;
+    cMaterialWrapper *mpMaterial;
 
-	bool mbPreviewNeedsUpdate;
+    bool mbPreviewNeedsUpdate;
 
-	tWStringVec mvTempLoadedFiles;
-	tWString msMatFilename;
-	tWString msInitMatFile;
+    tWStringVec mvTempLoadedFiles;
+    tWString msMatFilename;
+    tWString msInitMatFile;
 
-	tWString msLastTexturePath;
-	
-	cEditorInputFile* mpDestInput;
+    tWString msLastTexturePath;
 
-	bool mbStandAlone;
+    cEditorInputFile *mpDestInput;
+
+    bool mbStandAlone;
 };
 
 //-------------------------------------------------------------------

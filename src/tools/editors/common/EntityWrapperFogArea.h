@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,120 +20,114 @@
 #ifndef HPLEDITOR_ENTITY_WRAPPER_FOG_AREA_H
 #define HPLEDITOR_ENTITY_WRAPPER_FOG_AREA_H
 
-#include "EntityWrapper.h"
 #include "EngineEntity.h"
+#include "EntityWrapper.h"
 
 //---------------------------------------------------------------
 
-class cIconEntityFogArea : public iIconEntity
-{
-public:
-	cIconEntityFogArea(iEntityWrapper* apParent);
-	~cIconEntityFogArea();
+class cIconEntityFogArea : public iIconEntity {
+  public:
+    cIconEntityFogArea(iEntityWrapper *apParent);
+    ~cIconEntityFogArea();
 
-	bool Create(const tString& asName);
+    bool Create(const tString &asName);
 };
 
 //---------------------------------------------------------------
 
 #define FogAreaPropIdStart 50
 
-enum eFogAreaBool
-{
-	eFogAreaBool_ShownBacksideWhenInside = FogAreaPropIdStart,
-	eFogAreaBool_ShownBacksideWhenOutside,
+enum eFogAreaBool {
+    eFogAreaBool_ShownBacksideWhenInside = FogAreaPropIdStart,
+    eFogAreaBool_ShownBacksideWhenOutside,
 
-	eFogAreaBool_LastEnum,
+    eFogAreaBool_LastEnum,
 };
 
-enum eFogAreaCol
-{
-	eFogAreaCol_Color = FogAreaPropIdStart,
-	
-	eFogAreaColor_LastEnum,
+enum eFogAreaCol {
+    eFogAreaCol_Color = FogAreaPropIdStart,
+
+    eFogAreaColor_LastEnum,
 };
 
-enum eFogAreaFloat
-{
-	eFogAreaFloat_Start = FogAreaPropIdStart,
-	eFogAreaFloat_End, 
-	eFogAreaFloat_FalloffExp,
-	
-	eFogAreaFloat_LastEnum,	
+enum eFogAreaFloat {
+    eFogAreaFloat_Start = FogAreaPropIdStart,
+    eFogAreaFloat_End,
+    eFogAreaFloat_FalloffExp,
+
+    eFogAreaFloat_LastEnum,
 };
 
 //---------------------------------------------------------------
 
-class cEntityWrapperTypeFogArea : public iEntityWrapperType
-{
-public:
-	cEntityWrapperTypeFogArea();
+class cEntityWrapperTypeFogArea : public iEntityWrapperType {
+  public:
+    cEntityWrapperTypeFogArea();
 
-protected:
-	iEntityWrapperData* CreateSpecificData();
+  protected:
+    iEntityWrapperData *CreateSpecificData();
 };
 
 //---------------------------------------------------------------
 
-class cEntityWrapperDataFogArea : public iEntityWrapperData
-{
-public:
-	cEntityWrapperDataFogArea(iEntityWrapperType* apType);
+class cEntityWrapperDataFogArea : public iEntityWrapperData {
+  public:
+    cEntityWrapperDataFogArea(iEntityWrapperType *apType);
 
-protected:
-	iEntityWrapper* CreateSpecificEntity();
+  protected:
+    iEntityWrapper *CreateSpecificEntity();
 };
 
 //---------------------------------------------------------------
 
-class cEntityWrapperFogArea : public iEntityWrapper
-{
-public:
-	cEntityWrapperFogArea(iEntityWrapperData* apData);
-	~cEntityWrapperFogArea();
+class cEntityWrapperFogArea : public iEntityWrapper {
+  public:
+    cEntityWrapperFogArea(iEntityWrapperData *apData);
+    ~cEntityWrapperFogArea();
 
-	bool SetProperty(int, const float&);
-	bool SetProperty(int, const bool&);
-	bool SetProperty(int, const cColor&);
+    bool SetProperty(int, const float &);
+    bool SetProperty(int, const bool &);
+    bool SetProperty(int, const cColor &);
 
-	bool GetProperty(int, float&);
-	bool GetProperty(int, bool&);
-	bool GetProperty(int, cColor&);
+    bool GetProperty(int, float &);
+    bool GetProperty(int, bool &);
+    bool GetProperty(int, cColor &);
 
-	void SetColor(const cColor& aCol);
-	const cColor& GetColor() { return mColor; }
+    void SetColor(const cColor &aCol);
+    const cColor &GetColor() { return mColor; }
 
-	void SetStart(float afX);
-	float GetStart() { return mfStart; }
+    void SetStart(float afX);
+    float GetStart() { return mfStart; }
 
-	void SetEnd(float afX);
-	float GetEnd() { return mfEnd; }
+    void SetEnd(float afX);
+    float GetEnd() { return mfEnd; }
 
-	void SetFalloffExp(float afX);
-	float GetFalloffExp() { return mfFalloffExp; }
+    void SetFalloffExp(float afX);
+    float GetFalloffExp() { return mfFalloffExp; }
 
-	void SetShownBacksideWhenOutside(bool abX);
-	bool GetShownBacksideWhenOutside() { return mbShownBacksideWhenOutside; }
+    void SetShownBacksideWhenOutside(bool abX);
+    bool GetShownBacksideWhenOutside() { return mbShownBacksideWhenOutside; }
 
-	void SetShownBacksideWhenInside(bool abX);
-	bool GetShownBacksideWhenInside() { return mbShownBacksideWhenInside; }
+    void SetShownBacksideWhenInside(bool abX);
+    bool GetShownBacksideWhenInside() { return mbShownBacksideWhenInside; }
 
-	//void SetAbsScale(const cVector3f& avScale);
+    // void SetAbsScale(const cVector3f& avScale);
 
-	cEditorWindowEntityEditBox* CreateEditBox(cEditorEditModeSelect* apEditMode);
-	void Draw(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, iEditorEditMode* apEditMode, bool abIsSelected, const cColor& aHighlightCol, const cColor& aDisabledCol);
-	//void SaveToElement(cXmlElement* apElement);
+    cEditorWindowEntityEditBox *CreateEditBox(cEditorEditModeSelect *apEditMode);
+    void Draw(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions, iEditorEditMode *apEditMode,
+              bool abIsSelected, const cColor &aHighlightCol, const cColor &aDisabledCol);
+    // void SaveToElement(cXmlElement* apElement);
 
-protected:
-	iEngineEntity* CreateSpecificEngineEntity();
+  protected:
+    iEngineEntity *CreateSpecificEngineEntity();
 
-	cColor mColor;
-	float mfStart;
-	float mfEnd;
-	float mfFalloffExp;
+    cColor mColor;
+    float mfStart;
+    float mfEnd;
+    float mfFalloffExp;
 
-	bool mbShownBacksideWhenOutside;
-	bool mbShownBacksideWhenInside;
+    bool mbShownBacksideWhenOutside;
+    bool mbShownBacksideWhenInside;
 };
 
 //---------------------------------------------------------------

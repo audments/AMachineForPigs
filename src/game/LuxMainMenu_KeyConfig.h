@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -36,18 +36,17 @@ class cLuxMainMenu_KeyConfig;
 // Helper wrapper for SubActions
 ///////////////////////////////////////////////
 
-class cSubActionWrapper
-{
-public:
-	cSubActionWrapper(eInputDeviceType aType, int alInputId) : 
-	  mType(aType), mGamepadInputType(eGamepadInputType_LastEnum), mlInputId(alInputId), mfInputValue(1.0f) {}
-	cSubActionWrapper(eGamepadInputType aType, int alInputId, float afInputValue) : 
-	  mType(eInputDeviceType_Gamepad), mGamepadInputType(aType), mlInputId(alInputId), mfInputValue(afInputValue) {}
+class cSubActionWrapper {
+  public:
+    cSubActionWrapper(eInputDeviceType aType, int alInputId)
+        : mType(aType), mGamepadInputType(eGamepadInputType_LastEnum), mlInputId(alInputId), mfInputValue(1.0f) {}
+    cSubActionWrapper(eGamepadInputType aType, int alInputId, float afInputValue)
+        : mType(eInputDeviceType_Gamepad), mGamepadInputType(aType), mlInputId(alInputId), mfInputValue(afInputValue) {}
 
-	eInputDeviceType mType;
-	eGamepadInputType mGamepadInputType;
-	int mlInputId;
-	float mfInputValue;
+    eInputDeviceType mType;
+    eGamepadInputType mGamepadInputType;
+    int mlInputId;
+    float mfInputValue;
 };
 
 //----------------------------------------------
@@ -58,12 +57,11 @@ public:
 
 //----------------------------------------------
 
-enum eInputMenuEntryPos
-{
-	eInputMenuEntryPos_Primary,
-	eInputMenuEntryPos_Secondary,
+enum eInputMenuEntryPos {
+    eInputMenuEntryPos_Primary,
+    eInputMenuEntryPos_Secondary,
 
-	eInputMenuEntryPos_LastEnum
+    eInputMenuEntryPos_LastEnum
 };
 
 //----------------------------------------------
@@ -72,213 +70,212 @@ typedef std::vector<eInputMenuEntryPos> tMenuEntryPosVec;
 
 //----------------------------------------------
 
-class cLuxInputMenuEntry
-{
-public:
-	cLuxInputMenuEntry(cLuxMainMenu_KeyConfig* apWindow,
-					   cLuxAction* apAction,
-					   iWidget* apParent,
-					   const cVector3f& avPos);
-	~cLuxInputMenuEntry();
+class cLuxInputMenuEntry {
+  public:
+    cLuxInputMenuEntry(cLuxMainMenu_KeyConfig *apWindow, cLuxAction *apAction, iWidget *apParent,
+                       const cVector3f &avPos);
+    ~cLuxInputMenuEntry();
 
-	void RetrieveDefaultValue();
-	void RetrieveInitialValue();
+    void RetrieveDefaultValue();
+    void RetrieveInitialValue();
 
-	void UpdateAction();
-	void UpdateGamepadAction(cAction* apAction, const cSubActionWrapper& aSubAction);
-	void UpdateEntry();
+    void UpdateAction();
+    void UpdateGamepadAction(cAction *apAction, const cSubActionWrapper &aSubAction);
+    void UpdateEntry();
 
-	void SetInputKeypress(eInputMenuEntryPos aPos, eKey aKey);
-	void SetInputMouseButton(eInputMenuEntryPos aPos, eMouseButton aButton);
-	void SetInputGamepadButton(eInputMenuEntryPos aPos, eGamepadButton aButton);
-	void SetInputGamepadHat(eInputMenuEntryPos aPos, eGamepadHat aHat, eGamepadHatState aState);
-	void SetInputGamepadAxis(eInputMenuEntryPos aPos, eGamepadAxis aAxis, eGamepadAxisRange aRange);
+    void SetInputKeypress(eInputMenuEntryPos aPos, eKey aKey);
+    void SetInputMouseButton(eInputMenuEntryPos aPos, eMouseButton aButton);
+    void SetInputGamepadButton(eInputMenuEntryPos aPos, eGamepadButton aButton);
+    void SetInputGamepadHat(eInputMenuEntryPos aPos, eGamepadHat aHat, eGamepadHatState aState);
+    void SetInputGamepadAxis(eInputMenuEntryPos aPos, eGamepadAxis aAxis, eGamepadAxisRange aRange);
 
-	eInputMenuEntryPos GetKeyPos(eKey aKey);
-	eInputMenuEntryPos GetMouseButtonPos(eMouseButton aButton);
-	eInputMenuEntryPos GetGamepadButtonPos(eGamepadButton aButton);
-	eInputMenuEntryPos GetGamepadHatStatePos(eGamepadHat aHat, eGamepadHatState aState);
-	eInputMenuEntryPos GetGamepadAxisPos(eGamepadAxis aAxis, eGamepadAxisRange aRange);
+    eInputMenuEntryPos GetKeyPos(eKey aKey);
+    eInputMenuEntryPos GetMouseButtonPos(eMouseButton aButton);
+    eInputMenuEntryPos GetGamepadButtonPos(eGamepadButton aButton);
+    eInputMenuEntryPos GetGamepadHatStatePos(eGamepadHat aHat, eGamepadHatState aState);
+    eInputMenuEntryPos GetGamepadAxisPos(eGamepadAxis aAxis, eGamepadAxisRange aRange);
 
-	bool HasKey(eKey aKey);
-	bool HasMouseButton(eMouseButton aButton);
-	bool HasGamepadButton(eGamepadButton aButton);
-	bool HasGamepadHatState(eGamepadHat aHat, eGamepadHatState aState);
-	bool HasGamepadAxis(eGamepadAxis aAxis, eGamepadAxisRange aRange);
+    bool HasKey(eKey aKey);
+    bool HasMouseButton(eMouseButton aButton);
+    bool HasGamepadButton(eGamepadButton aButton);
+    bool HasGamepadHatState(eGamepadHat aHat, eGamepadHatState aState);
+    bool HasGamepadAxis(eGamepadAxis aAxis, eGamepadAxisRange aRange);
 
-	bool HasSubActions();
-	tMenuEntryPosVec GetPosSharingSubAction(cLuxInputMenuEntry* apEntry);
+    bool HasSubActions();
+    tMenuEntryPosVec GetPosSharingSubAction(cLuxInputMenuEntry *apEntry);
 
-	void SetColor(eInputMenuEntryPos aPos, const cColor& aCol);
+    void SetColor(eInputMenuEntryPos aPos, const cColor &aCol);
 
-	cWidgetLabel* mpLAction;
-	std::vector<cWidgetLabel*> mvLKeyInputs;
+    cWidgetLabel *mpLAction;
+    std::vector<cWidgetLabel *> mvLKeyInputs;
 
-	int mlActionId;
-	std::vector<cSubActionWrapper> mvSubActions;
-private:
-	cLuxMainMenu_KeyConfig* mpWindow;
-	std::vector<cColor> mvInputColors;
-	bool mbChanged;
+    int mlActionId;
+    std::vector<cSubActionWrapper> mvSubActions;
 
-	///////////////////////////
-	// Helper funcs
-	tString GetStringFromSubAction(const cSubActionWrapper& aSubAction);
-	tString GetStringFromGamepadSubAction(const cSubActionWrapper& aSubAction);
+  private:
+    cLuxMainMenu_KeyConfig *mpWindow;
+    std::vector<cColor> mvInputColors;
+    bool mbChanged;
 
-	cSubActionWrapper GetSubActionWrapperFromSubAction(iSubAction* apSubAction);
-	cSubActionWrapper GetSubActionWrapperFromLuxInput(cLuxInput* apInput);
-	
-	cSubActionWrapper GetSubActionWrapperFromString(const tString& asX, int alValue);
+    ///////////////////////////
+    // Helper funcs
+    tString GetStringFromSubAction(const cSubActionWrapper &aSubAction);
+    tString GetStringFromGamepadSubAction(const cSubActionWrapper &aSubAction);
 
-	cSubActionWrapper GetSubActionWrapperFromStringVecKeyboard(const tStringVec& avX, int alValue);
-	cSubActionWrapper GetSubActionWrapperFromStringVecMouse(const tStringVec& avX, int alValue);
-	cSubActionWrapper GetSubActionWrapperFromStringVecGamepad(const tStringVec& avX, int alValue);
+    cSubActionWrapper GetSubActionWrapperFromSubAction(iSubAction *apSubAction);
+    cSubActionWrapper GetSubActionWrapperFromLuxInput(cLuxInput *apInput);
 
-	eInputDeviceType GetInputDeviceTypeFromString(const tString& asX);
+    cSubActionWrapper GetSubActionWrapperFromString(const tString &asX, int alValue);
 
-	eInputMenuEntryPos GetPosFromInput(iWidget* apWidget);
+    cSubActionWrapper GetSubActionWrapperFromStringVecKeyboard(const tStringVec &avX, int alValue);
+    cSubActionWrapper GetSubActionWrapperFromStringVecMouse(const tStringVec &avX, int alValue);
+    cSubActionWrapper GetSubActionWrapperFromStringVecGamepad(const tStringVec &avX, int alValue);
 
-	void SaveSubAction(eInputMenuEntryPos aPos, eInputDeviceType aType, int alInputId);
-	void SaveGamepadSubAction(eInputMenuEntryPos aPos, eGamepadInputType, int alInputId, float afValue);
+    eInputDeviceType GetInputDeviceTypeFromString(const tString &asX);
 
-	void SetWaiting(bool abX, eInputMenuEntryPos aCat);
-	bool IsWaiting();
+    eInputMenuEntryPos GetPosFromInput(iWidget *apWidget);
 
-	///////////////////////////
-	// Callbacks
-	bool InputEntryMouseOver(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputEntryMouseOver);
+    void SaveSubAction(eInputMenuEntryPos aPos, eInputDeviceType aType, int alInputId);
+    void SaveGamepadSubAction(eInputMenuEntryPos aPos, eGamepadInputType, int alInputId, float afValue);
 
-	//bool InputEntryMouseMove(iWidget* apWidget, const cGuiMessageData& aData);
-	//kGuiCallbackDeclarationEnd(InputEntryMouseMove);
+    void SetWaiting(bool abX, eInputMenuEntryPos aCat);
+    bool IsWaiting();
 
-	bool InputEntryMouseEnter(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputEntryMouseEnter);
+    ///////////////////////////
+    // Callbacks
+    bool InputEntryMouseOver(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputEntryMouseOver);
 
-	bool InputEntryMouseLeave(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputEntryMouseLeave);
+    // bool InputEntryMouseMove(iWidget* apWidget, const cGuiMessageData& aData);
+    // kGuiCallbackDeclarationEnd(InputEntryMouseMove);
 
-	bool InputEntryChange(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputEntryChange);
+    bool InputEntryMouseEnter(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputEntryMouseEnter);
 
-	bool InputEntryClick(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputEntryClick);
+    bool InputEntryMouseLeave(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputEntryMouseLeave);
 
-	bool InputEntryKeyPress(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputEntryKeyPress);
+    bool InputEntryChange(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputEntryChange);
 
-	bool InputEntryUIButtonPress(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputEntryUIButtonPress);
+    bool InputEntryClick(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputEntryClick);
 
-	bool InputEntryUIArrowPress(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputEntryUIArrowPress);
+    bool InputEntryKeyPress(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputEntryKeyPress);
 
-	bool InputEntryGamepadButtonPress(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputEntryGamepadButtonPress);
+    bool InputEntryUIButtonPress(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputEntryUIButtonPress);
 
-	static bool mbGamepadButtonPress;
+    bool InputEntryUIArrowPress(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputEntryUIArrowPress);
+
+    bool InputEntryGamepadButtonPress(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputEntryGamepadButtonPress);
+
+    static bool mbGamepadButtonPress;
 };
 
-typedef std::vector<cLuxInputMenuEntry*> tInputEntryVec;
+typedef std::vector<cLuxInputMenuEntry *> tInputEntryVec;
 typedef tInputEntryVec::iterator tInputEntryVecIt;
 
 //----------------------------------------------
 
-class cLuxMainMenu_KeyConfig : public iLuxMainMenuWindow
-{
-	friend class cLuxInputMenuEntry;
-public:
-	cLuxMainMenu_KeyConfig(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin);
-	~cLuxMainMenu_KeyConfig();
+class cLuxMainMenu_KeyConfig : public iLuxMainMenuWindow {
+    friend class cLuxInputMenuEntry;
 
-	void CreateGui();
+  public:
+    cLuxMainMenu_KeyConfig(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin);
+    ~cLuxMainMenu_KeyConfig();
 
-	void ExitPressed();
+    void CreateGui();
 
-	iWidget* GetWaitingInput() { return mpWaitingInput; }
-	void SetWaitingInput(iWidget* apInput);
+    void ExitPressed();
 
-	void CancelInputSetting() { mbInputSettingCancelled = true; }
-private:
-	void OnSetActive(bool abX);
-	
-	cLuxInputMenuEntry* CreateInputEntry(cLuxAction* apAction, iWidget* apParent, const cVector3f& avPos);
+    iWidget *GetWaitingInput() { return mpWaitingInput; }
+    void SetWaitingInput(iWidget *apInput);
 
-	void SetCurrentToolTipEntry(cLuxInputMenuEntry* apEntry);
-	cLuxInputMenuEntry* GetCurrentToolTipEntry() { return mpCurrentTipEntry; }
+    void CancelInputSetting() { mbInputSettingCancelled = true; }
 
-	void ApplyChanges();
-	void SetDefaultValues();
-	void SetInitialValues();
+  private:
+    void OnSetActive(bool abX);
 
-	void CheckEmptyAndDuplicateInputs();
-	////////////////////////
-	// Properties
-	cVector2f mvWindowSize;
+    cLuxInputMenuEntry *CreateInputEntry(cLuxAction *apAction, iWidget *apParent, const cVector3f &avPos);
 
-	bool mbSettingInitialValues;
+    void SetCurrentToolTipEntry(cLuxInputMenuEntry *apEntry);
+    cLuxInputMenuEntry *GetCurrentToolTipEntry() { return mpCurrentTipEntry; }
 
-	bool mbInputSettingCancelled;
+    void ApplyChanges();
+    void SetDefaultValues();
+    void SetInitialValues();
 
-	iWidget* mpWaitingInput;
-	bool mbInvalidInputs;
+    void CheckEmptyAndDuplicateInputs();
+    ////////////////////////
+    // Properties
+    cVector2f mvWindowSize;
 
-	////////////////////////
-	// Layout
-	cVector2f mvHeaderPositions;
-	cVector2f mvEntrySize;
-	float mfEntrySep;
+    bool mbSettingInitialValues;
 
-	// Tip Label
-	cWidgetLabel *mpLTip;
-	bool mbTipFadeOut;
-	bool mbTipFadeRestore;
-	bool mbTipWidgetUpdated;
-	//iWidget* mpCurrentTipWidget;
-	cLuxInputMenuEntry* mpCurrentTipEntry;
-	tWString msTip;
+    bool mbInputSettingCancelled;
 
-	bool mbWasWaitingOnInput;
+    iWidget *mpWaitingInput;
+    bool mbInvalidInputs;
 
-	// Inputs
-	std::vector<cWidgetDummy*> mvDKeyGroups;
-	std::vector<tInputEntryVec> mvInputs;
+    ////////////////////////
+    // Layout
+    cVector2f mvHeaderPositions;
+    cVector2f mvEntrySize;
+    float mfEntrySep;
 
-	cWidgetComboBox* mpCBCategory;
+    // Tip Label
+    cWidgetLabel *mpLTip;
+    bool mbTipFadeOut;
+    bool mbTipFadeRestore;
+    bool mbTipWidgetUpdated;
+    // iWidget* mpCurrentTipWidget;
+    cLuxInputMenuEntry *mpCurrentTipEntry;
+    tWString msTip;
 
-	cWidgetButton* mpBDefaultKeys;
-	cWidgetButton* mpBOK;
-	cWidgetButton* mpBCancel;
+    bool mbWasWaitingOnInput;
 
-	////////////////////////
-	// Callbacks
-	bool WindowOnUpdate(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(WindowOnUpdate);
+    // Inputs
+    std::vector<cWidgetDummy *> mvDKeyGroups;
+    std::vector<tInputEntryVec> mvInputs;
 
-	bool CategoryChange(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(CategoryChange);
+    cWidgetComboBox *mpCBCategory;
 
-	bool CategorySelector_OnUIButtonPress(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(CategorySelector_OnUIButtonPress);
-	
-	bool PressSetDefault(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressSetDefault);
+    cWidgetButton *mpBDefaultKeys;
+    cWidgetButton *mpBOK;
+    cWidgetButton *mpBCancel;
 
-	bool PressOK(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressOK);
+    ////////////////////////
+    // Callbacks
+    bool WindowOnUpdate(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(WindowOnUpdate);
 
-	bool PressCancel(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(PressCancel);
+    bool CategoryChange(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(CategoryChange);
 
-	bool UIPressCancel(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(UIPressCancel);
+    bool CategorySelector_OnUIButtonPress(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(CategorySelector_OnUIButtonPress);
 
-	bool LoadDefaultsCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(LoadDefaultsCallback);
+    bool PressSetDefault(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressSetDefault);
 
-	bool ExitCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(ExitCallback);
+    bool PressOK(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressOK);
+
+    bool PressCancel(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(PressCancel);
+
+    bool UIPressCancel(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(UIPressCancel);
+
+    bool LoadDefaultsCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(LoadDefaultsCallback);
+
+    bool ExitCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(ExitCallback);
 };
 
 //----------------------------------------------

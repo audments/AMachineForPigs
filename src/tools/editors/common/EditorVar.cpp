@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -21,7 +21,6 @@
 #include "EditorWindow.h"
 
 //--------------------------------------------------------------------
-
 
 //--------------------------------------------------------------------------------
 
@@ -39,10 +38,9 @@
 
 //--------------------------------------------------------------------------------
 
-iEditorVar::iEditorVar(eVariableType aType)
-{
-	mType = aType;
-	mpExtData = NULL;
+iEditorVar::iEditorVar(eVariableType aType) {
+    mType = aType;
+    mpExtData = NULL;
 }
 
 //--------------------------------------------------------------------------------
@@ -53,47 +51,43 @@ iEditorVar::iEditorVar(eVariableType aType)
 
 //--------------------------------------------------------------------------------
 
-bool iEditorVar::Create(cXmlElement* apElement)
-{
-	if(apElement==NULL)
-		return false;
+bool iEditorVar::Create(cXmlElement *apElement) {
+    if (apElement == NULL)
+        return false;
 
-	msName = cString::To16Char(apElement->GetAttributeString("Name"));
-	if(msName==_W(""))
-		return false;
+    msName = cString::To16Char(apElement->GetAttributeString("Name"));
+    if (msName == _W(""))
+        return false;
 
-	msDefaultValue = cString::To16Char(apElement->GetAttributeString("DefaultValue"));
-	msDescription = cString::To16Char(apElement->GetAttributeString("Description"));
+    msDefaultValue = cString::To16Char(apElement->GetAttributeString("DefaultValue"));
+    msDescription = cString::To16Char(apElement->GetAttributeString("Description"));
 
-	if(msDefaultValue==_W(""))
-		msDefaultValue = cString::To16Char(apElement->GetAttributeString("Value"));
+    if (msDefaultValue == _W(""))
+        msDefaultValue = cString::To16Char(apElement->GetAttributeString("Value"));
 
-	return true;
+    return true;
 }
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput* iEditorVar::CreateInput(iEditorWindow* apWindow, iWidget* apParent, cEditorVarInstance* apVar)
-{
-	iEditorVarInput* pInput = CreateSpecificInput(apWindow, apParent, apVar);
-	if(pInput)
-	{
-		iEditorInput* pEditorInput = pInput->GetInput();
-		pEditorInput->SetLayoutStyle(eEditorInputLayoutStyle_RowLabelOnLeft);
-		pEditorInput->UpdateLayout();
-	}
+iEditorVarInput *iEditorVar::CreateInput(iEditorWindow *apWindow, iWidget *apParent, cEditorVarInstance *apVar) {
+    iEditorVarInput *pInput = CreateSpecificInput(apWindow, apParent, apVar);
+    if (pInput) {
+        iEditorInput *pEditorInput = pInput->GetInput();
+        pEditorInput->SetLayoutStyle(eEditorInputLayoutStyle_RowLabelOnLeft);
+        pEditorInput->UpdateLayout();
+    }
 
-	return pInput;
+    return pInput;
 }
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInstance* iEditorVar::CreateInstance()
-{
-	cEditorVarInstance* pInstance = hplNew(cEditorVarInstance,(this));
-	pInstance->SetValue(msDefaultValue);
+cEditorVarInstance *iEditorVar::CreateInstance() {
+    cEditorVarInstance *pInstance = hplNew(cEditorVarInstance, (this));
+    pInstance->SetValue(msDefaultValue);
 
-	return pInstance;
+    return pInstance;
 }
 
 //--------------------------------------------------------------------------------
@@ -114,20 +108,18 @@ cEditorVarInstance* iEditorVar::CreateInstance()
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput::iEditorVarInput(cEditorVarInstance* apVar, iEditorInput* apInput)
-{
-	mpVar = apVar; 
-	mpInput = apInput;
-	mpPanel = NULL;
+iEditorVarInput::iEditorVarInput(cEditorVarInstance *apVar, iEditorInput *apInput) {
+    mpVar = apVar;
+    mpInput = apInput;
+    mpPanel = NULL;
 
-	mpInput->AddCallback(eEditorInputCallback_ValueEnter, this, kGuiCallback(OnValueEnter));
-	mpInput->GetHandle()->SetToolTip(apVar->GetVarType()->GetDescription());
+    mpInput->AddCallback(eEditorInputCallback_ValueEnter, this, kGuiCallback(OnValueEnter));
+    mpInput->GetHandle()->SetToolTip(apVar->GetVarType()->GetDescription());
 }
 
-iEditorVarInput::~iEditorVarInput()
-{
-	iEditorWindow* pWindow = mpInput->GetWindow();
-	pWindow->DestroyInput(mpInput);
+iEditorVarInput::~iEditorVarInput() {
+    iEditorWindow *pWindow = mpInput->GetWindow();
+    pWindow->DestroyInput(mpInput);
 }
 
 //--------------------------------------------------------------------------------
@@ -138,24 +130,15 @@ iEditorVarInput::~iEditorVarInput()
 
 //--------------------------------------------------------------------------------
 
-void iEditorVarInput::Update()
-{
-	FetchValueFromVar();
-}
+void iEditorVarInput::Update() { FetchValueFromVar(); }
 
 //--------------------------------------------------------------------------------
 
-void iEditorVarInput::FetchValueFromVar()
-{
-	mpInput->SetValue(mpVar->GetValue(), false);
-}
+void iEditorVarInput::FetchValueFromVar() { mpInput->SetValue(mpVar->GetValue(), false); }
 
 //--------------------------------------------------------------------------------
 
-void iEditorVarInput::CopyValueToVar()
-{
-	mpVar->SetValue(mpInput->GetValue());
-}
+void iEditorVarInput::CopyValueToVar() { mpVar->SetValue(mpInput->GetValue()); }
 
 //--------------------------------------------------------------------------------
 
@@ -165,14 +148,13 @@ void iEditorVarInput::CopyValueToVar()
 
 //--------------------------------------------------------------------------------
 
-bool iEditorVarInput::OnValueEnter(iWidget* apWidget, const cGuiMessageData& aData)
-{
-	if(mpPanel->RunCallback(this)==false)
+bool iEditorVarInput::OnValueEnter(iWidget *apWidget, const cGuiMessageData &aData) {
+    if (mpPanel->RunCallback(this) == false)
         CopyValueToVar();
 
-	return true;
+    return true;
 }
-kGuiCallbackDeclaredFuncEnd(iEditorVarInput,OnValueEnter);
+kGuiCallbackDeclaredFuncEnd(iEditorVarInput, OnValueEnter);
 
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
@@ -192,9 +174,7 @@ kGuiCallbackDeclaredFuncEnd(iEditorVarInput,OnValueEnter);
 
 //--------------------------------------------------------------------------------
 
-cEditorVarBool::cEditorVarBool() : iEditorVar(eVariableType_Bool)
-{
-}
+cEditorVarBool::cEditorVarBool() : iEditorVar(eVariableType_Bool) {}
 
 //--------------------------------------------------------------------------------
 
@@ -204,9 +184,9 @@ cEditorVarBool::cEditorVarBool() : iEditorVar(eVariableType_Bool)
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput* cEditorVarBool::CreateSpecificInput(iEditorWindow* apWindow, iWidget* apParent, cEditorVarInstance* apVar)
-{
-	return hplNew(cEditorVarInputBool,(apVar, apWindow, apParent));
+iEditorVarInput *cEditorVarBool::CreateSpecificInput(iEditorWindow *apWindow, iWidget *apParent,
+                                                     cEditorVarInstance *apVar) {
+    return hplNew(cEditorVarInputBool, (apVar, apWindow, apParent));
 }
 
 //--------------------------------------------------------------------------------
@@ -235,15 +215,8 @@ iEditorVarInput* cEditorVarBool::CreateSpecificInput(iEditorWindow* apWindow, iW
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInputBool::cEditorVarInputBool(cEditorVarInstance* apVar, 
-										 iEditorWindow* apWindow, 
-										 iWidget* apParent) : iEditorVarInput(apVar,
-																			  apWindow->CreateInputBool(0,apVar->GetVarType()->GetName(), 
-																										"", 
-																										apParent))
-{
-}
-
+cEditorVarInputBool::cEditorVarInputBool(cEditorVarInstance *apVar, iEditorWindow *apWindow, iWidget *apParent)
+    : iEditorVarInput(apVar, apWindow->CreateInputBool(0, apVar->GetVarType()->GetName(), "", apParent)) {}
 
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
@@ -263,9 +236,7 @@ cEditorVarInputBool::cEditorVarInputBool(cEditorVarInstance* apVar,
 
 //--------------------------------------------------------------------------------
 
-cEditorVarFloat::cEditorVarFloat() : iEditorVar(eVariableType_Float)
-{
-}
+cEditorVarFloat::cEditorVarFloat() : iEditorVar(eVariableType_Float) {}
 
 //--------------------------------------------------------------------------------
 
@@ -275,9 +246,9 @@ cEditorVarFloat::cEditorVarFloat() : iEditorVar(eVariableType_Float)
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput* cEditorVarFloat::CreateSpecificInput(iEditorWindow* apWindow, iWidget* apParent, cEditorVarInstance* apVar)
-{
-	return hplNew(cEditorVarInputFloat,(apVar, apWindow, apParent));
+iEditorVarInput *cEditorVarFloat::CreateSpecificInput(iEditorWindow *apWindow, iWidget *apParent,
+                                                      cEditorVarInstance *apVar) {
+    return hplNew(cEditorVarInputFloat, (apVar, apWindow, apParent));
 }
 
 //--------------------------------------------------------------------------------
@@ -306,16 +277,8 @@ iEditorVarInput* cEditorVarFloat::CreateSpecificInput(iEditorWindow* apWindow, i
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInputFloat::cEditorVarInputFloat(cEditorVarInstance* apVar,
-										   iEditorWindow* apWindow,
-										   iWidget* apParent) : iEditorVarInput(apVar, 
-																				apWindow->CreateInputNumber(0,
-																											apVar->GetVarType()->GetName(),
-																											"",
-																											apParent,
-																											50,0.1f))
-{
-}
+cEditorVarInputFloat::cEditorVarInputFloat(cEditorVarInstance *apVar, iEditorWindow *apWindow, iWidget *apParent)
+    : iEditorVarInput(apVar, apWindow->CreateInputNumber(0, apVar->GetVarType()->GetName(), "", apParent, 50, 0.1f)) {}
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
@@ -334,9 +297,7 @@ cEditorVarInputFloat::cEditorVarInputFloat(cEditorVarInstance* apVar,
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInt::cEditorVarInt() : iEditorVar(eVariableType_Int)
-{
-}
+cEditorVarInt::cEditorVarInt() : iEditorVar(eVariableType_Int) {}
 
 //--------------------------------------------------------------------------------
 
@@ -346,9 +307,9 @@ cEditorVarInt::cEditorVarInt() : iEditorVar(eVariableType_Int)
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput* cEditorVarInt::CreateSpecificInput(iEditorWindow* apWindow, iWidget* apParent, cEditorVarInstance* apVar)
-{
-	return hplNew(cEditorVarInputInt, (apVar, apWindow, apParent));
+iEditorVarInput *cEditorVarInt::CreateSpecificInput(iEditorWindow *apWindow, iWidget *apParent,
+                                                    cEditorVarInstance *apVar) {
+    return hplNew(cEditorVarInputInt, (apVar, apWindow, apParent));
 }
 
 //--------------------------------------------------------------------------------
@@ -375,12 +336,8 @@ iEditorVarInput* cEditorVarInt::CreateSpecificInput(iEditorWindow* apWindow, iWi
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInputInt::cEditorVarInputInt(cEditorVarInstance* apVar,
-									   iEditorWindow* apWindow,
-									   iWidget* apParent) : iEditorVarInput(apVar,
-																			apWindow->CreateInputNumber(0,apVar->GetVarType()->GetName(), "", apParent, 50, 1))
-{
-}
+cEditorVarInputInt::cEditorVarInputInt(cEditorVarInstance *apVar, iEditorWindow *apWindow, iWidget *apParent)
+    : iEditorVarInput(apVar, apWindow->CreateInputNumber(0, apVar->GetVarType()->GetName(), "", apParent, 50, 1)) {}
 
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
@@ -400,9 +357,7 @@ cEditorVarInputInt::cEditorVarInputInt(cEditorVarInstance* apVar,
 
 //--------------------------------------------------------------------------------
 
-cEditorVarString::cEditorVarString() : iEditorVar(eVariableType_String)
-{
-}
+cEditorVarString::cEditorVarString() : iEditorVar(eVariableType_String) {}
 
 //--------------------------------------------------------------------------------
 
@@ -412,9 +367,9 @@ cEditorVarString::cEditorVarString() : iEditorVar(eVariableType_String)
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput* cEditorVarString::CreateSpecificInput(iEditorWindow* apWindow, iWidget* apParent, cEditorVarInstance* apVar)
-{
-	return hplNew(cEditorVarInputString, (apVar, apWindow, apParent));
+iEditorVarInput *cEditorVarString::CreateSpecificInput(iEditorWindow *apWindow, iWidget *apParent,
+                                                       cEditorVarInstance *apVar) {
+    return hplNew(cEditorVarInputString, (apVar, apWindow, apParent));
 }
 
 //--------------------------------------------------------------------------------
@@ -441,14 +396,10 @@ iEditorVarInput* cEditorVarString::CreateSpecificInput(iEditorWindow* apWindow, 
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInputString::cEditorVarInputString(cEditorVarInstance* apVar,
-											 iEditorWindow* apWindow,
-											 iWidget* apParent) : iEditorVarInput(apVar,
-																				  apWindow->CreateInputString(0,apVar->GetVarType()->GetName(), "", apParent, 160))
-																									
-{
-}
+cEditorVarInputString::cEditorVarInputString(cEditorVarInstance *apVar, iEditorWindow *apWindow, iWidget *apParent)
+    : iEditorVarInput(apVar, apWindow->CreateInputString(0, apVar->GetVarType()->GetName(), "", apParent, 160))
 
+{}
 
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
@@ -468,9 +419,7 @@ cEditorVarInputString::cEditorVarInputString(cEditorVarInstance* apVar,
 
 //--------------------------------------------------------------------------------
 
-cEditorVarVector2f::cEditorVarVector2f() : iEditorVar(eVariableType_Vec2)
-{
-}
+cEditorVarVector2f::cEditorVarVector2f() : iEditorVar(eVariableType_Vec2) {}
 
 //--------------------------------------------------------------------------------
 
@@ -480,9 +429,9 @@ cEditorVarVector2f::cEditorVarVector2f() : iEditorVar(eVariableType_Vec2)
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput* cEditorVarVector2f::CreateSpecificInput(iEditorWindow* apWindow, iWidget* apParent, cEditorVarInstance* apVar)
-{
-	return hplNew(cEditorVarInputVector2f, (apVar, apWindow, apParent));
+iEditorVarInput *cEditorVarVector2f::CreateSpecificInput(iEditorWindow *apWindow, iWidget *apParent,
+                                                         cEditorVarInstance *apVar) {
+    return hplNew(cEditorVarInputVector2f, (apVar, apWindow, apParent));
 }
 
 //--------------------------------------------------------------------------------
@@ -511,13 +460,9 @@ iEditorVarInput* cEditorVarVector2f::CreateSpecificInput(iEditorWindow* apWindow
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInputVector2f::cEditorVarInputVector2f(cEditorVarInstance* apVar,
-												 iEditorWindow* apWindow,
-												 iWidget* apParent) : iEditorVarInput(apVar,
-																					  apWindow->CreateInputVec2(0,apVar->GetVarType()->GetName(), 
-																												"", apParent, 50, tWStringList(),eEditorInputLayoutStyle_RowLabelOnTop, 0.1f))
-{
-}
+cEditorVarInputVector2f::cEditorVarInputVector2f(cEditorVarInstance *apVar, iEditorWindow *apWindow, iWidget *apParent)
+    : iEditorVarInput(apVar, apWindow->CreateInputVec2(0, apVar->GetVarType()->GetName(), "", apParent, 50,
+                                                       tWStringList(), eEditorInputLayoutStyle_RowLabelOnTop, 0.1f)) {}
 
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
@@ -537,9 +482,7 @@ cEditorVarInputVector2f::cEditorVarInputVector2f(cEditorVarInstance* apVar,
 
 //--------------------------------------------------------------------------------
 
-cEditorVarVector3f::cEditorVarVector3f() : iEditorVar(eVariableType_Vec3)
-{
-}
+cEditorVarVector3f::cEditorVarVector3f() : iEditorVar(eVariableType_Vec3) {}
 
 //--------------------------------------------------------------------------------
 
@@ -549,9 +492,9 @@ cEditorVarVector3f::cEditorVarVector3f() : iEditorVar(eVariableType_Vec3)
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput* cEditorVarVector3f::CreateSpecificInput(iEditorWindow* apWindow, iWidget* apParent, cEditorVarInstance* apVar)
-{
-	return hplNew(cEditorVarInputVector3f, (apVar, apWindow, apParent));
+iEditorVarInput *cEditorVarVector3f::CreateSpecificInput(iEditorWindow *apWindow, iWidget *apParent,
+                                                         cEditorVarInstance *apVar) {
+    return hplNew(cEditorVarInputVector3f, (apVar, apWindow, apParent));
 }
 
 //--------------------------------------------------------------------------------
@@ -578,12 +521,9 @@ iEditorVarInput* cEditorVarVector3f::CreateSpecificInput(iEditorWindow* apWindow
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInputVector3f::cEditorVarInputVector3f(cEditorVarInstance* apVar,
-												 iEditorWindow* apWindow,
-												 iWidget* apParent) : iEditorVarInput(apVar,
-																					  apWindow->CreateInputVec3(0,apVar->GetVarType()->GetName(), "", apParent,50,tWStringList(), eEditorInputLayoutStyle_RowLabelOnTop, 0.1f))
-{
-}
+cEditorVarInputVector3f::cEditorVarInputVector3f(cEditorVarInstance *apVar, iEditorWindow *apWindow, iWidget *apParent)
+    : iEditorVarInput(apVar, apWindow->CreateInputVec3(0, apVar->GetVarType()->GetName(), "", apParent, 50,
+                                                       tWStringList(), eEditorInputLayoutStyle_RowLabelOnTop, 0.1f)) {}
 
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
@@ -603,9 +543,7 @@ cEditorVarInputVector3f::cEditorVarInputVector3f(cEditorVarInstance* apVar,
 
 //--------------------------------------------------------------------------------
 
-cEditorVarColor::cEditorVarColor() : iEditorVar(eVariableType_Color)
-{
-}
+cEditorVarColor::cEditorVarColor() : iEditorVar(eVariableType_Color) {}
 
 //--------------------------------------------------------------------------------
 
@@ -615,9 +553,9 @@ cEditorVarColor::cEditorVarColor() : iEditorVar(eVariableType_Color)
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput* cEditorVarColor::CreateSpecificInput(iEditorWindow* apWindow, iWidget* apParent, cEditorVarInstance* apVar)
-{
-	return hplNew(cEditorVarInputColor, (apVar, apWindow, apParent));
+iEditorVarInput *cEditorVarColor::CreateSpecificInput(iEditorWindow *apWindow, iWidget *apParent,
+                                                      cEditorVarInstance *apVar) {
+    return hplNew(cEditorVarInputColor, (apVar, apWindow, apParent));
 }
 
 //--------------------------------------------------------------------------------
@@ -646,12 +584,8 @@ iEditorVarInput* cEditorVarColor::CreateSpecificInput(iEditorWindow* apWindow, i
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInputColor::cEditorVarInputColor(cEditorVarInstance* apVar,
-										   iEditorWindow* apWindow,
-										   iWidget* apParent) : iEditorVarInput(apVar,
-																				apWindow->CreateInputColorFrame(0, apVar->GetVarType()->GetName(), "", apParent))
-{
-}
+cEditorVarInputColor::cEditorVarInputColor(cEditorVarInstance *apVar, iEditorWindow *apWindow, iWidget *apParent)
+    : iEditorVarInput(apVar, apWindow->CreateInputColorFrame(0, apVar->GetVarType()->GetName(), "", apParent)) {}
 
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
@@ -671,9 +605,7 @@ cEditorVarInputColor::cEditorVarInputColor(cEditorVarInstance* apVar,
 
 //--------------------------------------------------------------------------------
 
-cEditorVarEnum::cEditorVarEnum() : iEditorVar(eVariableType_Enum)
-{
-}
+cEditorVarEnum::cEditorVarEnum() : iEditorVar(eVariableType_Enum) {}
 
 //--------------------------------------------------------------------------------
 
@@ -683,38 +615,36 @@ cEditorVarEnum::cEditorVarEnum() : iEditorVar(eVariableType_Enum)
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput* cEditorVarEnum::CreateSpecificInput(iEditorWindow* apWindow, iWidget* apParent, cEditorVarInstance* apVar)
-{
-	return hplNew(cEditorVarInputEnum, (apVar, apWindow, apParent));
+iEditorVarInput *cEditorVarEnum::CreateSpecificInput(iEditorWindow *apWindow, iWidget *apParent,
+                                                     cEditorVarInstance *apVar) {
+    return hplNew(cEditorVarInputEnum, (apVar, apWindow, apParent));
 }
 
 //--------------------------------------------------------------------------------
 
-bool cEditorVarEnum::Create(cXmlElement* apElement)
-{
-	if(iEditorVar::Create(apElement)==false)
-		return false;
+bool cEditorVarEnum::Create(cXmlElement *apElement) {
+    if (iEditorVar::Create(apElement) == false)
+        return false;
 
-	int lCurrentValue=-1;
+    int lCurrentValue = -1;
 
-	int i=0;
-	cXmlNodeListIterator it = apElement->GetChildIterator();
-	while(it.HasNext())
-	{
-		cXmlElement* pValue = it.Next()->ToElement();
-		tWString sValue = cString::To16Char(pValue->GetAttributeString("Name"));
+    int i = 0;
+    cXmlNodeListIterator it = apElement->GetChildIterator();
+    while (it.HasNext()) {
+        cXmlElement *pValue = it.Next()->ToElement();
+        tWString sValue = cString::To16Char(pValue->GetAttributeString("Name"));
 
-		if(msDefaultValue==sValue)
-			lCurrentValue = i;
-		mvValues.push_back(sValue);
+        if (msDefaultValue == sValue)
+            lCurrentValue = i;
+        mvValues.push_back(sValue);
 
-		++i;
-	}
+        ++i;
+    }
 
-	if(lCurrentValue==-1 && mvValues.empty()==false)
-		msDefaultValue = mvValues[0];
+    if (lCurrentValue == -1 && mvValues.empty() == false)
+        msDefaultValue = mvValues[0];
 
-	return true;
+    return true;
 }
 
 //--------------------------------------------------------------------------------
@@ -743,19 +673,17 @@ bool cEditorVarEnum::Create(cXmlElement* apElement)
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInputEnum::cEditorVarInputEnum(cEditorVarInstance* apVar,
-										 iEditorWindow* apWindow,
-										 iWidget* apParent) : iEditorVarInput(apVar,
-																			  apWindow->CreateInputEnum(0, apVar->GetVarType()->GetName(), "", tWStringList(), apParent))
-{
-	cEditorInputEnum* pInput = (cEditorInputEnum*)mpInput;
-	cEditorVarEnum* pEnum = (cEditorVarEnum*)apVar->GetVarType();
+cEditorVarInputEnum::cEditorVarInputEnum(cEditorVarInstance *apVar, iEditorWindow *apWindow, iWidget *apParent)
+    : iEditorVarInput(apVar,
+                      apWindow->CreateInputEnum(0, apVar->GetVarType()->GetName(), "", tWStringList(), apParent)) {
+    cEditorInputEnum *pInput = (cEditorInputEnum *)mpInput;
+    cEditorVarEnum *pEnum = (cEditorVarEnum *)apVar->GetVarType();
 
-	const tWStringVec& vValues = pEnum->GetEnumValues();
-	for(int i=0;i<(int)vValues.size();++i)
-		pInput->AddValue(vValues[i]);
+    const tWStringVec &vValues = pEnum->GetEnumValues();
+    for (int i = 0; i < (int)vValues.size(); ++i)
+        pInput->AddValue(vValues[i]);
 
-	mpInput->SetValue(mpVar->GetValue(), false, true);
+    mpInput->SetValue(mpVar->GetValue(), false, true);
 }
 
 //--------------------------------------------------------------------------------
@@ -776,56 +704,42 @@ cEditorVarInputEnum::cEditorVarInputEnum(cEditorVarInstance* apVar,
 
 //--------------------------------------------------------------------------------
 
-cEditorVarFile::cEditorVarFile() : iEditorVar(eVariableType_String)
-{
+cEditorVarFile::cEditorVarFile() : iEditorVar(eVariableType_String) {}
+
+//--------------------------------------------------------------------------------
+
+bool cEditorVarFile::Create(cXmlElement *apElement) {
+    if (iEditorVar::Create(apElement) == false)
+        return false;
+
+    mResType = GetBrowserTypeFromElement(apElement);
+    if (mResType == eEditorResourceType_LastEnum) {
+        tString sExtensions = apElement->GetAttributeString("Extensions");
+        tStringVec vExtensions;
+        vExtensions = cString::GetStringVec(sExtensions, vExtensions);
+        for (int i = 0; i < (int)vExtensions.size(); ++i)
+            mlstExtensions.push_back(cString::To16Char(vExtensions[i]));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------
 
-bool cEditorVarFile::Create(cXmlElement* apElement)
-{
-	if(iEditorVar::Create(apElement)==false)
-		return false;
+eEditorResourceType cEditorVarFile::GetBrowserTypeFromElement(cXmlElement *apElement) {
+    tString sType = apElement->GetAttributeString("ResType", "Custom");
 
-	mResType = GetBrowserTypeFromElement(apElement);
-	if(mResType==eEditorResourceType_LastEnum)
-	{
-		tString sExtensions = apElement->GetAttributeString("Extensions");
-		tStringVec vExtensions;
-		vExtensions = cString::GetStringVec(sExtensions, vExtensions);
-		for(int i=0;i<(int)vExtensions.size();++i)
-			mlstExtensions.push_back(cString::To16Char(vExtensions[i]));
-	}
+    tString vResStrings[] = {"Material", "Texture", "Sound", "ParticleSystem", "Entity", "Model",
 
-	return true;
-}
+                             ""};
 
-//--------------------------------------------------------------------------------
+    for (int i = 0; vResStrings[i] != ""; ++i) {
+        const tString &sResType = vResStrings[i];
+        if (sType == sResType)
+            return (eEditorResourceType)i;
+    }
 
-eEditorResourceType cEditorVarFile::GetBrowserTypeFromElement(cXmlElement* apElement)
-{
-	tString sType = apElement->GetAttributeString("ResType", "Custom");
-
-	tString vResStrings[] = 
-	{
-		"Material",
-		"Texture",
-		"Sound",
-		"ParticleSystem",
-		"Entity",
-		"Model",
-
-		""
-	};
-
-	for(int i=0;vResStrings[i]!="";++i)
-	{
-		const tString& sResType = vResStrings[i];
-		if(sType==sResType)
-			return (eEditorResourceType)i;
-	}
-
-	return eEditorResourceType_LastEnum;
+    return eEditorResourceType_LastEnum;
 }
 
 //--------------------------------------------------------------------------------
@@ -836,16 +750,16 @@ eEditorResourceType cEditorVarFile::GetBrowserTypeFromElement(cXmlElement* apEle
 
 //--------------------------------------------------------------------------------
 
-iEditorVarInput* cEditorVarFile::CreateSpecificInput(iEditorWindow* apWindow, iWidget* apParent, cEditorVarInstance* apVar)
-{
-	cEditorVarInputFile* pInput = hplNew(cEditorVarInputFile, (apVar, apWindow, apParent));
-	cEditorInputFile* pInputFile = (cEditorInputFile*)pInput->GetInput();
-	pInputFile->SetBrowserType(mResType);
-	tWStringListIt it = mlstExtensions.begin();
-	for(;it!=mlstExtensions.end();++it)
-		pInputFile->AddCustomFileType(*it);
+iEditorVarInput *cEditorVarFile::CreateSpecificInput(iEditorWindow *apWindow, iWidget *apParent,
+                                                     cEditorVarInstance *apVar) {
+    cEditorVarInputFile *pInput = hplNew(cEditorVarInputFile, (apVar, apWindow, apParent));
+    cEditorInputFile *pInputFile = (cEditorInputFile *)pInput->GetInput();
+    pInputFile->SetBrowserType(mResType);
+    tWStringListIt it = mlstExtensions.begin();
+    for (; it != mlstExtensions.end(); ++it)
+        pInputFile->AddCustomFileType(*it);
 
-	return pInput;
+    return pInput;
 }
 
 //--------------------------------------------------------------------------------
@@ -872,23 +786,19 @@ iEditorVarInput* cEditorVarFile::CreateSpecificInput(iEditorWindow* apWindow, iW
 
 //--------------------------------------------------------------------------------
 
-cEditorVarInputFile::cEditorVarInputFile(cEditorVarInstance* apVar,
-										 iEditorWindow* apWindow,
-										 iWidget* apParent) : iEditorVarInput(apVar,
-																			  apWindow->CreateInputFile(0,apVar->GetVarType()->GetName(), "", apParent, 100))
-																									
-{
-	cEditorInputFile* pInput = (cEditorInputFile*)mpInput;
-	cEditorVarFile* pFile = (cEditorVarFile*)apVar->GetVarType();
+cEditorVarInputFile::cEditorVarInputFile(cEditorVarInstance *apVar, iEditorWindow *apWindow, iWidget *apParent)
+    : iEditorVarInput(apVar, apWindow->CreateInputFile(0, apVar->GetVarType()->GetName(), "", apParent, 100))
 
-	pInput->SetBrowserType(pFile->GetBrowserType());
+{
+    cEditorInputFile *pInput = (cEditorInputFile *)mpInput;
+    cEditorVarFile *pFile = (cEditorVarFile *)apVar->GetVarType();
+
+    pInput->SetBrowserType(pFile->GetBrowserType());
 }
 
-
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
-
 
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
@@ -899,31 +809,21 @@ cEditorVarInputFile::cEditorVarInputFile(cEditorVarInstance* apVar,
 
 //--------------------------------------------------------------------
 
-cEditorVarInstance::cEditorVarInstance(iEditorVar* apVar)
-{
-	mpVar = apVar;
-}
+cEditorVarInstance::cEditorVarInstance(iEditorVar *apVar) { mpVar = apVar; }
 
 //--------------------------------------------------------------------
 
-iEditorVarInput* cEditorVarInstance::CreateInput(iEditorWindow* apWindow, iWidget* apParent)
-{
-	return mpVar->CreateInput(apWindow, apParent, this);
+iEditorVarInput *cEditorVarInstance::CreateInput(iEditorWindow *apWindow, iWidget *apParent) {
+    return mpVar->CreateInput(apWindow, apParent, this);
 }
 
 //-------------------------------------------------------------------
 
-const tWString& cEditorVarInstance::GetName()
-{
-	return mpVar->GetName();
-}
+const tWString &cEditorVarInstance::GetName() { return mpVar->GetName(); }
 
 //-------------------------------------------------------------------
 
-void cEditorVarInstance::SetValue(const tWString& asValue)
-{
-	msValue = asValue;
-}
+void cEditorVarInstance::SetValue(const tWString &asValue) { msValue = asValue; }
 
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
@@ -934,411 +834,356 @@ void cEditorVarInstance::SetValue(const tWString& asValue)
 
 //-------------------------------------------------------------------
 
-iEditorClass::iEditorClass()
-{
+iEditorClass::iEditorClass() {}
+
+//-------------------------------------------------------------------
+
+//-------------------------------------------------------------------
+
+bool iEditorClass::AddVariablesFromElement(iEditorClass *apClass, tEditorVarVec &avVars, cXmlElement *apElement) {
+    if (apElement == NULL)
+        return false;
+
+    cXmlNodeListIterator it = apElement->GetChildIterator();
+    while (it.HasNext()) {
+        cXmlElement *pVarData = it.Next()->ToElement();
+
+        iEditorVar *pVar = apClass->CreateClassSpecificVariableFromElement(pVarData);
+        if (pVar)
+            avVars.push_back(pVar);
+        else
+            return false;
+    }
+
+    return true;
 }
 
 //-------------------------------------------------------------------
 
-//-------------------------------------------------------------------
-
-bool iEditorClass::AddVariablesFromElement(iEditorClass* apClass, tEditorVarVec& avVars, cXmlElement* apElement)
-{
-	if(apElement==NULL)
-		return false;
-
-	cXmlNodeListIterator it = apElement->GetChildIterator();
-	while(it.HasNext())
-	{
-		cXmlElement* pVarData = it.Next()->ToElement();
-
-		iEditorVar* pVar = apClass->CreateClassSpecificVariableFromElement(pVarData);
-		if(pVar)
-			avVars.push_back(pVar);
-		else
-			return false;
-	}
-
-	return true;
+iEditorVar *iEditorClass::CreateClassSpecificVariableFromElement(cXmlElement *apElement) {
+    return CreateVariableFromElement(apElement);
 }
 
 //-------------------------------------------------------------------
 
-iEditorVar* iEditorClass::CreateClassSpecificVariableFromElement(cXmlElement* apElement)
-{
-	return CreateVariableFromElement(apElement);
+iEditorVar *iEditorClass::CreateVariableFromElement(cXmlElement *apElement) {
+    if (apElement == NULL)
+        return NULL;
+
+    iEditorVar *pVar = NULL;
+
+    ///////////////////////////////////////////
+    // Create Variable according to type
+    tString sName = apElement->GetValue();
+    if (sName != "Var")
+        return NULL;
+
+    tString sType = apElement->GetAttributeString("Type");
+    pVar = CreateVariable(sType);
+
+    ////////////////////////////////////////////
+    // Set up variable
+    if (pVar)
+        pVar->Create(apElement);
+
+    return pVar;
 }
 
 //-------------------------------------------------------------------
 
-iEditorVar* iEditorClass::CreateVariableFromElement(cXmlElement* apElement)
-{
-	if(apElement==NULL)
-		return NULL;
+iEditorVar *iEditorClass::CreateVariable(const tString &asType) {
+    iEditorVar *pVar = NULL;
 
-	iEditorVar* pVar = NULL;
+    if (asType == "Bool")
+        pVar = hplNew(cEditorVarBool, ());
 
-	///////////////////////////////////////////
-	// Create Variable according to type
-	tString sName = apElement->GetValue();
-	if(sName!="Var")
-		return NULL;
+    else if (asType == "Float")
+        pVar = hplNew(cEditorVarFloat, ());
 
-	tString sType = apElement->GetAttributeString("Type");
-	pVar = CreateVariable(sType);
+    else if (asType == "Int")
+        pVar = hplNew(cEditorVarInt, ());
 
-	////////////////////////////////////////////
-	// Set up variable
-	if(pVar)
-		pVar->Create(apElement);
+    else if (asType == "String")
+        pVar = hplNew(cEditorVarString, ());
 
-	return pVar;
+    else if (asType == "Vector2")
+        pVar = hplNew(cEditorVarVector2f, ());
+
+    else if (asType == "Vector3")
+        pVar = hplNew(cEditorVarVector3f, ());
+
+    else if (asType == "Color")
+        pVar = hplNew(cEditorVarColor, ());
+
+    else if (asType == "Enum")
+        pVar = hplNew(cEditorVarEnum, ());
+
+    else if (asType == "File")
+        pVar = hplNew(cEditorVarFile, ());
+
+    else
+        pVar = hplNew(cEditorVarString, ());
+
+    return pVar;
 }
 
 //-------------------------------------------------------------------
 
-iEditorVar* iEditorClass::CreateVariable(const tString& asType)
-{
-	iEditorVar* pVar = NULL;
+iEditorClass *iEditorClass::GetClassByIdx(const tEditorClassVec &avClasses, int alIdx) {
+    if (alIdx < 0 || alIdx >= (int)avClasses.size())
+        return NULL;
 
-	if(asType=="Bool")
-		pVar = hplNew(cEditorVarBool, ());
-
-	else if(asType=="Float")
-		pVar = hplNew(cEditorVarFloat, ());
-
-	else if(asType=="Int")
-		pVar = hplNew(cEditorVarInt, ());
-
-	else if(asType=="String")
-		pVar = hplNew(cEditorVarString, ());
-
-	else if(asType=="Vector2")
-		pVar = hplNew(cEditorVarVector2f, ());
-
-	else if(asType=="Vector3")
-		pVar = hplNew(cEditorVarVector3f, ());
-
-	else if(asType=="Color")
-		pVar = hplNew(cEditorVarColor, ());
-
-	else if(asType=="Enum")
-		pVar = hplNew(cEditorVarEnum, ());
-
-	else if(asType=="File")
-		pVar = hplNew(cEditorVarFile, ());
-
-	else
-		pVar = hplNew(cEditorVarString, ());
-
-	return pVar;
+    return avClasses[alIdx];
 }
 
 //-------------------------------------------------------------------
 
-iEditorClass* iEditorClass::GetClassByIdx(const tEditorClassVec& avClasses, int alIdx)
-{
-	if(alIdx<0 || alIdx>=(int)avClasses.size())
-		return NULL;
+iEditorClass *iEditorClass::GetClassByName(const tEditorClassVec &avClasses, const tString &asName) {
+    for (int i = 0; i < (int)avClasses.size(); ++i) {
+        iEditorClass *pClass = avClasses[i];
+        if (pClass->GetName() == asName)
+            return pClass;
+    }
 
-	return avClasses[alIdx];
+    return NULL;
 }
 
 //-------------------------------------------------------------------
 
-iEditorClass* iEditorClass::GetClassByName(const tEditorClassVec& avClasses, const tString& asName)
-{
-	for(int i=0;i<(int)avClasses.size();++i)
-	{
-		iEditorClass* pClass = avClasses[i];
-		if(pClass->GetName()==asName)
-			return pClass;
-	}
+void iEditorClass::DumpVarsOnInstance(const tEditorVarVec &avVars, cEditorClassInstance *apInstance) {
+    for (int i = 0; i < (int)avVars.size(); ++i) {
+        iEditorVar *pVar = avVars[i];
+        cEditorVarInstance *pVarInstance = pVar->CreateInstance();
 
-	return NULL;
-}
-
-//-------------------------------------------------------------------
-
-void iEditorClass::DumpVarsOnInstance(const tEditorVarVec& avVars, cEditorClassInstance* apInstance)
-{
-	for(int i=0;i<(int)avVars.size();++i)
-	{
-		iEditorVar* pVar = avVars[i];
-		cEditorVarInstance* pVarInstance = pVar->CreateInstance();
-
-		apInstance->AddVarInstance(pVarInstance);
-	}
+        apInstance->AddVarInstance(pVarInstance);
+    }
 }
 
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 
-cEditorClassInstance::cEditorClassInstance(iEditorClass* apClass)
-{
-	mpClass = apClass;
-}
+cEditorClassInstance::cEditorClassInstance(iEditorClass *apClass) { mpClass = apClass; }
 
-cEditorClassInstance::~cEditorClassInstance()
-{
-	STLDeleteAll(mvVars);
+cEditorClassInstance::~cEditorClassInstance() { STLDeleteAll(mvVars); }
+
+//-------------------------------------------------------------------
+
+void cEditorClassInstance::AddVarInstance(cEditorVarInstance *apVar) {
+    // override any previous var with same name
+    for (int i = 0; i < (int)mvVars.size(); ++i) {
+        if (mvVars[i]->GetName() == apVar->GetName()) {
+            hplDelete(mvVars[i]);
+            mvVars[i] = apVar;
+
+            return;
+        }
+    }
+
+    mvVars.push_back(apVar);
 }
 
 //-------------------------------------------------------------------
 
-void cEditorClassInstance::AddVarInstance(cEditorVarInstance* apVar)
-{
-	// override any previous var with same name
-	for(int i=0;i<(int)mvVars.size();++i)
-	{
-		if(mvVars[i]->GetName() == apVar->GetName())
-		{
-			hplDelete(mvVars[i]);
-			mvVars[i] = apVar;
+int cEditorClassInstance::GetVarInstanceNum() { return (int)mvVars.size(); }
 
-			return;
-		}
-	}
+//-------------------------------------------------------------------
 
-	mvVars.push_back(apVar);
+cEditorVarInstance *cEditorClassInstance::GetVarInstance(int alIndex) {
+    if (alIndex < 0 || alIndex >= GetVarInstanceNum())
+        return NULL;
+
+    cEditorVarInstance *pVar = mvVars[alIndex];
+
+    return pVar;
+}
+
+cEditorVarInstance *cEditorClassInstance::GetVarInstance(const tWString &asName) {
+    for (int i = 0; i < GetVarInstanceNum(); ++i) {
+        cEditorVarInstance *pVar = mvVars[i];
+        if (pVar->GetName() == asName)
+            return pVar;
+    }
+
+    return NULL;
 }
 
 //-------------------------------------------------------------------
 
-int cEditorClassInstance::GetVarInstanceNum()
-{
-	return (int)mvVars.size();
+void cEditorClassInstance::SetVarValue(const tWString &asName, const tWString &asValue) {
+    cEditorVarInstance *pVar = GetVarInstance(asName);
+    if (pVar) {
+        pVar->SetValue(asValue);
+    }
 }
 
 //-------------------------------------------------------------------
 
-cEditorVarInstance* cEditorClassInstance::GetVarInstance(int alIndex)
-{
-	if(alIndex<0 || alIndex>=GetVarInstanceNum())
-		return NULL;
-
-	cEditorVarInstance* pVar = mvVars[alIndex];
-
-	return pVar;
-}
-
-cEditorVarInstance* cEditorClassInstance::GetVarInstance(const tWString& asName)
-{
-	for(int i=0;i<GetVarInstanceNum();++i)
-	{
-		cEditorVarInstance* pVar = mvVars[i];
-		if(pVar->GetName()==asName)
-			return pVar;
-	}
-
-	return NULL;
+void cEditorClassInstance::Load(cXmlElement *apElement) {
+    cXmlNodeListIterator it = apElement->GetChildIterator();
+    while (it.HasNext()) {
+        cXmlElement *pValue = it.Next()->ToElement();
+        SetVarValue(cString::To16Char(pValue->GetAttributeString("Name")),
+                    cString::To16Char(pValue->GetAttributeString("Value")));
+    }
 }
 
 //-------------------------------------------------------------------
 
-void cEditorClassInstance::SetVarValue(const tWString& asName, const tWString& asValue)
-{
-	cEditorVarInstance* pVar = GetVarInstance(asName);
-	if(pVar)
-	{
-		pVar->SetValue(asValue);
-	}
+void cEditorClassInstance::Save(cXmlElement *apElement) {
+    for (int i = 0; i < GetVarInstanceNum(); ++i) {
+        cEditorVarInstance *pVar = GetVarInstance(i);
+        cXmlElement *pXmlVar = apElement->CreateChildElement("Var");
+        pXmlVar->SetAttributeString("Name", cString::To8Char(pVar->GetName()));
+        pXmlVar->SetAttributeString("Value", cString::To8Char(pVar->GetValue()));
+    }
 }
 
 //-------------------------------------------------------------------
 
-void cEditorClassInstance::Load(cXmlElement* apElement)
-{
-	cXmlNodeListIterator it = apElement->GetChildIterator();
-	while(it.HasNext())
-	{
-		cXmlElement* pValue = it.Next()->ToElement();
-		SetVarValue(cString::To16Char(pValue->GetAttributeString("Name")),
-					cString::To16Char(pValue->GetAttributeString("Value")));
-	}
+void cEditorClassInstance::LoadValuesFromMap(const tVarValueMap &amapValues) {
+    for (int i = 0; i < GetVarInstanceNum(); ++i) {
+        cEditorVarInstance *pVar = GetVarInstance(i);
+        tVarValueMap::const_iterator it = amapValues.find(pVar->GetName());
+        if (it != amapValues.end())
+            pVar->SetValue(it->second);
+    }
 }
 
 //-------------------------------------------------------------------
 
-void cEditorClassInstance::Save(cXmlElement* apElement)
-{
-	for(int i=0;i<GetVarInstanceNum();++i)
-	{
-		cEditorVarInstance* pVar = GetVarInstance(i);
-		cXmlElement* pXmlVar = apElement->CreateChildElement("Var");
-		pXmlVar->SetAttributeString("Name", cString::To8Char(pVar->GetName()));
-		pXmlVar->SetAttributeString("Value", cString::To8Char(pVar->GetValue()));
-	}
+void cEditorClassInstance::SaveValuesToMap(tVarValueMap &amapValues) {
+    for (int i = 0; i < GetVarInstanceNum(); ++i) {
+        cEditorVarInstance *pVar = GetVarInstance(i);
+        amapValues[pVar->GetName()] = pVar->GetValue();
+    }
 }
 
 //-------------------------------------------------------------------
 
-void cEditorClassInstance::LoadValuesFromMap(const tVarValueMap& amapValues)
-{
-	for(int i=0;i<GetVarInstanceNum();++i)
-	{
-		cEditorVarInstance* pVar = GetVarInstance(i);
-		tVarValueMap::const_iterator it = amapValues.find(pVar->GetName());
-		if(it!=amapValues.end())
-			pVar->SetValue(it->second);
-	}
+void cEditorClassInstance::LoadFromResourceVarsObject(cResourceVarsObject *apObject) {
+    for (int i = 0; i < GetVarInstanceNum(); ++i) {
+        cEditorVarInstance *pVar = GetVarInstance(i);
+        tString sName = cString::To8Char(pVar->GetName());
+        tString sOldValue = cString::To8Char(pVar->GetValue());
+        pVar->SetValue(cString::To16Char(apObject->GetVarString(sName, sOldValue)));
+    }
 }
 
 //-------------------------------------------------------------------
 
-void cEditorClassInstance::SaveValuesToMap(tVarValueMap& amapValues)
-{
-	for(int i=0;i<GetVarInstanceNum();++i)
-	{
-		cEditorVarInstance* pVar = GetVarInstance(i);
-		amapValues[pVar->GetName()] = pVar->GetValue();
-	}
+cEditorClassInstance *cEditorClassInstance::CreateCopy() {
+    cEditorClassInstance *pCopy = CreateSpecificCopy();
+    pCopy->CopyFromInstance(this);
+
+    return pCopy;
 }
 
 //-------------------------------------------------------------------
 
-void cEditorClassInstance::LoadFromResourceVarsObject(cResourceVarsObject* apObject)
-{
-	for(int i=0;i<GetVarInstanceNum();++i)
-	{
-		cEditorVarInstance* pVar = GetVarInstance(i);
-		tString sName = cString::To8Char(pVar->GetName());
-		tString sOldValue = cString::To8Char(pVar->GetValue());
-		pVar->SetValue(cString::To16Char(apObject->GetVarString(sName, sOldValue)));
-	}
+void cEditorClassInstance::CopyFromInstance(cEditorClassInstance *apInstance) {
+    for (int i = 0; i < GetVarInstanceNum(); ++i) {
+        cEditorVarInstance *pVar = GetVarInstance(i);
+        cEditorVarInstance *pVarToCopy = apInstance->GetVarInstance(pVar->GetName());
+        if (pVarToCopy)
+            pVar->SetValue(pVarToCopy->GetValue());
+    }
 }
 
 //-------------------------------------------------------------------
 
-cEditorClassInstance* cEditorClassInstance::CreateCopy()
-{
-	cEditorClassInstance* pCopy = CreateSpecificCopy();
-	pCopy->CopyFromInstance(this);
-	
-	return pCopy;
-}
+cEditorVarInputPanel *cEditorClassInstance::CreateInputPanel(iEditorWindow *apWindow, iWidget *apParent, bool abRows) {
+    cEditorVarInputPanel *pPanel = hplNew(cEditorVarInputPanel, (this));
+    pPanel->SetDeployInputsOnRows(abRows);
+    pPanel->Create(apWindow, apParent);
 
-//-------------------------------------------------------------------
-
-void cEditorClassInstance::CopyFromInstance(cEditorClassInstance* apInstance)
-{
-	for(int i=0;i<GetVarInstanceNum();++i)
-	{
-		cEditorVarInstance* pVar = GetVarInstance(i);
-		cEditorVarInstance* pVarToCopy = apInstance->GetVarInstance(pVar->GetName());
-		if(pVarToCopy)
-			pVar->SetValue(pVarToCopy->GetValue());
-	}
-}
-
-//-------------------------------------------------------------------
-
-cEditorVarInputPanel* cEditorClassInstance::CreateInputPanel(iEditorWindow* apWindow, iWidget* apParent, bool abRows)
-{
-	cEditorVarInputPanel* pPanel = hplNew(cEditorVarInputPanel,(this));
-	pPanel->SetDeployInputsOnRows(abRows);
-	pPanel->Create(apWindow, apParent);
-
-	return pPanel;
+    return pPanel;
 }
 
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 
-cEditorVarInputPanel::cEditorVarInputPanel(cEditorClassInstance* apClass)
-{
-	mpClass = apClass;
-	mpHandle = NULL;
+cEditorVarInputPanel::cEditorVarInputPanel(cEditorClassInstance *apClass) {
+    mpClass = apClass;
+    mpHandle = NULL;
 
-	mpCallback = NULL;
+    mpCallback = NULL;
 
-	mbDeployInputsOnRows = false;
+    mbDeployInputsOnRows = false;
 }
 
 //-------------------------------------------------------------------
 
-cEditorVarInputPanel::~cEditorVarInputPanel()
-{
-	STLDeleteAll(mvInputs);
+cEditorVarInputPanel::~cEditorVarInputPanel() {
+    STLDeleteAll(mvInputs);
 
-	cGuiSet* pSet = mpHandle->GetSet();
-	pSet->DestroyWidget(mpHandle);
+    cGuiSet *pSet = mpHandle->GetSet();
+    pSet->DestroyWidget(mpHandle);
 }
 
 //-------------------------------------------------------------------
 
-void cEditorVarInputPanel::Create(iEditorWindow* apWindow, iWidget* apWidget)
-{
-	cGuiSet* pSet = apWindow->GetSet();
-	mpHandle = pSet->CreateWidgetFrame(0,apWidget->GetSize()-4,false, apWidget, false, true);
-	mpHandle->SetName("InputPanel");
+void cEditorVarInputPanel::Create(iEditorWindow *apWindow, iWidget *apWidget) {
+    cGuiSet *pSet = apWindow->GetSet();
+    mpHandle = pSet->CreateWidgetFrame(0, apWidget->GetSize() - 4, false, apWidget, false, true);
+    mpHandle->SetName("InputPanel");
 
-	cVector3f vPos = cVector3f(0,0,0.1f);
+    cVector3f vPos = cVector3f(0, 0, 0.1f);
 
-	float fContainerWidth = apWidget->GetSize().x;
+    float fContainerWidth = apWidget->GetSize().x;
 
-	for(int i=0;i<mpClass->GetVarInstanceNum();++i)
-	{
-		cEditorVarInstance* pVar = mpClass->GetVarInstance(i);
-		iEditorVarInput* pInput = pVar->CreateInput(apWindow, mpHandle);
-		if(pInput)
-		{
-			if(mbDeployInputsOnRows)
-			{
-				if(vPos.x+pInput->GetInput()->GetSize().x> fContainerWidth)
-				{
-					vPos.x = 0;
-					vPos.y += 50;
-				}
-			}
+    for (int i = 0; i < mpClass->GetVarInstanceNum(); ++i) {
+        cEditorVarInstance *pVar = mpClass->GetVarInstance(i);
+        iEditorVarInput *pInput = pVar->CreateInput(apWindow, mpHandle);
+        if (pInput) {
+            if (mbDeployInputsOnRows) {
+                if (vPos.x + pInput->GetInput()->GetSize().x > fContainerWidth) {
+                    vPos.x = 0;
+                    vPos.y += 50;
+                }
+            }
 
-			pInput->SetPanel(this);
+            pInput->SetPanel(this);
 
-			pInput->GetInput()->SetPosition(vPos);
-			pInput->GetInput()->SetLayoutStyle(eEditorInputLayoutStyle_ColumnLabelOnTop);
-			pInput->GetInput()->UpdateLayout();
+            pInput->GetInput()->SetPosition(vPos);
+            pInput->GetInput()->SetLayoutStyle(eEditorInputLayoutStyle_ColumnLabelOnTop);
+            pInput->GetInput()->UpdateLayout();
 
-			mvInputs.push_back(pInput);
+            mvInputs.push_back(pInput);
 
-			if(mbDeployInputsOnRows)
-				vPos.x += pInput->GetInput()->GetSize().x + 15.0f;
-			else
-				vPos.y += pInput->GetInput()->GetSize().y + 10.0f;
-		}
-	}
+            if (mbDeployInputsOnRows)
+                vPos.x += pInput->GetInput()->GetSize().x + 15.0f;
+            else
+                vPos.y += pInput->GetInput()->GetSize().y + 10.0f;
+        }
+    }
 }
 
 //-------------------------------------------------------------------
 
-void cEditorVarInputPanel::Update()
-{
-	for(int i=0;i<(int)mvInputs.size();++i)
-	{
-		iEditorVarInput* pInput = mvInputs[i];
-		pInput->Update();
-	}
+void cEditorVarInputPanel::Update() {
+    for (int i = 0; i < (int)mvInputs.size(); ++i) {
+        iEditorVarInput *pInput = mvInputs[i];
+        pInput->Update();
+    }
 }
 
 //-------------------------------------------------------------------
 
-void cEditorVarInputPanel::SetCallback(void* apObject, tEditorVarInputPanelCallback apCallback)
-{
-	mpCallbackObject = apObject;
-	mpCallback = apCallback;
+void cEditorVarInputPanel::SetCallback(void *apObject, tEditorVarInputPanelCallback apCallback) {
+    mpCallbackObject = apObject;
+    mpCallback = apCallback;
 }
 
 //-------------------------------------------------------------------
 
-bool cEditorVarInputPanel::RunCallback(iEditorVarInput* apInput)
-{
-	if(mpCallback==NULL)
-		return false;
+bool cEditorVarInputPanel::RunCallback(iEditorVarInput *apInput) {
+    if (mpCallback == NULL)
+        return false;
 
-	return mpCallback(mpCallbackObject, apInput);
+    return mpCallback(mpCallbackObject, apInput);
 }
 
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
-

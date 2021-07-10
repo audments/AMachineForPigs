@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -34,50 +34,49 @@ class cEntityWrapperParticleSystem;
 
 //----------------------------------------------------------------------
 
-class cEditorWindowEntityEditBoxParticleSystem : public cEditorWindowEntityEditBox
-{
-public:
-	cEditorWindowEntityEditBoxParticleSystem(cEditorEditModeSelect* apEditMode,cEntityWrapperParticleSystem* apPS);
-	virtual ~cEditorWindowEntityEditBoxParticleSystem();
+class cEditorWindowEntityEditBoxParticleSystem : public cEditorWindowEntityEditBox {
+  public:
+    cEditorWindowEntityEditBoxParticleSystem(cEditorEditModeSelect *apEditMode, cEntityWrapperParticleSystem *apPS);
+    virtual ~cEditorWindowEntityEditBoxParticleSystem();
 
-	void Create();
-protected:
-	void AddPropertySetPS(cWidgetTab* apParentTab);
+    void Create();
 
-	void OnUpdate(float afTimeStep);
+  protected:
+    void AddPropertySetPS(cWidgetTab *apParentTab);
 
-	bool InputCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputCallback);
+    void OnUpdate(float afTimeStep);
 
-	bool BrowseButton_OnPressed(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(BrowseButton_OnPressed);
+    bool InputCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputCallback);
 
-	bool FilePSCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(FilePSCallback);
+    bool BrowseButton_OnPressed(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(BrowseButton_OnPressed);
 
-	bool WindowSpecificInputCallback(iEditorInput* apInput);
+    bool FilePSCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(FilePSCallback);
 
-	tWStringVec mvLoadedFiles;
-	tWString msLastPath;
+    bool WindowSpecificInputCallback(iEditorInput *apInput);
 
-	cWidgetTab* mpTabGeneral;
-	cWidgetTab* mpTabPS;
+    tWStringVec mvLoadedFiles;
+    tWString msLastPath;
 
-	cEntityWrapperParticleSystem* mpEntity;
+    cWidgetTab *mpTabGeneral;
+    cWidgetTab *mpTabPS;
 
-	cWidgetLabel* mpLabelFile;
-	cWidgetTextBox* mpInputFile;
-	cWidgetButton* mpButtonPSBrowse;
+    cEntityWrapperParticleSystem *mpEntity;
 
-	cEditorInputBool* mpInpFadeAtDistance;
-	cEditorInputColorFrame* mpInpColor;
-	cEditorInputNumber* mpInpMinFadeDistanceEnd;
-	cEditorInputNumber* mpInpMinFadeDistanceStart;
-	cEditorInputNumber* mpInpMaxFadeDistanceStart;
-	cEditorInputNumber* mpInpMaxFadeDistanceEnd;
+    cWidgetLabel *mpLabelFile;
+    cWidgetTextBox *mpInputFile;
+    cWidgetButton *mpButtonPSBrowse;
+
+    cEditorInputBool *mpInpFadeAtDistance;
+    cEditorInputColorFrame *mpInpColor;
+    cEditorInputNumber *mpInpMinFadeDistanceEnd;
+    cEditorInputNumber *mpInpMinFadeDistanceStart;
+    cEditorInputNumber *mpInpMaxFadeDistanceStart;
+    cEditorInputNumber *mpInpMaxFadeDistanceEnd;
 };
 
 //----------------------------------------------------------------------
-
 
 #endif // HPLEDITOR_EDITOR_WINDOW_ENTITY_EDIT_BOX_PARTICLE_SYSTEM_H

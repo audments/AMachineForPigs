@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,73 +26,72 @@
 
 namespace hpl {
 
-	//---------------------------------------------
+//---------------------------------------------
 
-	class iRenderable;
-	class iLight;
-	class cFrustum;
-	class cFogArea;
+class iRenderable;
+class iLight;
+class cFrustum;
+class cFogArea;
 
-	//---------------------------------------------
+//---------------------------------------------
 
-	typedef cSTLIterator<iRenderable*, tRenderableVec, tRenderableVecIt> cRenderableVecIterator;
+typedef cSTLIterator<iRenderable *, tRenderableVec, tRenderableVecIt> cRenderableVecIterator;
 
-	//---------------------------------------------
-	
-	class cRenderList
-	{
-	public:
-		cRenderList();
-		~cRenderList();
+//---------------------------------------------
 
-		void Setup(float afFrameTime, cFrustum *apFrustum);
+class cRenderList {
+  public:
+    cRenderList();
+    ~cRenderList();
 
-		void AddObject(iRenderable *apObject);
+    void Setup(float afFrameTime, cFrustum *apFrustum);
 
-		void Compile(tRenderListCompileFlag aFlags);
-		
-		bool ArrayHasObjects(eRenderListType aType);
-		cRenderableVecIterator GetArrayIterator(eRenderListType aType);
+    void AddObject(iRenderable *apObject);
 
-		cRenderableVecIterator GetOcclusionQueryObjectIterator();
+    void Compile(tRenderListCompileFlag aFlags);
 
-		void Clear();
+    bool ArrayHasObjects(eRenderListType aType);
+    cRenderableVecIterator GetArrayIterator(eRenderListType aType);
 
-		iLight* GetLight(int alIdx){ return mvLights[alIdx];}
-		int GetLightNum(){ return(int)mvLights.size();}
+    cRenderableVecIterator GetOcclusionQueryObjectIterator();
 
-		cFogArea* GetFogArea(int alIdx){ return mvFogAreas[alIdx];}
-		int GetFogAreaNum(){ return(int)mvFogAreas.size();}
+    void Clear();
 
-		void PrintAllObjects();
-		
-		//Temp:
-		int GetSolidObjectNum(){ return (int)mvSolidObjects.size();}
-		iRenderable* GetSolidObject(int alIdx){ return mvSolidObjects[alIdx];}
+    iLight *GetLight(int alIdx) { return mvLights[alIdx]; }
+    int GetLightNum() { return (int)mvLights.size(); }
 
-		int GetTransObjectNum(){ return (int)mvTransObjects.size();}
-		iRenderable* GetTransObject(int alIdx){ return mvTransObjects[alIdx];}
+    cFogArea *GetFogArea(int alIdx) { return mvFogAreas[alIdx]; }
+    int GetFogAreaNum() { return (int)mvFogAreas.size(); }
 
-	private:
-		void CompileArray(eRenderListType aType);
-		
-		void FindNearestLargeSurfacePlane();
+    void PrintAllObjects();
 
-		float mfFrameTime;
-		cFrustum *mpFrustum;
+    // Temp:
+    int GetSolidObjectNum() { return (int)mvSolidObjects.size(); }
+    iRenderable *GetSolidObject(int alIdx) { return mvSolidObjects[alIdx]; }
 
-		tRenderableVec mvOcclusionQueryObjects;
-		tRenderableVec mvSolidObjects;
-		tRenderableVec mvTransObjects;
-		tRenderableVec mvDecalObjects;
-		tRenderableVec mvIllumObjects;
-		std::vector<iLight*> mvLights;
-		std::vector<cFogArea*> mvFogAreas;
+    int GetTransObjectNum() { return (int)mvTransObjects.size(); }
+    iRenderable *GetTransObject(int alIdx) { return mvTransObjects[alIdx]; }
 
-		tRenderableVec mvSortedArrays[eRenderListType_LastEnum];
-	};
+  private:
+    void CompileArray(eRenderListType aType);
 
-	//---------------------------------------------
+    void FindNearestLargeSurfacePlane();
 
+    float mfFrameTime;
+    cFrustum *mpFrustum;
+
+    tRenderableVec mvOcclusionQueryObjects;
+    tRenderableVec mvSolidObjects;
+    tRenderableVec mvTransObjects;
+    tRenderableVec mvDecalObjects;
+    tRenderableVec mvIllumObjects;
+    std::vector<iLight *> mvLights;
+    std::vector<cFogArea *> mvFogAreas;
+
+    tRenderableVec mvSortedArrays[eRenderListType_LastEnum];
 };
+
+//---------------------------------------------
+
+};     // namespace hpl
 #endif // HPL_RENDER_LIST_H

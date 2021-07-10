@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,90 +26,83 @@
 
 //----------------------------------------------
 
-class cLuxArea_Ladder_SaveData : public iLuxArea_SaveData
-{
-	kSerializableClassInit(cLuxArea_Ladder_SaveData)
-public:
-	iLuxArea* CreateArea(cLuxMap *apMap);
+class cLuxArea_Ladder_SaveData : public iLuxArea_SaveData {
+    kSerializableClassInit(cLuxArea_Ladder_SaveData) public : iLuxArea *CreateArea(cLuxMap *apMap);
 
-	tString msMaterial;
+    tString msMaterial;
 };
 
 //----------------------------------------------
 
-class cLuxArea_Ladder : public iLuxArea
-{
-typedef iLuxArea super_class;
-friend class cLuxAreaLoader_Ladder;
-public:	
-	cLuxArea_Ladder(const tString &asName, int alID, cLuxMap *apMap);
-	virtual ~cLuxArea_Ladder();
+class cLuxArea_Ladder : public iLuxArea {
+    typedef iLuxArea super_class;
+    friend class cLuxAreaLoader_Ladder;
 
-	//////////////////////
-	//General
-	void SetupAfterLoad(cWorld *apWorld);
+  public:
+    cLuxArea_Ladder(const tString &asName, int alID, cLuxMap *apMap);
+    virtual ~cLuxArea_Ladder();
 
-	void OnUpdate(float afTimeStep);
+    //////////////////////
+    // General
+    void SetupAfterLoad(cWorld *apWorld);
 
-	bool CanInteract(iPhysicsBody *apBody);
-	bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
+    void OnUpdate(float afTimeStep);
 
-	eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
+    bool CanInteract(iPhysicsBody *apBody);
+    bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
 
-	//////////////////////
-	//Properties
-	cVector3f GetStartRotation();
-	
-	const cVector3f& GetForward(){ return mvForward;}
-	float GetMaxY(){ return mfMaxY;}
-	float GetMinY(){ return mfMinY;}
+    eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
 
-	const tString& GetMaterial(){return msMaterial;}
+    //////////////////////
+    // Properties
+    cVector3f GetStartRotation();
 
-	//////////////////////
-	//Connection callbacks
-	void OnConnectionStateChange(iLuxEntity *apEntity, int alState){}
+    const cVector3f &GetForward() { return mvForward; }
+    float GetMaxY() { return mfMaxY; }
+    float GetMinY() { return mfMinY; }
 
-	//////////////////////
-	//Save data stuff
-	iLuxEntity_SaveData* CreateSaveData();
-	virtual void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
-	virtual void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
-	virtual void SetupSaveData(iLuxEntity_SaveData *apSaveData);
-protected:
+    const tString &GetMaterial() { return msMaterial; }
 
-private:
-	cVector3f GetStartPosition();
+    //////////////////////
+    // Connection callbacks
+    void OnConnectionStateChange(iLuxEntity *apEntity, int alState) {}
 
-	/////////////////////////
-	// Data
-	cVector3f mvForward;
-	float mfMaxY;
-	float mfMinY;
+    //////////////////////
+    // Save data stuff
+    iLuxEntity_SaveData *CreateSaveData();
+    virtual void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
+    virtual void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
+    virtual void SetupSaveData(iLuxEntity_SaveData *apSaveData);
 
-	tString msMaterial;
+  protected:
+  private:
+    cVector3f GetStartPosition();
 
-	/////////////////////////
-	// Variables
+    /////////////////////////
+    // Data
+    cVector3f mvForward;
+    float mfMaxY;
+    float mfMinY;
 
+    tString msMaterial;
+
+    /////////////////////////
+    // Variables
 };
 
 //----------------------------------------------
 
-class cLuxAreaLoader_Ladder : public iLuxAreaLoader
-{
-public:
-	cLuxAreaLoader_Ladder(const tString& asName);
-	~cLuxAreaLoader_Ladder();
+class cLuxAreaLoader_Ladder : public iLuxAreaLoader {
+  public:
+    cLuxAreaLoader_Ladder(const tString &asName);
+    ~cLuxAreaLoader_Ladder();
 
-	iLuxArea *CreateArea(const tString& asName, int alID, cLuxMap *apMap);
-	
-	void LoadVariables(iLuxArea *apArea, cWorld *apWorld);
-	void SetupArea(iLuxArea *apArea, cWorld *apWorld);
-	
+    iLuxArea *CreateArea(const tString &asName, int alID, cLuxMap *apMap);
+
+    void LoadVariables(iLuxArea *apArea, cWorld *apWorld);
+    void SetupArea(iLuxArea *apArea, cWorld *apWorld);
 };
 
 //----------------------------------------------
-
 
 #endif // LUX_AREA_LADDER_H

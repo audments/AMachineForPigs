@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -23,8 +23,8 @@
 #include "../common/StdAfx.h"
 using namespace hpl;
 
-#include "EditorWindowEntityEditBox.h"
 #include "EditorEditModeSelect.h"
+#include "EditorWindowEntityEditBox.h"
 
 //----------------------------------------------------------------------
 
@@ -40,184 +40,181 @@ enum eEditorJointAttachedBody;
 
 //----------------------------------------------------------------------
 
-class cEditorWindowEntityEditBoxJoint : public cEditorWindowEntityEditBox
-{
-public:
-	cEditorWindowEntityEditBoxJoint(cEditorEditModeSelect* apEditMode,iEntityWrapperJoint* apObject);
-	virtual ~cEditorWindowEntityEditBoxJoint();
+class cEditorWindowEntityEditBoxJoint : public cEditorWindowEntityEditBox {
+  public:
+    cEditorWindowEntityEditBoxJoint(cEditorEditModeSelect *apEditMode, iEntityWrapperJoint *apObject);
+    virtual ~cEditorWindowEntityEditBoxJoint();
 
-	void Create();
-protected:
-	void OnUpdate(float afTimeStep);
+    void Create();
 
-	void AddPropertySetJointBase(cWidgetTab* apParentTab);
-	void AddPropertySetJointSounds(cWidgetTab* apParentTab);
-	void AddPropertySetBall(cWidgetTab* apParentTab);
-	void AddPropertySetHinge(cWidgetTab* apParentTab);
-	void AddPropertySetScrewSlider(cWidgetTab* apParentTab);
+  protected:
+    void OnUpdate(float afTimeStep);
 
-	bool InputCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputCallback);
+    void AddPropertySetJointBase(cWidgetTab *apParentTab);
+    void AddPropertySetJointSounds(cWidgetTab *apParentTab);
+    void AddPropertySetBall(cWidgetTab *apParentTab);
+    void AddPropertySetHinge(cWidgetTab *apParentTab);
+    void AddPropertySetScrewSlider(cWidgetTab *apParentTab);
 
-	bool Button_OnPressed(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(Button_OnPressed);
+    bool InputCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputCallback);
 
-	bool BrowseButton_OnPressed(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(BrowseButton_OnPressed);
+    bool Button_OnPressed(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(Button_OnPressed);
 
-	bool SetParentBodyCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(SetParentBodyCallback);
+    bool BrowseButton_OnPressed(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(BrowseButton_OnPressed);
 
-	bool SetChildBodyCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(SetChildBodyCallback);
+    bool SetParentBodyCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(SetParentBodyCallback);
 
-	void AttachBodyToJoint(int alBody);
+    bool SetChildBodyCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(SetChildBodyCallback);
 
-	bool FileMoveSoundCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(FileMoveSoundCallback);
+    void AttachBodyToJoint(int alBody);
 
-	bool FileMinLimitSoundCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(FileMinLimitSoundCallback);
+    bool FileMoveSoundCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(FileMoveSoundCallback);
 
-	bool FileMaxLimitSoundCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(FileMaxLimitSoundCallback);
+    bool FileMinLimitSoundCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(FileMinLimitSoundCallback);
 
-	bool FileBreakSoundCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(FileBreakSoundCallback);
+    bool FileMaxLimitSoundCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(FileMaxLimitSoundCallback);
 
-	bool WindowSpecificInputCallback(iEditorInput* apInput);
+    bool FileBreakSoundCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(FileBreakSoundCallback);
 
+    bool WindowSpecificInputCallback(iEditorInput *apInput);
 
-	//////////////////////////////////
-	// Data
-	cWidgetTab* mpTabGeneral;
-	cWidgetTab* mpTabJointBase;
-	cWidgetTab* mpTabJointSounds;
-	cWidgetTab* mpTabSpecific;
+    //////////////////////////////////
+    // Data
+    cWidgetTab *mpTabGeneral;
+    cWidgetTab *mpTabJointBase;
+    cWidgetTab *mpTabJointSounds;
+    cWidgetTab *mpTabSpecific;
 
-	////////////////////////////////////
-	// Joint Base
-	cWidgetButton* mvButtons[2];
+    ////////////////////////////////////
+    // Joint Base
+    cWidgetButton *mvButtons[2];
 
-	cWidgetCheckBox* mpCheckBoxStickyMinLimit;
-	cWidgetCheckBox* mpCheckBoxStickyMaxLimit;
+    cWidgetCheckBox *mpCheckBoxStickyMinLimit;
+    cWidgetCheckBox *mpCheckBoxStickyMaxLimit;
 
-	cWidgetLabel* mpLabelLimitStepCount;
-	cWidgetTextBox* mpInputLimitStepCount;
+    cWidgetLabel *mpLabelLimitStepCount;
+    cWidgetTextBox *mpInputLimitStepCount;
 
-	cWidgetCheckBox* mpCheckBoxCollideBodies;
+    cWidgetCheckBox *mpCheckBoxCollideBodies;
 
-	cWidgetCheckBox* mpCheckBoxBreakable;
-	
-	cWidgetLabel* mpLabelBreakForce;
-	cWidgetTextBox* mpInputBreakForce;
+    cWidgetCheckBox *mpCheckBoxBreakable;
 
-	///////////////////////////////////
-	// Sound related
-	cWidgetLabel* mpLabelMoveSound;
-	cWidgetTextBox* mpInputMoveSound;
-	cWidgetButton* mpButtonMoveSoundBrowse;
+    cWidgetLabel *mpLabelBreakForce;
+    cWidgetTextBox *mpInputBreakForce;
 
-	cEditorInputEnum* mpInpMoveType;
+    ///////////////////////////////////
+    // Sound related
+    cWidgetLabel *mpLabelMoveSound;
+    cWidgetTextBox *mpInputMoveSound;
+    cWidgetButton *mpButtonMoveSoundBrowse;
 
-	cWidgetLabel* mpLabelMinMoveSpeed;
-	cWidgetTextBox* mpInputMinMoveSpeed;
+    cEditorInputEnum *mpInpMoveType;
 
-	cWidgetLabel* mpLabelMinMoveFreq;
-	cWidgetTextBox* mpInputMinMoveFreq;
+    cWidgetLabel *mpLabelMinMoveSpeed;
+    cWidgetTextBox *mpInputMinMoveSpeed;
 
-	cWidgetLabel* mpLabelMinMoveFreqSpeed;
-	cWidgetTextBox* mpInputMinMoveFreqSpeed;
+    cWidgetLabel *mpLabelMinMoveFreq;
+    cWidgetTextBox *mpInputMinMoveFreq;
 
-	cWidgetLabel* mpLabelMinMoveVolume;
-	cWidgetTextBox* mpInputMinMoveVolume;
+    cWidgetLabel *mpLabelMinMoveFreqSpeed;
+    cWidgetTextBox *mpInputMinMoveFreqSpeed;
 
-	cWidgetLabel* mpLabelMaxMoveSpeed;
-	cWidgetTextBox* mpInputMaxMoveSpeed;
+    cWidgetLabel *mpLabelMinMoveVolume;
+    cWidgetTextBox *mpInputMinMoveVolume;
 
-	cWidgetLabel* mpLabelMaxMoveFreq;
-	cWidgetTextBox* mpInputMaxMoveFreq;
+    cWidgetLabel *mpLabelMaxMoveSpeed;
+    cWidgetTextBox *mpInputMaxMoveSpeed;
 
-	cWidgetLabel* mpLabelMaxMoveFreqSpeed;
-	cWidgetTextBox* mpInputMaxMoveFreqSpeed;
+    cWidgetLabel *mpLabelMaxMoveFreq;
+    cWidgetTextBox *mpInputMaxMoveFreq;
 
-	cWidgetLabel* mpLabelMaxMoveVolume;
-	cWidgetTextBox* mpInputMaxMoveVolume;
+    cWidgetLabel *mpLabelMaxMoveFreqSpeed;
+    cWidgetTextBox *mpInputMaxMoveFreqSpeed;
 
-	cWidgetLabel* mpLabelMiddleMoveSpeed;
-	cWidgetTextBox* mpInputMiddleMoveSpeed;
+    cWidgetLabel *mpLabelMaxMoveVolume;
+    cWidgetTextBox *mpInputMaxMoveVolume;
 
-	cWidgetLabel* mpLabelMiddleMoveVolume;
-	cWidgetTextBox* mpInputMiddleMoveVolume;
+    cWidgetLabel *mpLabelMiddleMoveSpeed;
+    cWidgetTextBox *mpInputMiddleMoveSpeed;
 
-	cWidgetLabel* mpLabelMinLimitSound;
-	cWidgetTextBox* mpInputMinLimitSound;
-	cWidgetButton* mpButtonMinLimitSoundBrowse;
+    cWidgetLabel *mpLabelMiddleMoveVolume;
+    cWidgetTextBox *mpInputMiddleMoveVolume;
 
-	cWidgetLabel* mpLabelMaxLimitSound;
-	cWidgetTextBox* mpInputMaxLimitSound;
-	cWidgetButton* mpButtonMaxLimitSoundBrowse;
+    cWidgetLabel *mpLabelMinLimitSound;
+    cWidgetTextBox *mpInputMinLimitSound;
+    cWidgetButton *mpButtonMinLimitSoundBrowse;
 
-	cWidgetLabel* mpLabelMinLimitMinSpeed;
-	cWidgetTextBox* mpInputMinLimitMinSpeed;
+    cWidgetLabel *mpLabelMaxLimitSound;
+    cWidgetTextBox *mpInputMaxLimitSound;
+    cWidgetButton *mpButtonMaxLimitSoundBrowse;
 
-	cWidgetLabel* mpLabelMinLimitMaxSpeed;
-	cWidgetTextBox* mpInputMinLimitMaxSpeed;
+    cWidgetLabel *mpLabelMinLimitMinSpeed;
+    cWidgetTextBox *mpInputMinLimitMinSpeed;
 
-	cWidgetLabel* mpLabelMaxLimitMinSpeed;
-	cWidgetTextBox* mpInputMaxLimitMinSpeed;
+    cWidgetLabel *mpLabelMinLimitMaxSpeed;
+    cWidgetTextBox *mpInputMinLimitMaxSpeed;
 
-	cWidgetLabel* mpLabelMaxLimitMaxSpeed;
-	cWidgetTextBox* mpInputMaxLimitMaxSpeed;
+    cWidgetLabel *mpLabelMaxLimitMinSpeed;
+    cWidgetTextBox *mpInputMaxLimitMinSpeed;
 
-	cWidgetLabel* mpLabelBreakSound;
-	cWidgetTextBox* mpInputBreakSound;
-	cWidgetButton* mpButtonBreakSoundBrowse;
+    cWidgetLabel *mpLabelMaxLimitMaxSpeed;
+    cWidgetTextBox *mpInputMaxLimitMaxSpeed;
 
-	///////////////////////////////////
-	// Ball
-	cWidgetLabel* mpLabelMaxConeAngle;
-	cWidgetTextBox* mpInputMaxConeAngle;
+    cWidgetLabel *mpLabelBreakSound;
+    cWidgetTextBox *mpInputBreakSound;
+    cWidgetButton *mpButtonBreakSoundBrowse;
 
-	cWidgetLabel* mpLabelMaxTwistAngle;
-	cWidgetTextBox* mpInputMaxTwistAngle;
+    ///////////////////////////////////
+    // Ball
+    cWidgetLabel *mpLabelMaxConeAngle;
+    cWidgetTextBox *mpInputMaxConeAngle;
 
-	cWidgetLabel* mpLabelConePin[4];
-	cWidgetTextBox* mvInputConePin[3];
+    cWidgetLabel *mpLabelMaxTwistAngle;
+    cWidgetTextBox *mpInputMaxTwistAngle;
 
-	///////////////////////////////////
-	// Hinge
-	cWidgetLabel* mpLabelMinAngle;
-	cWidgetTextBox* mpInputMinAngle;
+    cWidgetLabel *mpLabelConePin[4];
+    cWidgetTextBox *mvInputConePin[3];
 
-	cWidgetLabel* mpLabelMaxAngle;
-	cWidgetTextBox* mpInputMaxAngle;
+    ///////////////////////////////////
+    // Hinge
+    cWidgetLabel *mpLabelMinAngle;
+    cWidgetTextBox *mpInputMinAngle;
 
-	///////////////////////////////////
-	// Screw / Slider
-	cWidgetLabel* mpLabelMinDistance;
-	cWidgetTextBox* mpInputMinDistance;
+    cWidgetLabel *mpLabelMaxAngle;
+    cWidgetTextBox *mpInputMaxAngle;
 
-	cWidgetLabel* mpLabelMaxDistance;
-	cWidgetTextBox* mpInputMaxDistance;
+    ///////////////////////////////////
+    // Screw / Slider
+    cWidgetLabel *mpLabelMinDistance;
+    cWidgetTextBox *mpInputMinDistance;
 
-	//cWidgetLabel* mpLabelPin[4];
-	//cWidgetTextBox* mvInputPin[3];
+    cWidgetLabel *mpLabelMaxDistance;
+    cWidgetTextBox *mpInputMaxDistance;
 
+    // cWidgetLabel* mpLabelPin[4];
+    // cWidgetTextBox* mvInputPin[3];
 
-	//////////////////////////////////	
+    //////////////////////////////////
 
-	tWString msLastPath;
-	tWStringVec mvLoadedFiles;
+    tWString msLastPath;
+    tWStringVec mvLoadedFiles;
 
-	iEntityWrapperJoint* mpEntity;
+    iEntityWrapperJoint *mpEntity;
 
-	cEntitySelectorHighlighter* mpCurrentBodyHighlighter;
+    cEntitySelectorHighlighter *mpCurrentBodyHighlighter;
 
-	static int mlTabOnTopIndex;
+    static int mlTabOnTopIndex;
 };
 
 //----------------------------------------------------------------------
-
 
 #endif // HPLEDITOR_EDITOR_WINDOW_ENTITY_EDIT_BOX_JOINT_H

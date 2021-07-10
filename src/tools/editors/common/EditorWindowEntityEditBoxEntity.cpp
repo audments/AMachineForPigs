@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -31,16 +31,15 @@
 
 //----------------------------------------------------------------------------
 
-cEditorWindowEntityEditBoxEntity::cEditorWindowEntityEditBoxEntity(cEditorEditModeSelect* apEditMode, cEntityWrapperEntity* apObject) : cEditorWindowEntityEditBoxUserDefinedEntity(apEditMode, apObject)
-{
-	mpEntity = apObject;
+cEditorWindowEntityEditBoxEntity::cEditorWindowEntityEditBoxEntity(cEditorEditModeSelect *apEditMode,
+                                                                   cEntityWrapperEntity *apObject)
+    : cEditorWindowEntityEditBoxUserDefinedEntity(apEditMode, apObject) {
+    mpEntity = apObject;
 }
 
 //----------------------------------------------------------------------------
 
-cEditorWindowEntityEditBoxEntity::~cEditorWindowEntityEditBoxEntity()
-{
-}
+cEditorWindowEntityEditBoxEntity::~cEditorWindowEntityEditBoxEntity() {}
 
 //----------------------------------------------------------------------------
 
@@ -50,37 +49,36 @@ cEditorWindowEntityEditBoxEntity::~cEditorWindowEntityEditBoxEntity()
 
 //----------------------------------------------------------------------------
 
-void cEditorWindowEntityEditBoxEntity::Create()
-{
-	mpTabGeneral = mpTabs->AddTab(_W("General"));
-	mpTabEntity = mpTabs->AddTab(_W("Entity"));
-
-	////////////////////////////////////////
-	// Properties in Tab 'General'
-	AddPropertyName(mpTabGeneral);
-	AddPropertyActive(mpTabGeneral);
-	AddPropertyPosition(mpTabGeneral);
-	AddPropertyRotation(mpTabGeneral);
-	AddPropertyScale(mpTabGeneral);
-
-	cVector3f vPos = cVector3f(10,10,0.1f);
-	mpInpName->SetPosition(vPos);
-	vPos.y += mpInpName->GetSize().y+5;
-	mpInpActive->SetPosition(vPos);
-	vPos.y += mpInpActive->GetSize().y+5;
-	mpInpPosition->SetPosition(vPos);
-	vPos.y += mpInpPosition->GetSize().y+5;
-	mpInpRotation->SetPosition(vPos);
-	vPos.y += mpInpRotation->GetSize().y+5;
-	mpInpScale->SetPosition(vPos);
-	vPos.y += mpInpScale->GetSize().y+5;
-
-	mpInpFile = CreateInputFile(vPos, _W("Entity File"), "", mpTabGeneral, 100);
-	mpInpFile->SetBrowserType(eEditorResourceType_EntityFile);
+void cEditorWindowEntityEditBoxEntity::Create() {
+    mpTabGeneral = mpTabs->AddTab(_W("General"));
+    mpTabEntity = mpTabs->AddTab(_W("Entity"));
 
     ////////////////////////////////////////
-	// Properties in Tab 'Specific'
-	AddInputs(mpTabEntity, cVector3f(10, 10, 0.1f));
+    // Properties in Tab 'General'
+    AddPropertyName(mpTabGeneral);
+    AddPropertyActive(mpTabGeneral);
+    AddPropertyPosition(mpTabGeneral);
+    AddPropertyRotation(mpTabGeneral);
+    AddPropertyScale(mpTabGeneral);
+
+    cVector3f vPos = cVector3f(10, 10, 0.1f);
+    mpInpName->SetPosition(vPos);
+    vPos.y += mpInpName->GetSize().y + 5;
+    mpInpActive->SetPosition(vPos);
+    vPos.y += mpInpActive->GetSize().y + 5;
+    mpInpPosition->SetPosition(vPos);
+    vPos.y += mpInpPosition->GetSize().y + 5;
+    mpInpRotation->SetPosition(vPos);
+    vPos.y += mpInpRotation->GetSize().y + 5;
+    mpInpScale->SetPosition(vPos);
+    vPos.y += mpInpScale->GetSize().y + 5;
+
+    mpInpFile = CreateInputFile(vPos, _W("Entity File"), "", mpTabGeneral, 100);
+    mpInpFile->SetBrowserType(eEditorResourceType_EntityFile);
+
+    ////////////////////////////////////////
+    // Properties in Tab 'Specific'
+    AddInputs(mpTabEntity, cVector3f(10, 10, 0.1f));
 }
 
 //----------------------------------------------------------------------------
@@ -91,32 +89,28 @@ void cEditorWindowEntityEditBoxEntity::Create()
 
 //----------------------------------------------------------------------------
 
-bool cEditorWindowEntityEditBoxEntity::WindowSpecificInputCallback(iEditorInput* apInput)
-{
-	if(apInput==mpInpFile)
-	{
-		mpEditor->AddAction(mpEntity->CreateSetPropertyActionString(eEntityStr_Filename, cString::To8Char(mpInpFile->GetFullPath())));
-	}
-	else
-		return cEditorWindowEntityEditBox::WindowSpecificInputCallback(apInput);
+bool cEditorWindowEntityEditBoxEntity::WindowSpecificInputCallback(iEditorInput *apInput) {
+    if (apInput == mpInpFile) {
+        mpEditor->AddAction(
+            mpEntity->CreateSetPropertyActionString(eEntityStr_Filename, cString::To8Char(mpInpFile->GetFullPath())));
+    } else
+        return cEditorWindowEntityEditBox::WindowSpecificInputCallback(apInput);
 
-	return true;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 
-void cEditorWindowEntityEditBoxEntity::OnUpdate(float afTimeStep)
-{
-	if(mpEntity->GetTypeChanged())
-	{
-		SetRefreshInputs();
-		mpEntity->SetTypeChanged(false);
-	}
+void cEditorWindowEntityEditBoxEntity::OnUpdate(float afTimeStep) {
+    if (mpEntity->GetTypeChanged()) {
+        SetRefreshInputs();
+        mpEntity->SetTypeChanged(false);
+    }
 
-	cEditorWindowEntityEditBoxUserDefinedEntity::OnUpdate(afTimeStep);
+    cEditorWindowEntityEditBoxUserDefinedEntity::OnUpdate(afTimeStep);
 
-	mpInpFile->SetValue(cString::To16Char(mpEntity->GetFilename()), false);
-	mpInpFile->GetInputWidget()->SetToolTip(mpEditor->GetFilePathRelativeToWorkingDirW(mpInpFile->GetFullPath()));
+    mpInpFile->SetValue(cString::To16Char(mpEntity->GetFilename()), false);
+    mpInpFile->GetInputWidget()->SetToolTip(mpEditor->GetFilePathRelativeToWorkingDirW(mpInpFile->GetFullPath()));
 }
 
 //----------------------------------------------------------------------------

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -29,16 +29,14 @@
 
 //---------------------------------------------------------------
 
-cEditorActionHandler::cEditorActionHandler(iEditorBase* apEditor)
-{
-	mpEditor = apEditor;
+cEditorActionHandler::cEditorActionHandler(iEditorBase *apEditor) {
+    mpEditor = apEditor;
     mlMaxUndoListSize = 50;
 }
 
-cEditorActionHandler::~cEditorActionHandler()
-{
-	STLDeleteAll(mlstDoneActions);
-	STLDeleteAll(mlstUndoneActions);
+cEditorActionHandler::~cEditorActionHandler() {
+    STLDeleteAll(mlstDoneActions);
+    STLDeleteAll(mlstUndoneActions);
 }
 
 //---------------------------------------------------------------
@@ -49,67 +47,64 @@ cEditorActionHandler::~cEditorActionHandler()
 
 //---------------------------------------------------------------
 
-void cEditorActionHandler::Reset()
-{
-	STLDeleteAll(mlstUndoneActions);
-	STLDeleteAll(mlstDoneActions);
+void cEditorActionHandler::Reset() {
+    STLDeleteAll(mlstUndoneActions);
+    STLDeleteAll(mlstDoneActions);
 }
 
 //---------------------------------------------------------------
 
-void cEditorActionHandler::Do(iEditorAction* apAction)
-{
-	if(apAction==NULL)
-		return;
+void cEditorActionHandler::Do(iEditorAction *apAction) {
+    if (apAction == NULL)
+        return;
 
-	apAction->Do();
+    apAction->Do();
 
-	mlstDoneActions.push_back(apAction);
-	if(mlMaxUndoListSize<(int)mlstDoneActions.size())
-	{
-		iEditorAction* pAction = mlstDoneActions.front();
-		mlstDoneActions.pop_front();
+    mlstDoneActions.push_back(apAction);
+    if (mlMaxUndoListSize < (int)mlstDoneActions.size()) {
+        iEditorAction *pAction = mlstDoneActions.front();
+        mlstDoneActions.pop_front();
 
-		hplDelete(pAction);
-	}
+        hplDelete(pAction);
+    }
 
-	STLDeleteAll(mlstUndoneActions);
+    STLDeleteAll(mlstUndoneActions);
 
-	mpEditor->SetLayoutNeedsUpdate(true);
+    mpEditor->SetLayoutNeedsUpdate(true);
 }
 
 //---------------------------------------------------------------
 
-void cEditorActionHandler::Undo()
-{
-	if(IsDoneActionsListEmpty()) return;
+void cEditorActionHandler::Undo() {
+    if (IsDoneActionsListEmpty())
+        return;
 
-	iEditorAction* pAction = mlstDoneActions.back();
+    iEditorAction *pAction = mlstDoneActions.back();
 
-	mlstDoneActions.pop_back();
+    mlstDoneActions.pop_back();
 
-	pAction->Undo();
+    pAction->Undo();
 
-	mlstUndoneActions.push_back(pAction);
+    mlstUndoneActions.push_back(pAction);
 
-	mpEditor->SetLayoutNeedsUpdate(true);
+    mpEditor->SetLayoutNeedsUpdate(true);
 }
 
 //---------------------------------------------------------------
 
-void cEditorActionHandler::Redo()
-{
-	if(IsUndoneActionsListEmpty()) return;
+void cEditorActionHandler::Redo() {
+    if (IsUndoneActionsListEmpty())
+        return;
 
-	iEditorAction* pAction = mlstUndoneActions.back();
+    iEditorAction *pAction = mlstUndoneActions.back();
 
-	mlstUndoneActions.pop_back();
+    mlstUndoneActions.pop_back();
 
-	pAction->Do();
+    pAction->Do();
 
-	mlstDoneActions.push_back(pAction);
+    mlstDoneActions.push_back(pAction);
 
-	mpEditor->SetLayoutNeedsUpdate(true);
+    mpEditor->SetLayoutNeedsUpdate(true);
 }
 
 //---------------------------------------------------------------

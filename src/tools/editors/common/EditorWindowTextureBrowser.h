@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -37,179 +37,170 @@ class cEditorWindowTextureBrowser;
 
 //--------------------------------------------------------------------
 
-class cEditorObjectIndexEntryTexture : public iEditorObjectIndexEntry
-{
-public:
-	cEditorObjectIndexEntryTexture(cEditorObjectIndexTextures* apIndex);
+class cEditorObjectIndexEntryTexture : public iEditorObjectIndexEntry {
+  public:
+    cEditorObjectIndexEntryTexture(cEditorObjectIndexTextures *apIndex);
 
-	bool CreateFromFile(const tWString& asFilename);
-	bool CreateFromXmlElement(cXmlElement* apElement);
+    bool CreateFromFile(const tWString &asFilename);
+    bool CreateFromXmlElement(cXmlElement *apElement);
 
-	tString GetTextureFile();
-	tString GetTextureFileFullPath();
-	const cVector3l& GetTextureSize() { return mvSize; }
-	tWString GetTextureTypeString();
-	eEditorTextureResourceType GetTextureType() { return mType; }
+    tString GetTextureFile();
+    tString GetTextureFileFullPath();
+    const cVector3l &GetTextureSize() { return mvSize; }
+    tWString GetTextureTypeString();
+    eEditorTextureResourceType GetTextureType() { return mType; }
 
-	void Save(cXmlElement* apElement);
+    void Save(cXmlElement *apElement);
 
-protected:
-	void BuildEntryName(tString& asEntryName);
-	void BuildThumbnail();
+  protected:
+    void BuildEntryName(tString &asEntryName);
+    void BuildThumbnail();
 
-	eEditorTextureResourceType GetTextureTypeFromTypeString(const tString& asType);
+    eEditorTextureResourceType GetTextureTypeFromTypeString(const tString &asType);
 
-	tString GetDiffuseFromMatFile(const tString& asFileName);
+    tString GetDiffuseFromMatFile(const tString &asFileName);
 
-	tString msTextureFile;
-	cVector3l mvSize;
-	eEditorTextureResourceType mType;
+    tString msTextureFile;
+    cVector3l mvSize;
+    eEditorTextureResourceType mType;
 };
 
 //--------------------------------------------------------------------
 
-class cEditorObjectIndexDirTextures : public iEditorObjectIndexDir
-{
-public:
-	cEditorObjectIndexDirTextures(cEditorObjectIndexTextures* apIndex);
+class cEditorObjectIndexDirTextures : public iEditorObjectIndexDir {
+  public:
+    cEditorObjectIndexDirTextures(cEditorObjectIndexTextures *apIndex);
 
-	iEditorObjectIndexEntry* CreateEntry();
+    iEditorObjectIndexEntry *CreateEntry();
 
-protected:
+  protected:
 };
 
 //--------------------------------------------------------------------
 
-class cEditorObjectIndexTextures : public iEditorObjectIndex
-{
-public:
-	cEditorObjectIndexTextures(iEditorBase* apEditor, const tWString& asBaseDir);
+class cEditorObjectIndexTextures : public iEditorObjectIndex {
+  public:
+    cEditorObjectIndexTextures(iEditorBase *apEditor, const tWString &asBaseDir);
 
-	iEditorObjectIndexDir* CreateDir(iEditorObjectIndexDir* apParent=NULL);
+    iEditorObjectIndexDir *CreateDir(iEditorObjectIndexDir *apParent = NULL);
 };
 
 //--------------------------------------------------------------------
 
-class cTextureDescriptor
-{
-public:
-	tString msFilename;
-	cVector3l mvSize;
-	eEditorTextureType mType;
-	tString msDate;
+class cTextureDescriptor {
+  public:
+    tString msFilename;
+    cVector3l mvSize;
+    eEditorTextureType mType;
+    tString msDate;
 };
 
 //--------------------------------------------------------------------
 
-class cTextureBrowserIcon
-{
-public:
-	cTextureBrowserIcon(cEditorWindowTextureBrowser* apBrowser,
-						iWidget* apWidget, 
-						cEditorObjectIndexEntryTexture* apEntry);
-	~cTextureBrowserIcon();
+class cTextureBrowserIcon {
+  public:
+    cTextureBrowserIcon(cEditorWindowTextureBrowser *apBrowser, iWidget *apWidget,
+                        cEditorObjectIndexEntryTexture *apEntry);
+    ~cTextureBrowserIcon();
 
-	cEditorObjectIndexEntryTexture* GetEntry() { return mpEntry; }
+    cEditorObjectIndexEntryTexture *GetEntry() { return mpEntry; }
 
-	void SetPosition(const cVector3f& avPos);
-	cVector3f& GetPosition() { return mvPos; }
+    void SetPosition(const cVector3f &avPos);
+    cVector3f &GetPosition() { return mvPos; }
 
-	void SetSliderPosition(const cVector3f& avPos);
-	
-	void SetSelected(bool abX);
-protected:
-	bool Frame_OnMouseUp(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(Frame_OnMouseUp);
+    void SetSliderPosition(const cVector3f &avPos);
 
-	bool Frame_OnDoubleClick(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(Frame_OnDoubleClick);
+    void SetSelected(bool abX);
 
-	cVector3f mvPos;
+  protected:
+    bool Frame_OnMouseUp(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(Frame_OnMouseUp);
 
-	cEditorWindowTextureBrowser* mpBrowser;
-	cGuiSet* mpSet;
-	cWidgetFrame* mpIconBG;
-	cWidgetImage* mpTexture;
-	cWidgetLabel* mpLabelName;
-	cWidgetLabel* mpLabelSize;
-	cWidgetLabel* mpLabelType;
+    bool Frame_OnDoubleClick(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(Frame_OnDoubleClick);
 
-	cEditorObjectIndexEntryTexture* mpEntry;
+    cVector3f mvPos;
+
+    cEditorWindowTextureBrowser *mpBrowser;
+    cGuiSet *mpSet;
+    cWidgetFrame *mpIconBG;
+    cWidgetImage *mpTexture;
+    cWidgetLabel *mpLabelName;
+    cWidgetLabel *mpLabelSize;
+    cWidgetLabel *mpLabelType;
+
+    cEditorObjectIndexEntryTexture *mpEntry;
 };
-
 
 //--------------------------------------------------------------------
 
-class cEditorWindowTextureBrowser : public iEditorWindowPopUp, public iFileBrowser
-{
-public:
-	cEditorWindowTextureBrowser(iEditorBase* apEditor, 
-								eEditorTextureResourceType aType,
-								const tWString& asStartDir, 
-								tWString& asTextureFilename, 
-								void* apCallbackObject, tGuiCallbackFunc apCallback,
-								const tWStringList& alstFilters=tWStringList());
+class cEditorWindowTextureBrowser : public iEditorWindowPopUp, public iFileBrowser {
+  public:
+    cEditorWindowTextureBrowser(iEditorBase *apEditor, eEditorTextureResourceType aType, const tWString &asStartDir,
+                                tWString &asTextureFilename, void *apCallbackObject, tGuiCallbackFunc apCallback,
+                                const tWStringList &alstFilters = tWStringList());
     ~cEditorWindowTextureBrowser();
 
-	//void Open(eEditorTextureType aType, const tWString& asDirectory, tWString* apTextureFilename, void* apCallbackObject,tGuiCallbackFunc apCallback);
+    // void Open(eEditorTextureType aType, const tWString& asDirectory, tWString* apTextureFilename, void*
+    // apCallbackObject,tGuiCallbackFunc apCallback);
 
-	void Close(bool abX);
+    void Close(bool abX);
 
-	void SetSelectedIcon(cTextureBrowserIcon* apIcon);
+    void SetSelectedIcon(cTextureBrowserIcon *apIcon);
 
-	//void MoveSlider(int alMouseButton);
+    // void MoveSlider(int alMouseButton);
 
-	iEditorObjectIndex* CreateIndex(const tWString& asFolder);
-protected:
-	void OnInitLayout();
-	void OnSetActive(bool abX);
+    iEditorObjectIndex *CreateIndex(const tWString &asFolder);
 
-	bool Button_OnPressed(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(Button_OnPressed);
-	bool DirList_OnSelectionChange(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(DirList_OnSelectionChange);
-	bool Frame_OnClick(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(Frame_OnClick);
-	/*bool FrameSlider_OnMove(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(FrameSlider_OnMove);*/
-	bool CurrentDirectory_OnSelectionChange(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(CurrentDirectory_OnSelectionChange);
-	bool DirectoryList_OnSelectionDblClick(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(DirectoryList_OnSelectionDblClick);
+  protected:
+    void OnInitLayout();
+    void OnSetActive(bool abX);
 
-	void OnNavigate();
-	void OnAddFilter(){}
+    bool Button_OnPressed(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(Button_OnPressed);
+    bool DirList_OnSelectionChange(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(DirList_OnSelectionChange);
+    bool Frame_OnClick(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(Frame_OnClick);
+    /*bool FrameSlider_OnMove(iWidget* apWidget, const cGuiMessageData& aData);
+    kGuiCallbackDeclarationEnd(FrameSlider_OnMove);*/
+    bool CurrentDirectory_OnSelectionChange(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(CurrentDirectory_OnSelectionChange);
+    bool DirectoryList_OnSelectionDblClick(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(DirectoryList_OnSelectionDblClick);
 
-	void UpdateCurrentDirectory();
-	void PopulateDirList();
-	void PopulateTextureList();
-	void BuildContentFile(const tWString& asFilename);
+    void OnNavigate();
+    void OnAddFilter() {}
 
-	tWString msCurrentDirectory;
+    void UpdateCurrentDirectory();
+    void PopulateDirList();
+    void PopulateTextureList();
+    void BuildContentFile(const tWString &asFilename);
 
-	std::vector<cTextureBrowserIcon*> mvIcons;
-	cTextureBrowserIcon* mpSelectedIcon;
-	
-	cWidgetComboBox* mpComboBoxCurrentDirectory;
-	cWidgetListBox* mpListDirectories;
-	cWidgetFrame* mpFrameTextures;
-	cWidgetTextBox* mpLabelTextureFilename;
+    tWString msCurrentDirectory;
 
-	eEditorTextureResourceType mType;
-	tWStringList mlstFilters;
+    std::vector<cTextureBrowserIcon *> mvIcons;
+    cTextureBrowserIcon *mpSelectedIcon;
 
-	cWidgetButton* mvButtons[2];
+    cWidgetComboBox *mpComboBoxCurrentDirectory;
+    cWidgetListBox *mpListDirectories;
+    cWidgetFrame *mpFrameTextures;
+    cWidgetTextBox *mpLabelTextureFilename;
 
-	tWString& msTextureFilename;
+    eEditorTextureResourceType mType;
+    tWStringList mlstFilters;
 
-	void * mpCallbackObject;
-	tGuiCallbackFunc mpCallback;
+    cWidgetButton *mvButtons[2];
 
-	std::map<tWString, iEditorObjectIndex*> mmapTextureIndices;
-	iEditorObjectIndex* mpCurrentIndex;
+    tWString &msTextureFilename;
+
+    void *mpCallbackObject;
+    tGuiCallbackFunc mpCallback;
+
+    std::map<tWString, iEditorObjectIndex *> mmapTextureIndices;
+    iEditorObjectIndex *mpCurrentIndex;
 };
 
 //---------------------------------------------------------
 
-#endif //HPLEDITOR_EDITOR_WINDOW_TEXTURE_BROWSER_H
-
+#endif // HPLEDITOR_EDITOR_WINDOW_TEXTURE_BROWSER_H

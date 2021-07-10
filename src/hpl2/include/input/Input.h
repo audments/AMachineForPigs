@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,166 +20,164 @@
 #ifndef HPL_INPUT_H
 #define HPL_INPUT_H
 
-#include <map>
 #include <list>
+#include <map>
 
-#include "system/SystemTypes.h"
 #include "engine/Updateable.h"
 #include "input/InputTypes.h"
+#include "system/SystemTypes.h"
 
 namespace hpl {
 
-	class iKeyboard;
-	class iMouse;
-	class iGamepad;
-	class iLowLevelInput;
-	class iInputDevice;
-	class cAction;
-	class iSubAction;
+class iKeyboard;
+class iMouse;
+class iGamepad;
+class iLowLevelInput;
+class iInputDevice;
+class cAction;
+class iSubAction;
 
-	typedef std::map<tString, cAction*> tActionMap;
-	typedef tActionMap::iterator tActionMapIt;
+typedef std::map<tString, cAction *> tActionMap;
+typedef tActionMap::iterator tActionMapIt;
 
-	typedef std::multimap<tString, cAction*> tActionMultiMap;
-	typedef tActionMultiMap::iterator tActionMultiMapIt;
+typedef std::multimap<tString, cAction *> tActionMultiMap;
+typedef tActionMultiMap::iterator tActionMultiMapIt;
 
-	typedef std::multimap<int, cAction*> tActionIdMap;
-	typedef tActionIdMap::iterator tActionIdMapIt;
+typedef std::multimap<int, cAction *> tActionIdMap;
+typedef tActionIdMap::iterator tActionIdMapIt;
 
-	typedef std::list<iInputDevice*> tInputDeviceList;
-	typedef tInputDeviceList::iterator tInputDeviceListIt;
+typedef std::list<iInputDevice *> tInputDeviceList;
+typedef tInputDeviceList::iterator tInputDeviceListIt;
 
-	typedef std::list<iGamepad*> tGamepadList;
-	typedef tGamepadList::iterator tGamepadListIt;
+typedef std::list<iGamepad *> tGamepadList;
+typedef tGamepadList::iterator tGamepadListIt;
 
-	class cInput : public iUpdateable
-	{
-	public: 
-		cInput(iLowLevelInput *apLowLevelInput);
-        ~cInput();
-		
-		/**
-		 * Updates the input, called by cEngine
-		 */
-		void Update(float afTimeStep);
-		
-		/**
-		 * Create and add a new action. The Name must be unique, and the Id is optional
-		 */
-		cAction* CreateAction(const tString& asName, int alId=-1);
+class cInput : public iUpdateable {
+  public:
+    cInput(iLowLevelInput *apLowLevelInput);
+    ~cInput();
 
-		/**
-		 * Check if an action is triggered.
-		 * \param asName 
-		 * \return 
-		 */
-		bool IsTriggerd(const tString& asName);
-		bool IsTriggerd(int alId);
-		/**
-		 *
-		 * \param asName name of the action.
-		 * \return 
-		 */
-		bool WasTriggerd(const tString& asName);
-		bool WasTriggerd(int alId);
+    /**
+     * Updates the input, called by cEngine
+     */
+    void Update(float afTimeStep);
 
-		/**
-		 *
-		 * \param asName name of the action.
-		 * \return 
-		 */
-		bool BecameTriggerd(const tString& asName);
-		bool BecameTriggerd(int alId);
+    /**
+     * Create and add a new action. The Name must be unique, and the Id is optional
+     */
+    cAction *CreateAction(const tString &asName, int alId = -1);
 
-		/**
-		*
-		* \param asName name of the action.
-		* \return 
-		*/
-		bool DoubleTriggerd(const tString& asName, float afLimit);
-		bool DoubleTriggerd(int alId, float afLimit);
-        
-		/**
-		 *
-		 * \return currently used keyboard
-		 */
-		iKeyboard * GetKeyboard();
+    /**
+     * Check if an action is triggered.
+     * \param asName
+     * \return
+     */
+    bool IsTriggerd(const tString &asName);
+    bool IsTriggerd(int alId);
+    /**
+     *
+     * \param asName name of the action.
+     * \return
+     */
+    bool WasTriggerd(const tString &asName);
+    bool WasTriggerd(int alId);
 
-		/**
-		*
-		* \return currently used mouse
-		*/
-		iMouse * GetMouse();
+    /**
+     *
+     * \param asName name of the action.
+     * \return
+     */
+    bool BecameTriggerd(const tString &asName);
+    bool BecameTriggerd(int alId);
 
-		/**
-		*
-		* Updates list of plugged gamepads
-		*/
-		void RefreshGamepads();
+    /**
+     *
+     * \param asName name of the action.
+     * \return
+     */
+    bool DoubleTriggerd(const tString &asName, float afLimit);
+    bool DoubleTriggerd(int alId, float afLimit);
 
-		/**
-		*
-		* \return number of available gamepads
-		*/
-		int GetGamepadNum();
+    /**
+     *
+     * \return currently used keyboard
+     */
+    iKeyboard *GetKeyboard();
 
-		/**
-		*
-		* \return gamepad in list
-		*/
-		iGamepad* GetGamepad(int i);
-		
-		/**
-		* Get action from map.
-		* \param asName name of action.
-		* \return Pointer to action, if not found NULL.
-		*/
-		cAction* GetAction(const tString& asName);
-		cAction* GetAction(int alId);
+    /**
+     *
+     * \return currently used mouse
+     */
+    iMouse *GetMouse();
 
-		/**
-		 * Destroys an action if it exists.
-		 */
-		void DestroyAction(cAction *apAction);
+    /**
+     *
+     * Updates list of plugged gamepads
+     */
+    void RefreshGamepads();
 
-		/**
-		 * Checks if any input is given.
-		 * \return true if any input is given, else false.
-		 */
-		bool CheckForInput();
+    /**
+     *
+     * \return number of available gamepads
+     */
+    int GetGamepadNum();
 
+    /**
+     *
+     * \return gamepad in list
+     */
+    iGamepad *GetGamepad(int i);
 
-		/**
-		 * This resets all actions to the current way that 
-		 */
-		void ResetActionsToCurrentState();
+    /**
+     * Get action from map.
+     * \param asName name of action.
+     * \return Pointer to action, if not found NULL.
+     */
+    cAction *GetAction(const tString &asName);
+    cAction *GetAction(int alId);
 
-		/**
-		 * Creates an action from the latest input made. Any action with the same name is destroyed.
-		 * \param &asName Name of action be be created.
-		 * \return NULL if no input was given.
-		 */
-		iSubAction* InputToSubAction();
+    /**
+     * Destroys an action if it exists.
+     */
+    void DestroyAction(cAction *apAction);
 
-        bool isQuitMessagePosted();
-        void resetQuitMessagePosted();
+    /**
+     * Checks if any input is given.
+     * \return true if any input is given, else false.
+     */
+    bool CheckForInput();
 
-		iLowLevelInput* GetLowLevel(){ return mpLowLevelInput;}
+    /**
+     * This resets all actions to the current way that
+     */
+    void ResetActionsToCurrentState();
 
-		void AppDeviceWasPlugged();
-		void AppDeviceWasRemoved();
-	private:
-		
-		tActionMap m_mapActions;
-		tActionIdMap m_mapActionIds;
-		tInputDeviceList mlstInputDevices;
+    /**
+     * Creates an action from the latest input made. Any action with the same name is destroyed.
+     * \param &asName Name of action be be created.
+     * \return NULL if no input was given.
+     */
+    iSubAction *InputToSubAction();
 
-		iLowLevelInput *mpLowLevelInput;
-		
-		iMouse* mpMouse;
-		iKeyboard* mpKeyboard;
-		tGamepadList mlstGamepads;
-	};
+    bool isQuitMessagePosted();
+    void resetQuitMessagePosted();
+
+    iLowLevelInput *GetLowLevel() { return mpLowLevelInput; }
+
+    void AppDeviceWasPlugged();
+    void AppDeviceWasRemoved();
+
+  private:
+    tActionMap m_mapActions;
+    tActionIdMap m_mapActionIds;
+    tInputDeviceList mlstInputDevices;
+
+    iLowLevelInput *mpLowLevelInput;
+
+    iMouse *mpMouse;
+    iKeyboard *mpKeyboard;
+    tGamepadList mlstGamepads;
 };
+}; // namespace hpl
 
 #endif // HPL_INPUT_H

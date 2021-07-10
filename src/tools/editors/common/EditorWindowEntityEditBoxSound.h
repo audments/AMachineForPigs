@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -34,36 +34,35 @@ class cEntityWrapperSound;
 
 //----------------------------------------------------------------------
 
-class cEditorWindowEntityEditBoxSound : public cEditorWindowEntityEditBox
-{
-public:
-	cEditorWindowEntityEditBoxSound(cEditorEditModeSelect* apEditMode,cEntityWrapperSound* apSound);
-	virtual ~cEditorWindowEntityEditBoxSound();
+class cEditorWindowEntityEditBoxSound : public cEditorWindowEntityEditBox {
+  public:
+    cEditorWindowEntityEditBoxSound(cEditorEditModeSelect *apEditMode, cEntityWrapperSound *apSound);
+    virtual ~cEditorWindowEntityEditBoxSound();
 
-	void Create();
-protected:
-	void AddPropertySetSound(cWidgetTab* apParentTab);
-	void OnUpdate(float afTimeStep);
-	bool WindowSpecificInputCallback(iEditorInput* apInput);
+    void Create();
 
-	tWStringVec mvLoadedFiles;
-	static tWString msLastPath;
+  protected:
+    void AddPropertySetSound(cWidgetTab *apParentTab);
+    void OnUpdate(float afTimeStep);
+    bool WindowSpecificInputCallback(iEditorInput *apInput);
 
-	cWidgetTab* mpTabGeneral;
-	cWidgetTab* mpTabSound;
+    tWStringVec mvLoadedFiles;
+    static tWString msLastPath;
 
-	cEntityWrapperSound* mpEntity;
+    cWidgetTab *mpTabGeneral;
+    cWidgetTab *mpTabSound;
 
-	cWidgetCheckBox* mpCheckBoxUseDefault;
+    cEntityWrapperSound *mpEntity;
 
-	cEditorInputBool* mpInpUseDefault;
+    cWidgetCheckBox *mpCheckBoxUseDefault;
 
-	cEditorInputVec2* mpInpDistance;
-	cEditorInputNumber* mpInpVolume;
-	cEditorInputFile* mpInpSoundEntity;
+    cEditorInputBool *mpInpUseDefault;
+
+    cEditorInputVec2 *mpInpDistance;
+    cEditorInputNumber *mpInpVolume;
+    cEditorInputFile *mpInpSoundEntity;
 };
 
 //----------------------------------------------------------------------
-
 
 #endif // HPLEDITOR_EDITOR_WINDOW_ENTITY_EDIT_BOX_SOUND_H

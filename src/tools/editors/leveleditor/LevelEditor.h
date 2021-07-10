@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -55,169 +55,160 @@ class cEditorWindowOptions;
 // Level Editor Group
 //  Used to group entities int the level editor. Entities keep ID for a group stored.
 //
-class cLevelEditorGroup
-{
-public:
-	cLevelEditorGroup();
-	cLevelEditorGroup(cLevelEditor* apEditor,unsigned int alID, const tString& asName);
+class cLevelEditorGroup {
+  public:
+    cLevelEditorGroup();
+    cLevelEditorGroup(cLevelEditor *apEditor, unsigned int alID, const tString &asName);
 
-	/**
-	 * Iterates all entities to find those of correct ID and set visibility
-	 */
-	void SetVisibility(bool abX);
-	bool GetVisibility() { return mbVisibility; }
+    /**
+     * Iterates all entities to find those of correct ID and set visibility
+     */
+    void SetVisibility(bool abX);
+    bool GetVisibility() { return mbVisibility; }
 
-	void SetName(const tString& asName) { msName = asName; }
-	const tString& GetName() { return msName; }
+    void SetName(const tString &asName) { msName = asName; }
+    const tString &GetName() { return msName; }
 
-	unsigned int GetID() { return mlID; }
+    unsigned int GetID() { return mlID; }
 
-	static unsigned int GetGroupCount() { return mlGroupCounter; }
-	static void IncGroupCount() { ++mlGroupCounter; }
+    static unsigned int GetGroupCount() { return mlGroupCounter; }
+    static void IncGroupCount() { ++mlGroupCounter; }
 
-protected:
-	cLevelEditor* mpEditor;
-	unsigned int mlID;
-	tString msName;
-	bool mbVisibility;
+  protected:
+    cLevelEditor *mpEditor;
+    unsigned int mlID;
+    tString msName;
+    bool mbVisibility;
 
-
-	static unsigned int mlGroupCounter;
+    static unsigned int mlGroupCounter;
 };
-
 
 //--------------------------------------------------------------------
 
 ////////////////////////////////////
 // Level Editor
-//  Base class for the level editor. Contains global functions specific to the level editor. 
+//  Base class for the level editor. Contains global functions specific to the level editor.
 //  It is also responsible for (by using functionality from iEditorBase) created all needed GUI
 //  and structures needed when Engine calls the Run command.
-class cLevelEditor : public iEditorBase
-{
-public:
-	cLevelEditor();
-	~cLevelEditor();
+class cLevelEditor : public iEditorBase {
+  public:
+    cLevelEditor();
+    ~cLevelEditor();
 
-	void LookAtEntity(int alEntityID);
+    void LookAtEntity(int alEntityID);
 
-	// Open up a file picker for importing the contents of a map file into the current map. 
-	void Command_Import();
-	
-	
-	// Open up a file picker for exporting all currently selected entities into a map file.
-	void Command_Export();
+    // Open up a file picker for importing the contents of a map file into the current map.
+    void Command_Import();
 
-	///////////////////////////////
-	// Group Tool stuff
-	void AddGroup(unsigned int alID, const tString& asName);
-	void RemoveGroup(unsigned int alID);
+    // Open up a file picker for exporting all currently selected entities into a map file.
+    void Command_Export();
 
-	cLevelEditorGroup& GetGroup(unsigned int alID);
-	tGroupMap& GetGroups() { return mmapGroups; }
+    ///////////////////////////////
+    // Group Tool stuff
+    void AddGroup(unsigned int alID, const tString &asName);
+    void RemoveGroup(unsigned int alID);
 
-	void SetUpClassDefinitions(cEditorUserClassDefinitionManager* apManager);
+    cLevelEditorGroup &GetGroup(unsigned int alID);
+    tGroupMap &GetGroups() { return mmapGroups; }
 
-	const tWStringVec& GetStaticObjectExtraDirs() { return mvExtraSODirs; }
-	const tWStringVec& GetEntityExtraDirs() { return mvExtraEntDirs; }
+    void SetUpClassDefinitions(cEditorUserClassDefinitionManager *apManager);
 
-protected:
-	///////////////////////////
-	// Own functions
-	bool MainMenu_ItemClick(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(MainMenu_ItemClick);
+    const tWStringVec &GetStaticObjectExtraDirs() { return mvExtraSODirs; }
+    const tWStringVec &GetEntityExtraDirs() { return mvExtraEntDirs; }
 
-	bool MainMenu_UndoRedo(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(MainMenu_UndoRedo);
+  protected:
+    ///////////////////////////
+    // Own functions
+    bool MainMenu_ItemClick(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(MainMenu_ItemClick);
 
-	void AppSpecificReset();
-	//void AppSpecificLoad(iXmlDocument* apDoc);
-	//void AppSpecificSave(iXmlDocument* apDoc);
+    bool MainMenu_UndoRedo(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(MainMenu_UndoRedo);
 
-	void LoadEditorSession(iXmlDocument* apDoc, cXmlElement** apElement);
-	void SaveEditorSession(iXmlDocument* apDoc, cXmlElement** apElement);
+    void AppSpecificReset();
+    // void AppSpecificLoad(iXmlDocument* apDoc);
+    // void AppSpecificSave(iXmlDocument* apDoc);
 
-	bool ImportFileCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(ImportFileCallback);
-	bool ExportFileCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(ExportFileCallback);
+    void LoadEditorSession(iXmlDocument *apDoc, cXmlElement **apElement);
+    void SaveEditorSession(iXmlDocument *apDoc, cXmlElement **apElement);
 
-	iEditorWorld* CreateSpecificWorld();
+    bool ImportFileCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(ImportFileCallback);
+    bool ExportFileCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(ExportFileCallback);
 
-	cWidgetMainMenu* CreateMainMenu();
-	void UpdateEditMenu();
+    iEditorWorld *CreateSpecificWorld();
 
-	///////////////////////////
-	// Implemented functions
-	void OnSetUpDirectories();
+    cWidgetMainMenu *CreateMainMenu();
+    void UpdateEditMenu();
 
-	void OnUpdate(float afTimeStep);
-	void OnSetSelectedViewport(){}
+    ///////////////////////////
+    // Implemented functions
+    void OnSetUpDirectories();
 
-	void OnPostUpdateLayout();
+    void OnUpdate(float afTimeStep);
+    void OnSetSelectedViewport() {}
 
-	void OnInit();
-	void OnInitInput();
-	void OnInitLayout();
+    void OnPostUpdateLayout();
 
-	void OnLoadConfig();
-	void OnSaveConfig();
+    void OnInit();
+    void OnInitInput();
+    void OnInitLayout();
 
-	///////////////////////////
-	// Data
-	tWString msLastImportFile;	//Last file path used for an import operation. Default = ??
-	tWString msLastImportPath;	//Last file path used for an export operation. Default = ??
+    void OnLoadConfig();
+    void OnSaveConfig();
 
-	tWStringVec mvExtraSODirs;
-	tWStringVec mvExtraEntDirs;
+    ///////////////////////////
+    // Data
+    tWString msLastImportFile; // Last file path used for an import operation. Default = ??
+    tWString msLastImportPath; // Last file path used for an export operation. Default = ??
 
-	/////////////////////////////
-	// Main menu
-	cWidgetMainMenu* mpMainMenu;
-	
-	// File menu
-	cWidgetMenuItem* mpMainMenuNew;
-	cWidgetMenuItem* mpMainMenuSave;
-	cWidgetMenuItem* mpMainMenuSaveAs;
-	cWidgetMenuItem* mpMainMenuLoad;
-	cWidgetMenuItem* mpMainMenuRecent;
-	cWidgetMenuItem* mpMainMenuImport;
-	cWidgetMenuItem* mpMainMenuExport;
-	cWidgetMenuItem* mpMainMenuExit;
+    tWStringVec mvExtraSODirs;
+    tWStringVec mvExtraEntDirs;
 
-	// Edit menu
-	cWidgetMenuItem* mpMainMenuUndo;
-	cWidgetMenuItem* mpMainMenuRedo;
-	cWidgetMenuItem* mpMainMenuDelete;
-	cWidgetMenuItem* mpMainMenuClone;
-	cWidgetMenuItem* mpMainMenuDeselect;
-	cWidgetMenuItem* mpMainMenuSearch;
-	cWidgetMenuItem* mpMainMenuGroup;
-	cWidgetMenuItem* mpMainMenuLevelSettings;
-	cWidgetMenuItem* mpMainMenuOptions;
-	cWidgetMenuItem* mpMainMenuCompound;
+    /////////////////////////////
+    // Main menu
+    cWidgetMainMenu *mpMainMenu;
 
+    // File menu
+    cWidgetMenuItem *mpMainMenuNew;
+    cWidgetMenuItem *mpMainMenuSave;
+    cWidgetMenuItem *mpMainMenuSaveAs;
+    cWidgetMenuItem *mpMainMenuLoad;
+    cWidgetMenuItem *mpMainMenuRecent;
+    cWidgetMenuItem *mpMainMenuImport;
+    cWidgetMenuItem *mpMainMenuExport;
+    cWidgetMenuItem *mpMainMenuExit;
 
-	
-	////////////////////////////////
-	// Some windows
-	cEditorWindowOptions* mpWindowOptions;
-	cEditorWindowEntitySearch* mpWindowSearch;
-	cEditorWindowTextureBrowser* mpWindowTextureBrowser;
+    // Edit menu
+    cWidgetMenuItem *mpMainMenuUndo;
+    cWidgetMenuItem *mpMainMenuRedo;
+    cWidgetMenuItem *mpMainMenuDelete;
+    cWidgetMenuItem *mpMainMenuClone;
+    cWidgetMenuItem *mpMainMenuDeselect;
+    cWidgetMenuItem *mpMainMenuSearch;
+    cWidgetMenuItem *mpMainMenuGroup;
+    cWidgetMenuItem *mpMainMenuLevelSettings;
+    cWidgetMenuItem *mpMainMenuOptions;
+    cWidgetMenuItem *mpMainMenuCompound;
 
-	cLevelEditorWindowGroup* mpWindowGroup;
+    ////////////////////////////////
+    // Some windows
+    cEditorWindowOptions *mpWindowOptions;
+    cEditorWindowEntitySearch *mpWindowSearch;
+    cEditorWindowTextureBrowser *mpWindowTextureBrowser;
 
+    cLevelEditorWindowGroup *mpWindowGroup;
 
-	////////////////////////////////
-	// Groups
-	tGroupMap mmapGroups;	//Map for all entity groups currently created. (map specific)
+    ////////////////////////////////
+    // Groups
+    tGroupMap mmapGroups; // Map for all entity groups currently created. (map specific)
 
-	///////////////////////
-	// Config stuff
-	cConfigFile* mpLocalConfig;
+    ///////////////////////
+    // Config stuff
+    cConfigFile *mpLocalConfig;
 };
 
 //----------------------------------------------------------
 
-#endif //LEVEL_EDITOR_H
-
+#endif // LEVEL_EDITOR_H

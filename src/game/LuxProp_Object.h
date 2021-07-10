@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,190 +26,180 @@
 
 //----------------------------------------------
 
-class cLuxProp_Object_SaveData : public iLuxProp_SaveData
-{
-	kSerializableClassInit(cLuxProp_Object_SaveData)
-public:
-	float mfLifeLengthCount;
-	tString msContainedItem;
-	int mlStuckState;
-	float mfFoodAttractCount;
-	bool mbDisableBreakable;
-	bool mbIsInsanityVision;
-	float mfVisionMinInfection;
-	bool mbInfectionVisionActive;
+class cLuxProp_Object_SaveData : public iLuxProp_SaveData {
+    kSerializableClassInit(cLuxProp_Object_SaveData) public : float mfLifeLengthCount;
+    tString msContainedItem;
+    int mlStuckState;
+    float mfFoodAttractCount;
+    bool mbDisableBreakable;
+    bool mbIsInsanityVision;
+    float mfVisionMinInfection;
+    bool mbInfectionVisionActive;
 };
 
 //----------------------------------------------
 class cLuxProp_Object;
 
-class cLuxProp_Object_BodyCallback : public iPhysicsBodyCallback
-{
-public:
-	cLuxProp_Object_BodyCallback(cLuxProp_Object *apObject);
-	~cLuxProp_Object_BodyCallback();
+class cLuxProp_Object_BodyCallback : public iPhysicsBodyCallback {
+  public:
+    cLuxProp_Object_BodyCallback(cLuxProp_Object *apObject);
+    ~cLuxProp_Object_BodyCallback();
 
-	bool OnAABBCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody);
-	void OnBodyCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody, cPhysicsContactData* apContactData);
-	
-private:
-	cLuxProp_Object *mpObject;
+    bool OnAABBCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody);
+    void OnBodyCollide(iPhysicsBody *apBody, iPhysicsBody *apCollideBody, cPhysicsContactData *apContactData);
+
+  private:
+    cLuxProp_Object *mpObject;
 };
 
 //----------------------------------------------
 
-class cLuxProp_Object_BreakData
-{
-public:
-	bool mbActive;
-	
-	bool mbDestroyJoints;
-	float mfMinEnergy;
-	tString msEntity;
-	tString msEntityAlignBody;
-	tString msSound;
-	tString msParticleSystem;
-	float mfImpulse;
+class cLuxProp_Object_BreakData {
+  public:
+    bool mbActive;
+
+    bool mbDestroyJoints;
+    float mfMinEnergy;
+    tString msEntity;
+    tString msEntityAlignBody;
+    tString msSound;
+    tString msParticleSystem;
+    float mfImpulse;
 };
 
 //----------------------------------------------
 
-class cLuxProp_Object_JointData
-{
-public:
-	float mfMaxLimit;
-	float mfMinLimit;
-	float mfLockedRange;
+class cLuxProp_Object_JointData {
+  public:
+    float mfMaxLimit;
+    float mfMinLimit;
+    float mfLockedRange;
 };
 
 //----------------------------------------------
 
-class cLuxProp_Object : public iLuxProp
-{
-typedef iLuxProp super_class;
-friend class cLuxPropLoader_Object;
-friend class cLuxProp_Object_BodyCallback;
-public:	
-	cLuxProp_Object(const tString &asName, int alID, cLuxMap *apMap);
-	virtual ~cLuxProp_Object();
+class cLuxProp_Object : public iLuxProp {
+    typedef iLuxProp super_class;
+    friend class cLuxPropLoader_Object;
+    friend class cLuxProp_Object_BodyCallback;
 
-	//////////////////////
-	//General
-	bool CanInteract(iPhysicsBody *apBody);
-	bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
-	
-	void OnSetupAfterLoad(cWorld *apWorld);
+  public:
+    cLuxProp_Object(const tString &asName, int alID, cLuxMap *apMap);
+    virtual ~cLuxProp_Object();
 
-	void OnResetProperties();
+    //////////////////////
+    // General
+    bool CanInteract(iPhysicsBody *apBody);
+    bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
 
-	void UpdatePropSpecific(float afTimeStep);
-	
-	void BeforePropDestruction();
+    void OnSetupAfterLoad(cWorld *apWorld);
 
-	eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
+    void OnResetProperties();
 
-	//////////////////////
-	//Actions
-	void SetStuckState(int alState);
+    void UpdatePropSpecific(float afTimeStep);
 
-	void Break();
+    void BeforePropDestruction();
 
-	void OnHealthChange();
-	void OnDamage(float afAmount, int alStrength);
+    eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
 
-	//////////////////////
-	//Properties
-	cLuxInteractData_Grab* GetGrabData(){ return &mGrabData;}
-	cLuxInteractData_Push* GetPushData(){ return &mPushData;}
-	cLuxInteractData_Slide* GetSlideData(){ return &mSlideData;}
+    //////////////////////
+    // Actions
+    void SetStuckState(int alState);
 
-	bool IsFood(){ return mbIsFood;}
+    void Break();
 
-	bool ShowOutlinesOnConnectedBodies();
+    void OnHealthChange();
+    void OnDamage(float afAmount, int alStrength);
 
-	const tString& GetContainedItem(){ return msContainedItem; }
-	void SetContainedItem(const tString& asItem){ msContainedItem = asItem; }
+    //////////////////////
+    // Properties
+    cLuxInteractData_Grab *GetGrabData() { return &mGrabData; }
+    cLuxInteractData_Push *GetPushData() { return &mPushData; }
+    cLuxInteractData_Slide *GetSlideData() { return &mSlideData; }
 
-	//////////////////////
-	//Connection callbacks
-	void OnConnectionStateChange(iLuxEntity *apEntity, int alState){}
+    bool IsFood() { return mbIsFood; }
 
-	//////////////////////
-	//Save data stuff
-	iLuxEntity_SaveData* CreateSaveData();
-	void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
-	void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
-	void SetupSaveData(iLuxEntity_SaveData *apSaveData);
+    bool ShowOutlinesOnConnectedBodies();
 
+    const tString &GetContainedItem() { return msContainedItem; }
+    void SetContainedItem(const tString &asItem) { msContainedItem = asItem; }
 
-private:
-	void UpdateFoodEnemyAttraction(float afTimeStep);
-	void UpdateInfectionVision(float afTimeStep);
-	void SetInfectionVisionVisability(bool abX);
+    //////////////////////
+    // Connection callbacks
+    void OnConnectionStateChange(iLuxEntity *apEntity, int alState) {}
 
-	void SetJointMinMax(int alIdx, float afMin, float afMax);
-	
+    //////////////////////
+    // Save data stuff
+    iLuxEntity_SaveData *CreateSaveData();
+    void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
+    void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
+    void SetupSaveData(iLuxEntity_SaveData *apSaveData);
 
-	//General
-	eLuxObjectType mObjectType;
+  private:
+    void UpdateFoodEnemyAttraction(float afTimeStep);
+    void UpdateInfectionVision(float afTimeStep);
+    void SetInfectionVisionVisability(bool abX);
 
-	//Vars
-	bool mbBroken;
-	float mfLifeLengthCount;
-	tString msContainedItem;
-	int mlStuckState;
-	bool mbDisableBreakable;
+    void SetJointMinMax(int alIdx, float afMin, float afMax);
 
-	bool mbIsInsanityVision;
-	float mfVisionMinInfection;
-	bool mbInfectionVisionActive;
+    // General
+    eLuxObjectType mObjectType;
 
-	float mfFoodAttractCount;
-	float mfInfectionVisionTimer;
-	
-	//Data
-	cLuxProp_Object_BodyCallback *mpBodyCallback;
+    // Vars
+    bool mbBroken;
+    float mfLifeLengthCount;
+    tString msContainedItem;
+    int mlStuckState;
+    bool mbDisableBreakable;
 
-	cLuxProp_Object_BreakData mBreakData;
+    bool mbIsInsanityVision;
+    float mfVisionMinInfection;
+    bool mbInfectionVisionActive;
 
-	std::vector<cLuxProp_Object_JointData> mvJointData;
+    float mfFoodAttractCount;
+    float mfInfectionVisionTimer;
 
-	float mfLifeLength;
+    // Data
+    cLuxProp_Object_BodyCallback *mpBodyCallback;
 
-	bool mbIsFood;
+    cLuxProp_Object_BreakData mBreakData;
 
-	float mfHitDamageAmount;
-	int mlHitDamageStrength;
-	float mfMinHitDamageSpeed;
+    std::vector<cLuxProp_Object_JointData> mvJointData;
 
-	bool mbGrabSkipNonOuterBodies;
+    float mfLifeLength;
 
-	cLuxInteractData_Grab mGrabData;
-	cLuxInteractData_Push mPushData;	
-	cLuxInteractData_Slide mSlideData;
+    bool mbIsFood;
+
+    float mfHitDamageAmount;
+    int mlHitDamageStrength;
+    float mfMinHitDamageSpeed;
+
+    bool mbGrabSkipNonOuterBodies;
+
+    cLuxInteractData_Grab mGrabData;
+    cLuxInteractData_Push mPushData;
+    cLuxInteractData_Slide mSlideData;
 };
 
 //----------------------------------------------
 
-class cLuxPropLoader_Object : public iLuxPropLoader
-{
-public:
-	cLuxPropLoader_Object(const tString& asName);
-	virtual ~cLuxPropLoader_Object(){}
+class cLuxPropLoader_Object : public iLuxPropLoader {
+  public:
+    cLuxPropLoader_Object(const tString &asName);
+    virtual ~cLuxPropLoader_Object() {}
 
-	iLuxProp *CreateProp(const tString& asName, int alID, cLuxMap *apMap);
-	void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem);
-	void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars);
+    iLuxProp *CreateProp(const tString &asName, int alID, cLuxMap *apMap);
+    void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem);
+    void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars);
 
-private:
-	eLuxObjectType GetObjectType(const tString&asName);
+  private:
+    eLuxObjectType GetObjectType(const tString &asName);
 
-	float mfGrabDefaultMaxFocusDist;
-	float mfPushDefaultMaxFocusDist;
-	float mfSlideDefaultMaxFocusDist;
+    float mfGrabDefaultMaxFocusDist;
+    float mfPushDefaultMaxFocusDist;
+    float mfSlideDefaultMaxFocusDist;
 };
 
 //----------------------------------------------
-
 
 #endif // LUX_PROP_H

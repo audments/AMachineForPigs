@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -29,229 +29,209 @@ tWString gsNullStringW = _W("");
 
 //-------------------------------------------------------------------------
 
-cLookupDirectory::cLookupDirectory(const tWString& asDir, bool abAddSubDirs)
-{
-	msDir = asDir;
-	mbAddSubDirs = abAddSubDirs;
-	mbIsUpdated = true;
+cLookupDirectory::cLookupDirectory(const tWString &asDir, bool abAddSubDirs) {
+    msDir = asDir;
+    mbAddSubDirs = abAddSubDirs;
+    mbIsUpdated = true;
 }
 
 //-------------------------------------------------------------------------
 
-cDirectoryHandler::cDirectoryHandler(iEditorBase* apEditor)
-{
-	mpEditor = apEditor;
+cDirectoryHandler::cDirectoryHandler(iEditorBase *apEditor) {
+    mpEditor = apEditor;
 
-	msHomeDir = cPlatform::GetSystemSpecialPath(eSystemPath_Personal);
-	msHomeDir = cString::AddSlashAtEndW(msHomeDir);
-	msHomeDir = cString::ReplaceCharToW(msHomeDir, _W("\\"), _W("/"));
+    msHomeDir = cPlatform::GetSystemSpecialPath(eSystemPath_Personal);
+    msHomeDir = cString::AddSlashAtEndW(msHomeDir);
+    msHomeDir = cString::ReplaceCharToW(msHomeDir, _W("\\"), _W("/"));
 
-	msWorkingDir = cPlatform::GetWorkingDir();
-	msWorkingDir = cString::AddSlashAtEndW(msWorkingDir);
-	msWorkingDir = cString::ReplaceCharToW(msWorkingDir, _W("\\"), _W("/"));
-	tWString sSep = _W("/");  
-	cString::GetStringVecW(msWorkingDir, mvWorkingDirPathSteps, &sSep);
+    msWorkingDir = cPlatform::GetWorkingDir();
+    msWorkingDir = cString::AddSlashAtEndW(msWorkingDir);
+    msWorkingDir = cString::ReplaceCharToW(msWorkingDir, _W("\\"), _W("/"));
+    tWString sSep = _W("/");
+    cString::GetStringVecW(msWorkingDir, mvWorkingDirPathSteps, &sSep);
 
     // Create the base personal folders
     tWStringVec vDirs;
     SetupBaseDirs(vDirs
 #ifdef USERDIR_RESOURCES
-                  , _W(""), true
+                  ,
+                  _W(""), true
 #endif
-                  );
+    );
     CreateBaseDirs(vDirs, msHomeDir);
 }
 
 //-------------------------------------------------------------------------
 
-void cDirectoryHandler::OnLoadGlobalConfig(cConfigFile* apCfg)
-{
-	////////////////////////////////////////////////
-	// Properly name folders
+void cDirectoryHandler::OnLoadGlobalConfig(cConfigFile *apCfg) {
+    ////////////////////////////////////////////////
+    // Properly name folders
     tWString sPersonalDir = msHomeDir;
 #ifdef USERDIR_RESOURCES
-    tWString sUserParentDir = sPersonalDir + PERSONAL_RELATIVEROOT
-            + apCfg->GetStringW("Directories", "GameHomeDir", PERSONAL_RELATIVEGAME_PARENT);
-    msUserResourceDir = sPersonalDir + PERSONAL_RELATIVEROOT
-            + apCfg->GetStringW("Directories", "GameHomeDir", PERSONAL_RELATIVEGAME_PARENT)
-            + PERSONAL_RESOURCES;
+    tWString sUserParentDir = sPersonalDir + PERSONAL_RELATIVEROOT +
+                              apCfg->GetStringW("Directories", "GameHomeDir", PERSONAL_RELATIVEGAME_PARENT);
+    msUserResourceDir = sPersonalDir + PERSONAL_RELATIVEROOT +
+                        apCfg->GetStringW("Directories", "GameHomeDir", PERSONAL_RELATIVEGAME_PARENT) +
+                        PERSONAL_RESOURCES;
     msUserResourceDir = cString::AddSlashAtEndW(msUserResourceDir);
 #endif
 
-	msHomeDir = sPersonalDir + PERSONAL_RELATIVEROOT + apCfg->GetStringW("Directories", "EditorHomeDir", _W("HPL2"));
-	msHomeDir = cString::AddSlashAtEndW(msHomeDir);
+    msHomeDir = sPersonalDir + PERSONAL_RELATIVEROOT + apCfg->GetStringW("Directories", "EditorHomeDir", _W("HPL2"));
+    msHomeDir = cString::AddSlashAtEndW(msHomeDir);
 
-	msTempDir = msHomeDir + apCfg->GetStringW("Directories", "EditorTempDir", _W("Temp"));
-	msTempDir = cString::AddSlashAtEndW(msTempDir);
+    msTempDir = msHomeDir + apCfg->GetStringW("Directories", "EditorTempDir", _W("Temp"));
+    msTempDir = cString::AddSlashAtEndW(msTempDir);
 
-	msThumbnailDir = msHomeDir + apCfg->GetStringW("Directories", "ThumbnailsDir", _W("Thumbnails"));
-	msThumbnailDir = cString::AddSlashAtEndW(msThumbnailDir);
+    msThumbnailDir = msHomeDir + apCfg->GetStringW("Directories", "ThumbnailsDir", _W("Thumbnails"));
+    msThumbnailDir = cString::AddSlashAtEndW(msThumbnailDir);
 
-	/////////////////////////////////////////////////
-	// Create folders if they don't exist
-	tWString vDirs[] = { msHomeDir, msTempDir, msThumbnailDir,
+    /////////////////////////////////////////////////
+    // Create folders if they don't exist
+    tWString vDirs[] = {msHomeDir,      msTempDir,         msThumbnailDir,
 #ifdef USERDIR_RESOURCES
-        sUserParentDir, msUserResourceDir,
+                        sUserParentDir, msUserResourceDir,
 #endif
-        _W("") };
-	for(int i=0; vDirs[i]!=_W(""); ++i)
-	{
-		if(cPlatform::FolderExists(vDirs[i])==false)
-			cPlatform::CreateFolder(vDirs[i]);
-	}
+                        _W("")};
+    for (int i = 0; vDirs[i] != _W(""); ++i) {
+        if (cPlatform::FolderExists(vDirs[i]) == false)
+            cPlatform::CreateFolder(vDirs[i]);
+    }
 }
 
 //-------------------------------------------------------------------------
 
-bool cDirectoryHandler::AddLookUpDir(int alCategory, const tWString& asDir,
-									  bool abAddSubdirs, bool abUpdateResources)
-{
-	if(cPlatform::FolderExists(asDir)==false)
-	{
-		cPlatform::CreateMessageBox(_W("Error"), _W("Could not find lookup folder: %ls"), 
-										cString::ReplaceCharToW(asDir,_W("\\"),_W("/")).c_str());
-		return false;
-	}
+bool cDirectoryHandler::AddLookUpDir(int alCategory, const tWString &asDir, bool abAddSubdirs, bool abUpdateResources) {
+    if (cPlatform::FolderExists(asDir) == false) {
+        cPlatform::CreateMessageBox(_W("Error"), _W("Could not find lookup folder: %ls"),
+                                    cString::ReplaceCharToW(asDir, _W("\\"), _W("/")).c_str());
+        return false;
+    }
 
-	tLookupDirVecMap::iterator it = mmapDirs.find(alCategory);
-	if(it==mmapDirs.end())
-	{
-		tLookupDirVec vDirs = tLookupDirVec(1, cLookupDirectory(asDir, abAddSubdirs));
-		mmapDirs.insert(std::pair<int, tLookupDirVec>(alCategory, vDirs));
-	}
-	else
-	{
-		bool bAdded = false;
-		tLookupDirVec& vDirs = it->second;
+    tLookupDirVecMap::iterator it = mmapDirs.find(alCategory);
+    if (it == mmapDirs.end()) {
+        tLookupDirVec vDirs = tLookupDirVec(1, cLookupDirectory(asDir, abAddSubdirs));
+        mmapDirs.insert(std::pair<int, tLookupDirVec>(alCategory, vDirs));
+    } else {
+        bool bAdded = false;
+        tLookupDirVec &vDirs = it->second;
 
-		for(int i=0;i<(int)vDirs.size(); ++i)
-		{
-			cLookupDirectory& dir = (cLookupDirectory&) vDirs[i];
+        for (int i = 0; i < (int)vDirs.size(); ++i) {
+            cLookupDirectory &dir = (cLookupDirectory &)vDirs[i];
 
-			if(IsSameDir(dir.msDir, asDir))
-			{
-				dir.mbAddSubDirs = abAddSubdirs;
-				dir.mbIsUpdated = true;
+            if (IsSameDir(dir.msDir, asDir)) {
+                dir.mbAddSubDirs = abAddSubdirs;
+                dir.mbIsUpdated = true;
 
-				bAdded = true;
+                bAdded = true;
 
-				break;
-			}
-		}
-		if(bAdded==false)
-			vDirs.push_back(cLookupDirectory(asDir, abAddSubdirs));
-	}
+                break;
+            }
+        }
+        if (bAdded == false)
+            vDirs.push_back(cLookupDirectory(asDir, abAddSubdirs));
+    }
 
-	if(abUpdateResources)
-		RefreshLookupDirs();
+    if (abUpdateResources)
+        RefreshLookupDirs();
 
-	return true;
+    return true;
 }
 
 //-------------------------------------------------------------------------
 
-void cDirectoryHandler::RefreshLookupDirs()
-{
-	tLookupDirVecMap::iterator it = mmapDirs.begin();
-	for(;it!=mmapDirs.end();++it)
-	{
-		tLookupDirVec& vDirs = it->second;
-		for(int i=0;i<(int)vDirs.size();++i)
-		{
-			cLookupDirectory& lookupDir = vDirs[i];
+void cDirectoryHandler::RefreshLookupDirs() {
+    tLookupDirVecMap::iterator it = mmapDirs.begin();
+    for (; it != mmapDirs.end(); ++it) {
+        tLookupDirVec &vDirs = it->second;
+        for (int i = 0; i < (int)vDirs.size(); ++i) {
+            cLookupDirectory &lookupDir = vDirs[i];
 
-			if(lookupDir.mbIsUpdated)
-			{
-				mpEditor->GetEngine()->GetResources()->AddResourceDir(lookupDir.msDir, lookupDir.mbAddSubDirs);
-				lookupDir.mbIsUpdated = false;
-			}
-		}
-	}
+            if (lookupDir.mbIsUpdated) {
+                mpEditor->GetEngine()->GetResources()->AddResourceDir(lookupDir.msDir, lookupDir.mbAddSubDirs);
+                lookupDir.mbIsUpdated = false;
+            }
+        }
+    }
 }
 
 //-------------------------------------------------------------------------
 
-const tWString& cDirectoryHandler::GetMainLookUpDir(int alCategory)
-{
-	tLookupDirVecMap::iterator it = mmapDirs.find(alCategory);
+const tWString &cDirectoryHandler::GetMainLookUpDir(int alCategory) {
+    tLookupDirVecMap::iterator it = mmapDirs.find(alCategory);
 
-	if(it==mmapDirs.end())
-		return gsNullStringW;
+    if (it == mmapDirs.end())
+        return gsNullStringW;
 
-	tLookupDirVec& vDirs = it->second;
-	if(vDirs.empty())
-		return gsNullStringW;
+    tLookupDirVec &vDirs = it->second;
+    if (vDirs.empty())
+        return gsNullStringW;
 
-	return vDirs[0].msDir;
+    return vDirs[0].msDir;
 }
 
 //-------------------------------------------------------------------------
 
-tWStringVec cDirectoryHandler::GetLookUpDirs(int alCategory)
-{
-	tLookupDirVecMap::const_iterator it = mmapDirs.find(alCategory);
+tWStringVec cDirectoryHandler::GetLookUpDirs(int alCategory) {
+    tLookupDirVecMap::const_iterator it = mmapDirs.find(alCategory);
 
-	if(it==mmapDirs.end())
-		return tWStringVec();
+    if (it == mmapDirs.end())
+        return tWStringVec();
 
-	tWStringVec vDirNames;
-	const tLookupDirVec& vLookUpDirs = it->second;
-	for(int i=0;i<(int)vLookUpDirs.size();++i)
-		vDirNames.push_back(vLookUpDirs[i].msDir);
+    tWStringVec vDirNames;
+    const tLookupDirVec &vLookUpDirs = it->second;
+    for (int i = 0; i < (int)vLookUpDirs.size(); ++i)
+        vDirNames.push_back(vLookUpDirs[i].msDir);
 
-	return vDirNames;
+    return vDirNames;
 }
 
 //-------------------------------------------------------------------------
 
-tWString cDirectoryHandler::GetPathRelToWD(const tWString& asPath)
-{
-	tWString sSep = _W("/");
+tWString cDirectoryHandler::GetPathRelToWD(const tWString &asPath) {
+    tWString sSep = _W("/");
 
-	tWString sRelPath;
+    tWString sRelPath;
 
-	tWString sPath = cString::GetFilePathW(asPath);
-	tWString sFile = cString::GetFileNameW(asPath);
+    tWString sPath = cString::GetFilePathW(asPath);
+    tWString sFile = cString::GetFileNameW(asPath);
 
-	tWStringVec vPathSteps;
-	cString::GetStringVecW(sPath, vPathSteps, &sSep);
+    tWStringVec vPathSteps;
+    cString::GetStringVecW(sPath, vPathSteps, &sSep);
 
-	int i;
-	for(i=0; i<(int)mvWorkingDirPathSteps.size() && i<(int)vPathSteps.size(); ++i)
-	{
-		const tWString& sWDStep = mvWorkingDirPathSteps[i];
-		const tWString& sPathStep = vPathSteps[i];
+    int i;
+    for (i = 0; i < (int)mvWorkingDirPathSteps.size() && i < (int)vPathSteps.size(); ++i) {
+        const tWString &sWDStep = mvWorkingDirPathSteps[i];
+        const tWString &sPathStep = vPathSteps[i];
 
-		if(IsSameDir(sPathStep,sWDStep)==false)	break;
-	}
+        if (IsSameDir(sPathStep, sWDStep) == false)
+            break;
+    }
 
-	if(i < (int)mvWorkingDirPathSteps.size())
-	{
-		for(int j=i; j<(int)mvWorkingDirPathSteps.size(); ++j)
-			sRelPath += cString::AddSlashAtEndW(_W(".."));
-	}
+    if (i < (int)mvWorkingDirPathSteps.size()) {
+        for (int j = i; j < (int)mvWorkingDirPathSteps.size(); ++j)
+            sRelPath += cString::AddSlashAtEndW(_W(".."));
+    }
 
-	for(int j=i; j<(int)vPathSteps.size(); ++j)
-		sRelPath += cString::AddSlashAtEndW(vPathSteps[j]);
+    for (int j = i; j < (int)vPathSteps.size(); ++j)
+        sRelPath += cString::AddSlashAtEndW(vPathSteps[j]);
 
-	sRelPath += sFile;
+    sRelPath += sFile;
 
-	return sRelPath;
+    return sRelPath;
 }
 
 //----------------------------------------------------------------------------
 
-bool cDirectoryHandler::IsSameDir(const tWString& asDir1, const tWString& asDir2)
-{
-	tWString sDir1 = cString::ReplaceCharToW(asDir1, _W("\\"), _W("/"));
-	tWString sDir2 = cString::ReplaceCharToW(asDir2, _W("\\"), _W("/"));
+bool cDirectoryHandler::IsSameDir(const tWString &asDir1, const tWString &asDir2) {
+    tWString sDir1 = cString::ReplaceCharToW(asDir1, _W("\\"), _W("/"));
+    tWString sDir2 = cString::ReplaceCharToW(asDir2, _W("\\"), _W("/"));
 
 #ifdef WIN32
-	sDir1 = cString::ToLowerCaseW(sDir1);
-	sDir2 = cString::ToLowerCaseW(sDir2);
+    sDir1 = cString::ToLowerCaseW(sDir1);
+    sDir2 = cString::ToLowerCaseW(sDir2);
 #endif
 
-	return sDir1==sDir2;
+    return sDir1 == sDir2;
 }
 
 //----------------------------------------------------------------------------

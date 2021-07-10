@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -34,110 +34,106 @@ class cEditorWindowEntityEditBoxEntity;
 
 #define EntityPropIdStart 40
 
-enum eEntityInt
-{
-	eEntityInt_FileIndex = EntityPropIdStart,
+enum eEntityInt {
+    eEntityInt_FileIndex = EntityPropIdStart,
 
-	eEntityInt_LastEnum,
+    eEntityInt_LastEnum,
 };
 
-enum eEntityStr
-{
-	eEntityStr_Filename = EntityPropIdStart,
+enum eEntityStr {
+    eEntityStr_Filename = EntityPropIdStart,
 
-	eEntityStr_LastEnum,
-};
-
-//---------------------------------------------------------------
-
-class cEntityWrapperTypeEntity : public iEntityWrapperTypeUserDefinedEntity
-{
-public:
-	cEntityWrapperTypeEntity(cEditorUserClassSubType*);
-
-	tString ToString();
-
-	bool IsAppropriateType(cXmlElement*);
-	bool IsAppropriateDefaultType(cXmlElement*);
-
-	const tString& GetUserTypeName();
-	const tString& GetUserSubTypeName();
-
-	iEditorVar* GetAffectsShadowsVar();
-	iEditorVar* GetAffectsLightVar();
-	iEditorVar* GetAffectsParticlesVar();
-
-	iEditorVar* GetLinkedEditorSetupVar(const tWString&, eVariableType);
-
-protected:
- 	iEntityWrapperData* CreateSpecificData();
-
-	/////////////////////////
-	// Data for making checks for appropriate type faster and nicer
-	static tString msLastCheckedFile;
-	static tString msLastCheckedType;
-	static tString msLastCheckedSubType;
+    eEntityStr_LastEnum,
 };
 
 //---------------------------------------------------------------
 
-class cEntityWrapperDataEntity : public iEntityWrapperDataUserDefinedEntity
-{
-public:
-	cEntityWrapperDataEntity(iEntityWrapperType*);
-	~cEntityWrapperDataEntity();
+class cEntityWrapperTypeEntity : public iEntityWrapperTypeUserDefinedEntity {
+  public:
+    cEntityWrapperTypeEntity(cEditorUserClassSubType *);
 
-	bool Load(cXmlElement* apElement);
+    tString ToString();
 
-protected:
-	iEntityWrapper* CreateSpecificEntity();
+    bool IsAppropriateType(cXmlElement *);
+    bool IsAppropriateDefaultType(cXmlElement *);
+
+    const tString &GetUserTypeName();
+    const tString &GetUserSubTypeName();
+
+    iEditorVar *GetAffectsShadowsVar();
+    iEditorVar *GetAffectsLightVar();
+    iEditorVar *GetAffectsParticlesVar();
+
+    iEditorVar *GetLinkedEditorSetupVar(const tWString &, eVariableType);
+
+  protected:
+    iEntityWrapperData *CreateSpecificData();
+
+    /////////////////////////
+    // Data for making checks for appropriate type faster and nicer
+    static tString msLastCheckedFile;
+    static tString msLastCheckedType;
+    static tString msLastCheckedSubType;
 };
 
 //---------------------------------------------------------------
 
-class cEntityWrapperEntity : public iEntityWrapperUserDefinedEntity
-{
-public:
-	cEntityWrapperEntity(iEntityWrapperData* apData);
-	~cEntityWrapperEntity();
+class cEntityWrapperDataEntity : public iEntityWrapperDataUserDefinedEntity {
+  public:
+    cEntityWrapperDataEntity(iEntityWrapperType *);
+    ~cEntityWrapperDataEntity();
 
-	bool GetProperty(int, int&);
-	bool GetProperty(int, tString&);
+    bool Load(cXmlElement *apElement);
 
-	bool SetProperty(int, const int&);
-	bool SetProperty(int, const tString&);
+  protected:
+    iEntityWrapper *CreateSpecificEntity();
+};
 
-	void SetFileIndex(int alIdx) { mlFileIndex = alIdx; }
-	int GetFileIndex() { return mlFileIndex; }
+//---------------------------------------------------------------
 
-	void SetFilename(const tString& asFilename);
+class cEntityWrapperEntity : public iEntityWrapperUserDefinedEntity {
+  public:
+    cEntityWrapperEntity(iEntityWrapperData *apData);
+    ~cEntityWrapperEntity();
 
-	bool GetTypeChanged() { return mbTypeChanged; }
-	void SetTypeChanged(bool abX) { mbTypeChanged = abX; }
+    bool GetProperty(int, int &);
+    bool GetProperty(int, tString &);
 
-	cEditorWindowEntityEditBox* CreateEditBox(cEditorEditModeSelect* apEditMode);
+    bool SetProperty(int, const int &);
+    bool SetProperty(int, const tString &);
 
-	bool IsAffectedByDecal(bool abAffectsStaticObject, bool abAffectsPrimitive, bool abAffectsEntity);
+    void SetFileIndex(int alIdx) { mlFileIndex = alIdx; }
+    int GetFileIndex() { return mlFileIndex; }
 
-	void UpdateEntity();
+    void SetFilename(const tString &asFilename);
 
-	iEditorAction* CreateSetPropertyActionString(int alPropID, const tString& asX);
-protected:
-	iEngineEntity* CreateSpecificEngineEntity();
+    bool GetTypeChanged() { return mbTypeChanged; }
+    void SetTypeChanged(bool abX) { mbTypeChanged = abX; }
 
-	void OnSetActive(bool abX);
-	void OnSetVar(const tWString& asName, const tWString& asValue);
+    cEditorWindowEntityEditBox *CreateEditBox(cEditorEditModeSelect *apEditMode);
 
-	bool SetEntityType(iEntityWrapperType* apType);
-	///////////////////////////
-	// Data
-	std::vector<iLight*> mvLights;
-	std::vector<cMatrixf> mvLightLocalTransforms;
+    bool IsAffectedByDecal(bool abAffectsStaticObject, bool abAffectsPrimitive, bool abAffectsEntity);
 
-	int mlFileIndex;
-	bool mbAffectedByDecal;
+    void UpdateEntity();
 
-	bool mbTypeChanged;
+    iEditorAction *CreateSetPropertyActionString(int alPropID, const tString &asX);
+
+  protected:
+    iEngineEntity *CreateSpecificEngineEntity();
+
+    void OnSetActive(bool abX);
+    void OnSetVar(const tWString &asName, const tWString &asValue);
+
+    bool SetEntityType(iEntityWrapperType *apType);
+    ///////////////////////////
+    // Data
+    std::vector<iLight *> mvLights;
+    std::vector<cMatrixf> mvLightLocalTransforms;
+
+    int mlFileIndex;
+    bool mbAffectedByDecal;
+
+    bool mbTypeChanged;
 };
 
 //---------------------------------------------------------------

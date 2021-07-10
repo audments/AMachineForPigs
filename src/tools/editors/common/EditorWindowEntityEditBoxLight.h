@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -22,138 +22,132 @@
 
 #include "EditorWindowEntityEditBox.h"
 
-
 //--------------------------------------------------------------------
 
 class iEntityWrapperLight;
 
 //--------------------------------------------------------------------
 
-class cEditorWindowEntityEditBoxLight : public cEditorWindowEntityEditBox
-{
-public:
-	cEditorWindowEntityEditBoxLight(cEditorEditModeSelect* apEditMode,iEntityWrapperLight* apLight);
-	~cEditorWindowEntityEditBoxLight();
+class cEditorWindowEntityEditBoxLight : public cEditorWindowEntityEditBox {
+  public:
+    cEditorWindowEntityEditBoxLight(cEditorEditModeSelect *apEditMode, iEntityWrapperLight *apLight);
+    ~cEditorWindowEntityEditBoxLight();
 
-	void Create();
+    void Create();
 
-protected:
-	void OnUpdate(float afTimeStep);
+  protected:
+    void OnUpdate(float afTimeStep);
 
-	void AddPropertyGobo(cWidgetTab* apParentTab);
-	void AddPropertyFalloffMap(cWidgetTab* apParentTab);
-	void AddPropertyRadius(cWidgetTab* apParentTab);
-	void AddPropertyDiffuseColor(cWidgetTab* apParentTab);
-	void AddPropertyCastShadows(cWidgetTab* apParentTab);
+    void AddPropertyGobo(cWidgetTab *apParentTab);
+    void AddPropertyFalloffMap(cWidgetTab *apParentTab);
+    void AddPropertyRadius(cWidgetTab *apParentTab);
+    void AddPropertyDiffuseColor(cWidgetTab *apParentTab);
+    void AddPropertyCastShadows(cWidgetTab *apParentTab);
 
-	void AddPropertySetFlicker(cWidgetTab* apParentTab);
-	
-	void AddPropertySetBox(cWidgetTab* apParentTab);
-	void AddPropertySetPoint(cWidgetTab* apParentTab);
-	void AddPropertySetSpot(cWidgetTab* apParentTab);
+    void AddPropertySetFlicker(cWidgetTab *apParentTab);
 
-	
-	bool InputCallback(iWidget* apWidget, const cGuiMessageData& aData);
-	kGuiCallbackDeclarationEnd(InputCallback);
-	
+    void AddPropertySetBox(cWidgetTab *apParentTab);
+    void AddPropertySetPoint(cWidgetTab *apParentTab);
+    void AddPropertySetSpot(cWidgetTab *apParentTab);
 
-	bool WindowSpecificInputCallback(iEditorInput* apInput);
+    bool InputCallback(iWidget *apWidget, const cGuiMessageData &aData);
+    kGuiCallbackDeclarationEnd(InputCallback);
 
-	///////////////////////////////////////////////////
-	// Data
-	iEntityWrapperLight* mpLight;
+    bool WindowSpecificInputCallback(iEditorInput *apInput);
 
-	tWString msTempTextureFilename;
-	tWStringVec mvLoadedFiles;
+    ///////////////////////////////////////////////////
+    // Data
+    iEntityWrapperLight *mpLight;
 
-	cColor mDiffuseCol;
-	cColor mSpecularCol;
-	cColor mFlickerOffCol;
+    tWString msTempTextureFilename;
+    tWStringVec mvLoadedFiles;
 
-	// Layout
-	cWidgetTab* mpTabGeneral;
-	cWidgetTab* mpTabFlicker;
-	cWidgetTab* mpTabLightParameters;
+    cColor mDiffuseCol;
+    cColor mSpecularCol;
+    cColor mFlickerOffCol;
 
-	cWidgetDummy* mpGroupRadius;
-	cEditorInputNumber* mpInpRadius;
+    // Layout
+    cWidgetTab *mpTabGeneral;
+    cWidgetTab *mpTabFlicker;
+    cWidgetTab *mpTabLightParameters;
 
-	cWidgetDummy* mpGroupGobo;
-	cEditorInputFile* mpInpGobo;
-	cEditorInputEnum* mpInpGoboAnimMode;
-	cEditorInputNumber* mpInpGoboAnimFrameTime;
+    cWidgetDummy *mpGroupRadius;
+    cEditorInputNumber *mpInpRadius;
 
-	cEditorInputColorFrame* mpInpDiffuse;
+    cWidgetDummy *mpGroupGobo;
+    cEditorInputFile *mpInpGobo;
+    cEditorInputEnum *mpInpGoboAnimMode;
+    cEditorInputNumber *mpInpGoboAnimFrameTime;
 
-	cWidgetDummy* mpGroupDiffuse;
-	cWidgetLabel* mpLabelDiffuseColor;
-	cWidgetLabel* mpLabelDiffuseColorExp;
-	cWidgetFrame* mpFrameDiffuseColor;
+    cEditorInputColorFrame *mpInpDiffuse;
 
-	cWidgetDummy* mpGroupShadows;
-	cEditorInputBool* mpInpCastShadows;
-	cEditorInputEnum* mpInpShadowRes;
-	cEditorInputBool* mpInpShadowAffectStatic;
-	cEditorInputBool* mpInpShadowAffectDynamic;
+    cWidgetDummy *mpGroupDiffuse;
+    cWidgetLabel *mpLabelDiffuseColor;
+    cWidgetLabel *mpLabelDiffuseColorExp;
+    cWidgetFrame *mpFrameDiffuseColor;
 
-	///////////////////////////////
-	// Flicker stuff
-	cEditorInputBool* mpInpFlickerActive;
+    cWidgetDummy *mpGroupShadows;
+    cEditorInputBool *mpInpCastShadows;
+    cEditorInputEnum *mpInpShadowRes;
+    cEditorInputBool *mpInpShadowAffectStatic;
+    cEditorInputBool *mpInpShadowAffectDynamic;
 
-	// On params
-	cWidgetDummy* mpGFlickerOn;
-	cEditorInputNumber* mpInpFlickerOnMinLength;
-	cEditorInputNumber* mpInpFlickerOnMaxLength;
+    ///////////////////////////////
+    // Flicker stuff
+    cEditorInputBool *mpInpFlickerActive;
 
-	cEditorInputFile* mpInpFlickerOnSound;
-	cEditorInputFile* mpInpFlickerOnPS;
+    // On params
+    cWidgetDummy *mpGFlickerOn;
+    cEditorInputNumber *mpInpFlickerOnMinLength;
+    cEditorInputNumber *mpInpFlickerOnMaxLength;
 
-	// Off params
-	cWidgetDummy* mpGFlickerOff;
+    cEditorInputFile *mpInpFlickerOnSound;
+    cEditorInputFile *mpInpFlickerOnPS;
 
-	cEditorInputNumber* mpInpFlickerOffMinLength;
-	cEditorInputNumber* mpInpFlickerOffMaxLength;
-	
-	cEditorInputFile* mpInpFlickerOffSound;
-	cEditorInputFile* mpInpFlickerOffPS;
+    // Off params
+    cWidgetDummy *mpGFlickerOff;
 
-	cEditorInputNumber* mpInpFlickerOffRadius;
-	cEditorInputColorFrame* mpInpFlickerOffColor;
+    cEditorInputNumber *mpInpFlickerOffMinLength;
+    cEditorInputNumber *mpInpFlickerOffMaxLength;
 
-	// Fade
-	cWidgetDummy* mpGFlickerFade;
+    cEditorInputFile *mpInpFlickerOffSound;
+    cEditorInputFile *mpInpFlickerOffPS;
 
-	cEditorInputBool* mpInpFlickerFade;
+    cEditorInputNumber *mpInpFlickerOffRadius;
+    cEditorInputColorFrame *mpInpFlickerOffColor;
 
-	cEditorInputNumber* mpInpFlickerFadeOnMinLength;
-	cEditorInputNumber* mpInpFlickerFadeOnMaxLength;
-	cEditorInputNumber* mpInpFlickerFadeOffMinLength;
-	cEditorInputNumber* mpInpFlickerFadeOffMaxLength;
+    // Fade
+    cWidgetDummy *mpGFlickerFade;
 
-	/////////////////////////////////
-	// Box Light specific
-	cWidgetLabel* mpLabelBlendFunc;
-	cWidgetComboBox* mpComboBoxBlendFunc;
+    cEditorInputBool *mpInpFlickerFade;
 
-	cWidgetLabel* mvLabelBoxSize[4];
-	cWidgetTextBox* mvInputBoxSize[3];
+    cEditorInputNumber *mpInpFlickerFadeOnMinLength;
+    cEditorInputNumber *mpInpFlickerFadeOnMaxLength;
+    cEditorInputNumber *mpInpFlickerFadeOffMinLength;
+    cEditorInputNumber *mpInpFlickerFadeOffMaxLength;
 
-	cEditorInputEnum* mpInpBoxBlendFunc;
-	cEditorInputVec3* mpInpBoxSize;
-	
-	cEditorInputNumber* mpInpPriority;
+    /////////////////////////////////
+    // Box Light specific
+    cWidgetLabel *mpLabelBlendFunc;
+    cWidgetComboBox *mpComboBoxBlendFunc;
 
-	cEditorInputNumber* mpInpFalloff;
-	cEditorInputNumber* mpInpBrightness;
+    cWidgetLabel *mvLabelBoxSize[4];
+    cWidgetTextBox *mvInputBoxSize[3];
 
-	///////////////////////////////////
-	// Spot Light specific
-	cEditorInputNumber* mpInpSpotFOV;
-	cEditorInputNumber* mpInpSpotAspect;
-	cEditorInputNumber* mpInpSpotNearClipPlane;
-	cEditorInputFile* mpInpSpotFalloffMap;
+    cEditorInputEnum *mpInpBoxBlendFunc;
+    cEditorInputVec3 *mpInpBoxSize;
+
+    cEditorInputNumber *mpInpPriority;
+
+    cEditorInputNumber *mpInpFalloff;
+    cEditorInputNumber *mpInpBrightness;
+
+    ///////////////////////////////////
+    // Spot Light specific
+    cEditorInputNumber *mpInpSpotFOV;
+    cEditorInputNumber *mpInpSpotAspect;
+    cEditorInputNumber *mpInpSpotNearClipPlane;
+    cEditorInputFile *mpInpSpotFalloffMap;
 };
-
-
 
 #endif // HPLEDITOR_EDITOR_WINDOW_EDIT_BOX_LIGHT_H

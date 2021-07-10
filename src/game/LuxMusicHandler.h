@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,89 +26,88 @@
 
 //----------------------------------------------
 
-class cLuxMusic
-{
-friend class cLuxMusicHandler;
-public:
-	cLuxMusic();
+class cLuxMusic {
+    friend class cLuxMusicHandler;
 
-	void Reset();
+  public:
+    cLuxMusic();
 
-	tString msFile;
-	bool mbLoop;
-	bool mbResume;
-	float mfVolume;
-	bool mbSpecialEffect;	//If started by enemy close or similar.
+    void Reset();
+
+    tString msFile;
+    bool mbLoop;
+    bool mbResume;
+    float mfVolume;
+    bool mbSpecialEffect; // If started by enemy close or similar.
 };
 
 //----------------------------------------
 
+class cLuxMusicHandler : public iLuxUpdateable {
+    friend class cLuxMusicHandler_SaveData;
 
-class cLuxMusicHandler : public iLuxUpdateable
-{
-friend class cLuxMusicHandler_SaveData;
-public:	
-	cLuxMusicHandler();
-	~cLuxMusicHandler();
-	
-	void OnStart();
-	void Update(float afTimeStep);
-	void Reset();
+  public:
+    cLuxMusicHandler();
+    ~cLuxMusicHandler();
 
-	float GetVolumeMul(){ return mfVolumeMul;}
+    void OnStart();
+    void Update(float afTimeStep);
+    void Reset();
 
-	int GetMaxPrio(){ return mlMaxPrio;}
-	int GetCurrentMaxPrio(){ return mlCurrentMaxPrio;}
+    float GetVolumeMul() { return mfVolumeMul; }
 
-	cLuxMusic* GetMusic(int alPrio){ return &mvGameMusic[alPrio]; }
+    int GetMaxPrio() { return mlMaxPrio; }
+    int GetCurrentMaxPrio() { return mlCurrentMaxPrio; }
 
-	void OnMapEnter(cLuxMap *apMap);
-	void OnMapLeave(cLuxMap *apMap);
+    cLuxMusic *GetMusic(int alPrio) { return &mvGameMusic[alPrio]; }
 
-	void Play(const tString &asFile, bool abLoop,float afVolume, float afFadeTime, int alPrio, bool abResume, bool abSpecialEffect);
-	void Stop(float afFadeTime, int alPrio, bool abForceStop = false);
+    void OnMapEnter(cLuxMap *apMap);
+    void OnMapLeave(cLuxMap *apMap);
 
-	void AddEnemy(eLuxEnemyMusic aType, iLuxEnemy *apEnemy);
-	void RemoveEnemy(eLuxEnemyMusic aType, iLuxEnemy *apEnemy);
-	bool EnemyExist(eLuxEnemyMusic aType, iLuxEnemy *apEnemy);
-	
-	void AddSearcher(iLuxEnemy *apEnemy);
-	void RemoveSearcher(iLuxEnemy *apEnemy);
-	bool SearcherExist(iLuxEnemy *apEnemy);
- 
-private:
-	void UpdateDangerMusic(float afTimeStep);
-	void UpdateEnemyMusic(float afTimeStep, eLuxEnemyMusic aType);
+    void Play(const tString &asFile, bool abLoop, float afVolume, float afFadeTime, int alPrio, bool abResume,
+              bool abSpecialEffect);
+    void Stop(float afFadeTime, int alPrio, bool abForceStop = false);
 
-	void PlayHighestPriority();
+    void AddEnemy(eLuxEnemyMusic aType, iLuxEnemy *apEnemy);
+    void RemoveEnemy(eLuxEnemyMusic aType, iLuxEnemy *apEnemy);
+    bool EnemyExist(eLuxEnemyMusic aType, iLuxEnemy *apEnemy);
 
-	//////////////////
-	// Data
-	cMusicHandler *mpMusicHandler;
-	int mlMaxPrio;
-	float mfVolumeMul;
+    void AddSearcher(iLuxEnemy *apEnemy);
+    void RemoveSearcher(iLuxEnemy *apEnemy);
+    bool SearcherExist(iLuxEnemy *apEnemy);
 
-	//////////////////
-	// Variables
-	float mfUpdateDangerCount;
-	float mfUpdateAttackCount;
+  private:
+    void UpdateDangerMusic(float afTimeStep);
+    void UpdateEnemyMusic(float afTimeStep, eLuxEnemyMusic aType);
 
-	std::vector<cLuxMusic> mvGameMusic;
-	
-	int mlCurrentMaxPrio;
+    void PlayHighestPriority();
 
-	tLuxEnemySet m_setEnemies[eLuxEnemyMusic_LastEnum];
-	
-	bool mbEnemyPlaying[eLuxEnemyMusic_LastEnum];
-	float mfEnemyPlayCount[eLuxEnemyMusic_LastEnum];
-	float mfEnemyStopCount[eLuxEnemyMusic_LastEnum];
+    //////////////////
+    // Data
+    cMusicHandler *mpMusicHandler;
+    int mlMaxPrio;
+    float mfVolumeMul;
 
-	bool mbEnemyClosePlaying;
-	float mfEnemyCloseCount;
-	float mfEnemyGoneCount;
+    //////////////////
+    // Variables
+    float mfUpdateDangerCount;
+    float mfUpdateAttackCount;
+
+    std::vector<cLuxMusic> mvGameMusic;
+
+    int mlCurrentMaxPrio;
+
+    tLuxEnemySet m_setEnemies[eLuxEnemyMusic_LastEnum];
+
+    bool mbEnemyPlaying[eLuxEnemyMusic_LastEnum];
+    float mfEnemyPlayCount[eLuxEnemyMusic_LastEnum];
+    float mfEnemyStopCount[eLuxEnemyMusic_LastEnum];
+
+    bool mbEnemyClosePlaying;
+    float mfEnemyCloseCount;
+    float mfEnemyGoneCount;
 };
 
 //----------------------------------------------
-
 
 #endif // LUX_MUSIC_HANDLER_H

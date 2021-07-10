@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,107 +20,107 @@
 #ifndef HPL_BILLBOARD_H
 #define HPL_BILLBOARD_H
 
-#include "math/MathTypes.h"
 #include "graphics/GraphicsTypes.h"
+#include "math/MathTypes.h"
 #include "system/SystemTypes.h"
 
-#include "scene/Entity3D.h"
 #include "graphics/Renderable.h"
+#include "scene/Entity3D.h"
 
 namespace hpl {
 
-	class cMaterialManager;
-	class cResources;
-	class cGraphics;
-	class iLowLevelGraphics;
-	class cMaterial;
-	class iVertexBuffer;
-	
-	//------------------------------------------
+class cMaterialManager;
+class cResources;
+class cGraphics;
+class iLowLevelGraphics;
+class cMaterial;
+class iVertexBuffer;
 
-	class cBillboard : public iRenderable
-	{
-	#ifdef __GNUC__
-		typedef iRenderable __super;
-	#endif
-	public:
-		cBillboard(const tString asName,const cVector2f& avSize,eBillboardType aType, cResources *apResources,cGraphics *apGraphics);
-		~cBillboard();
+//------------------------------------------
 
-		void SetMaterial(cMaterial * apMaterial);
+class cBillboard : public iRenderable {
+#ifdef __GNUC__
+    typedef iRenderable __super;
+#endif
+  public:
+    cBillboard(const tString asName, const cVector2f &avSize, eBillboardType aType, cResources *apResources,
+               cGraphics *apGraphics);
+    ~cBillboard();
 
-		void SetSize(const cVector2f& avSize);
-		cVector2f GetSize(){ return mvSize;}
+    void SetMaterial(cMaterial *apMaterial);
 
-		eBillboardType GetType(){ return mType;}
+    void SetSize(const cVector2f &avSize);
+    cVector2f GetSize() { return mvSize; }
 
-		void SetAxis(const cVector3f& avAxis);
-		cVector3f GetAxis(){ return mvAxis;}
+    eBillboardType GetType() { return mType; }
 
-		void SetForwardOffset(float afOffset);
-		float GetForwardOffset(){ return mfForwardOffset;}
+    void SetAxis(const cVector3f &avAxis);
+    cVector3f GetAxis() { return mvAxis; }
 
-		void SetColor(const cColor &aColor);
-		const cColor& GetColor(){ return mColor;}
+    void SetForwardOffset(float afOffset);
+    float GetForwardOffset() { return mfForwardOffset; }
 
-		void SetHaloAlpha(float afX);
-		float GetHaloAlpha(){ return mfHaloAlpha;}
+    void SetColor(const cColor &aColor);
+    const cColor &GetColor() { return mColor; }
 
-		/////////////////////////////////
-		//Halo stuff
-		void SetIsHalo(bool abX);
-		bool IsHalo(){ return mbIsHalo;}
+    void SetHaloAlpha(float afX);
+    float GetHaloAlpha() { return mfHaloAlpha; }
 
-		void SetHaloSourceSize(const cVector3f &avSize);
-		cVector3f GetHaloSourceSize(){return mvHaloSourceSize;}
-		
-		bool UsesOcclusionQuery();
-		void AssignOcclusionQuery(iRenderer *apRenderer);
-		bool RetrieveOcculsionQuery(iRenderer *apRenderer);
-		
-		/////////////////////////////////
-		//Entity implementation
-		tString GetEntityType(){ return "Billboard";}
+    /////////////////////////////////
+    // Halo stuff
+    void SetIsHalo(bool abX);
+    bool IsHalo() { return mbIsHalo; }
 
-		bool IsVisible();
-		bool IsFullyTranslucent();
+    void SetHaloSourceSize(const cVector3f &avSize);
+    cVector3f GetHaloSourceSize() { return mvHaloSourceSize; }
 
-		//Renderable implementations
-		cMaterial *GetMaterial(){ return mpMaterial;}
-		iVertexBuffer* GetVertexBuffer(){return mpVtxBuffer;}
+    bool UsesOcclusionQuery();
+    void AssignOcclusionQuery(iRenderer *apRenderer);
+    bool RetrieveOcculsionQuery(iRenderer *apRenderer);
 
-		cMatrixf* GetModelMatrix(cFrustum *apFrustum);
+    /////////////////////////////////
+    // Entity implementation
+    tString GetEntityType() { return "Billboard"; }
 
-		int GetMatrixUpdateCount();
+    bool IsVisible();
+    bool IsFullyTranslucent();
 
-		eRenderableType GetRenderType(){ return eRenderableType_Billboard;}
+    // Renderable implementations
+    cMaterial *GetMaterial() { return mpMaterial; }
+    iVertexBuffer *GetVertexBuffer() { return mpVtxBuffer; }
 
-	private:
-		cMaterialManager* mpMaterialManager;
-		iLowLevelGraphics* mpLowLevelGraphics;
-		
-		cMaterial *mpMaterial;
-		iVertexBuffer* mpVtxBuffer;
+    cMatrixf *GetModelMatrix(cFrustum *apFrustum);
 
-		cMatrixf m_mtxHaloOcclusionMatrix;
-		cMatrixf m_mtxTempTransform;
+    int GetMatrixUpdateCount();
 
-		eBillboardType mType;
-		cVector2f mvSize;
-		cVector3f mvAxis;
+    eRenderableType GetRenderType() { return eRenderableType_Billboard; }
 
-		int mlLastRenderCount;
+  private:
+    cMaterialManager *mpMaterialManager;
+    iLowLevelGraphics *mpLowLevelGraphics;
 
-		bool mbIsHalo;
-		cVector3f mvHaloSourceSize;
-		cBoundingVolume *mpHaloSourceBV;
-		int mbHaloSizeUpdated;
-		int mlHaloBVMatrixCount;
-		
-		float mfForwardOffset;
-		cColor mColor;
-		float mfHaloAlpha;
-	};
+    cMaterial *mpMaterial;
+    iVertexBuffer *mpVtxBuffer;
 
+    cMatrixf m_mtxHaloOcclusionMatrix;
+    cMatrixf m_mtxTempTransform;
+
+    eBillboardType mType;
+    cVector2f mvSize;
+    cVector3f mvAxis;
+
+    int mlLastRenderCount;
+
+    bool mbIsHalo;
+    cVector3f mvHaloSourceSize;
+    cBoundingVolume *mpHaloSourceBV;
+    int mbHaloSizeUpdated;
+    int mlHaloBVMatrixCount;
+
+    float mfForwardOffset;
+    cColor mColor;
+    float mfHaloAlpha;
 };
+
+};     // namespace hpl
 #endif // HPL_BILLBOARD_H

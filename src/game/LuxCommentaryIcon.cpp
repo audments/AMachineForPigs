@@ -1,27 +1,26 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include "LuxCommentaryIcon.h"
 
-#include "LuxMap.h"
 #include "LuxEffectHandler.h"
-
+#include "LuxMap.h"
 
 //////////////////////////////////////////////////////////////////////////
 // LOADER
@@ -29,70 +28,65 @@
 
 //-----------------------------------------------------------------------
 
-cLuxCommentaryIconLoader::cLuxCommentaryIconLoader(const tString& asName) : cEntityLoader_Object(asName)
-{
-	mfDefaultMaxFocusDistance = gpBase->mpGameCfg->GetFloat("Player_Interaction", "Commentary_MaxFocusDist",0);
+cLuxCommentaryIconLoader::cLuxCommentaryIconLoader(const tString &asName) : cEntityLoader_Object(asName) {
+    mfDefaultMaxFocusDistance = gpBase->mpGameCfg->GetFloat("Player_Interaction", "Commentary_MaxFocusDist", 0);
 }
 
 //-----------------------------------------------------------------------
 
-void cLuxCommentaryIconLoader::BeforeLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform,cWorld *apWorld, cResourceVarsObject *apInstanceVars)
-{
-
-}
+void cLuxCommentaryIconLoader::BeforeLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform, cWorld *apWorld,
+                                          cResourceVarsObject *apInstanceVars) {}
 
 //-----------------------------------------------------------------------
 
-void cLuxCommentaryIconLoader::AfterLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform,cWorld *apWorld, cResourceVarsObject *apInstanceVars)
-{
-	cLuxMap *pMap = gpBase->mpCurrentMapLoading;
-	if(pMap==NULL)	return;
+void cLuxCommentaryIconLoader::AfterLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform, cWorld *apWorld,
+                                         cResourceVarsObject *apInstanceVars) {
+    cLuxMap *pMap = gpBase->mpCurrentMapLoading;
+    if (pMap == NULL)
+        return;
 
-	cLuxCommentaryIcon *pCommentaryIcon = hplNew(cLuxCommentaryIcon, (mpEntity->GetName(), mlID,pMap));
+    cLuxCommentaryIcon *pCommentaryIcon = hplNew(cLuxCommentaryIcon, (mpEntity->GetName(), mlID, pMap));
 
-	//////////////////////////////
-	// Set data
-	pCommentaryIcon->msFileName = msFileName;
-	pCommentaryIcon->m_mtxOnLoadTransform = a_mtxTransform;
-	pCommentaryIcon->mvOnLoadScale = mvScale;
+    //////////////////////////////
+    // Set data
+    pCommentaryIcon->msFileName = msFileName;
+    pCommentaryIcon->m_mtxOnLoadTransform = a_mtxTransform;
+    pCommentaryIcon->mvOnLoadScale = mvScale;
 
-	pCommentaryIcon->mvBodies = mvBodies;
-	pCommentaryIcon->mpMeshEntity = mpEntity;
+    pCommentaryIcon->mvBodies = mvBodies;
+    pCommentaryIcon->mpMeshEntity = mpEntity;
 
-	pCommentaryIcon->mvLights = mvLights;
-	pCommentaryIcon->mvParticleSystems = mvParticleSystems;
-	pCommentaryIcon->mvBillboards = mvBillboards;
+    pCommentaryIcon->mvLights = mvLights;
+    pCommentaryIcon->mvParticleSystems = mvParticleSystems;
+    pCommentaryIcon->mvBillboards = mvBillboards;
 
-	pCommentaryIcon->mfMaxFocusDistance = mfDefaultMaxFocusDistance;
+    pCommentaryIcon->mfMaxFocusDistance = mfDefaultMaxFocusDistance;
 
-	//Set body userdata
-	for(size_t i=0; i<mvBodies.size(); ++i)
-	{
-		iPhysicsBody *pBody = mvBodies[i];
-		iLuxEntity *pEnt = pCommentaryIcon;
-		pBody->SetUserData(pEnt);
-	}
+    // Set body userdata
+    for (size_t i = 0; i < mvBodies.size(); ++i) {
+        iPhysicsBody *pBody = mvBodies[i];
+        iLuxEntity *pEnt = pCommentaryIcon;
+        pBody->SetUserData(pEnt);
+    }
 
-	//////////////////////////////
-	// User vars
-	pCommentaryIcon->msRotateSubMesh = GetVarString("RotateSubMesh","");
+    //////////////////////////////
+    // User vars
+    pCommentaryIcon->msRotateSubMesh = GetVarString("RotateSubMesh", "");
 
-	//////////////////////////////
-	// Load Instance Variables
-	if(apInstanceVars)
-	{
-		tString sFile = apInstanceVars->GetVarString("File", "");
-		pCommentaryIcon->LoadCommentaryFile(sFile);
-	}
+    //////////////////////////////
+    // Load Instance Variables
+    if (apInstanceVars) {
+        tString sFile = apInstanceVars->GetVarString("File", "");
+        pCommentaryIcon->LoadCommentaryFile(sFile);
+    }
 
+    pCommentaryIcon->SetupAfterLoad(apWorld);
 
-	pCommentaryIcon->SetupAfterLoad(apWorld);
+    // Add to the current map
+    pMap->AddEntity(pCommentaryIcon);
 
-	//Add to the current map
-	pMap->AddEntity(pCommentaryIcon);
-
-	//Always disable by default
-	pCommentaryIcon->SetActive(false);
+    // Always disable by default
+    pCommentaryIcon->SetActive(false);
 }
 
 //-----------------------------------------------------------------------
@@ -103,50 +97,51 @@ void cLuxCommentaryIconLoader::AfterLoad(cXmlElement *apRootElem, const cMatrixf
 
 //-----------------------------------------------------------------------
 
-cLuxCommentaryIcon::cLuxCommentaryIcon(const tString &asName, int alID, cLuxMap *apMap) : iLuxEntity(asName,alID,apMap, eLuxEntityType_CommentaryIcon)
-{
-	mbPlayingSound = false;
-	mvRotAngle =0;
+cLuxCommentaryIcon::cLuxCommentaryIcon(const tString &asName, int alID, cLuxMap *apMap)
+    : iLuxEntity(asName, alID, apMap, eLuxEntityType_CommentaryIcon) {
+    mbPlayingSound = false;
+    mvRotAngle = 0;
 }
 
 //-----------------------------------------------------------------------
 
-cLuxCommentaryIcon::~cLuxCommentaryIcon()
-{
-	cWorld *pWorld = mpMap->GetWorld();
-	iPhysicsWorld *pPhysicsWorld = pWorld->GetPhysicsWorld();
-	
-	////////////////////
-	// Destroy physics
-	{
-		//Bodies
-		for(size_t i=0; i<mvBodies.size(); ++i)
-		{
-			iPhysicsBody *pBody = mvBodies[i];
-				
-			pWorld->GetPhysicsWorld()->DestroyBody(pBody);
-		}
-	}
+cLuxCommentaryIcon::~cLuxCommentaryIcon() {
+    cWorld *pWorld = mpMap->GetWorld();
+    iPhysicsWorld *pPhysicsWorld = pWorld->GetPhysicsWorld();
 
-	////////////////////
-	// Destroy graphics
-	{
-		//Mesh entity
-		if(mpMeshEntity) pWorld->DestroyMeshEntity(mpMeshEntity);
+    ////////////////////
+    // Destroy physics
+    {
+        // Bodies
+        for (size_t i = 0; i < mvBodies.size(); ++i) {
+            iPhysicsBody *pBody = mvBodies[i];
 
-		//Lights
-		for(size_t i=0; i<mvLights.size(); ++i) pWorld->DestroyLight(mvLights[i]);
-		
-		//Particle systems
-		for(size_t i=0; i<mvParticleSystems.size(); ++i) 
-		{
-			cParticleSystem *pPS = mvParticleSystems[i];
-			if(pPS && pWorld->ParticleSystemExists(pPS)) pPS->Kill();
-		}
+            pWorld->GetPhysicsWorld()->DestroyBody(pBody);
+        }
+    }
 
-		//Billboards
-		for(size_t i=0; i<mvBillboards.size(); ++i)	pWorld->DestroyBillboard(mvBillboards[i]);
-	}
+    ////////////////////
+    // Destroy graphics
+    {
+        // Mesh entity
+        if (mpMeshEntity)
+            pWorld->DestroyMeshEntity(mpMeshEntity);
+
+        // Lights
+        for (size_t i = 0; i < mvLights.size(); ++i)
+            pWorld->DestroyLight(mvLights[i]);
+
+        // Particle systems
+        for (size_t i = 0; i < mvParticleSystems.size(); ++i) {
+            cParticleSystem *pPS = mvParticleSystems[i];
+            if (pPS && pWorld->ParticleSystemExists(pPS))
+                pPS->Kill();
+        }
+
+        // Billboards
+        for (size_t i = 0; i < mvBillboards.size(); ++i)
+            pWorld->DestroyBillboard(mvBillboards[i]);
+    }
 }
 
 //-----------------------------------------------------------------------
@@ -157,99 +152,82 @@ cLuxCommentaryIcon::~cLuxCommentaryIcon()
 
 //-----------------------------------------------------------------------
 
-void cLuxCommentaryIcon::SetupAfterLoad(cWorld *apWorld)
-{
-	mvSubMeshMatrix.resize(mpMeshEntity->GetSubMeshEntityNum());
-	for(int i=0; i<mpMeshEntity->GetSubMeshEntityNum(); ++i)
-	{
-		cSubMeshEntity *pSubEnt = mpMeshEntity->GetSubMeshEntity(i);
+void cLuxCommentaryIcon::SetupAfterLoad(cWorld *apWorld) {
+    mvSubMeshMatrix.resize(mpMeshEntity->GetSubMeshEntityNum());
+    for (int i = 0; i < mpMeshEntity->GetSubMeshEntityNum(); ++i) {
+        cSubMeshEntity *pSubEnt = mpMeshEntity->GetSubMeshEntity(i);
 
-		mvSubMeshMatrix[i] = pSubEnt->GetLocalMatrix();
-	}
+        mvSubMeshMatrix[i] = pSubEnt->GetLocalMatrix();
+    }
 }
 
 //-----------------------------------------------------------------------
 
-void cLuxCommentaryIcon::OnUpdate(float afTimeStep)
-{
-	if(mbPlayingSound)
-	{
-		mvRotAngle.y += afTimeStep*2.5f;
-	}
-	else
-	{
-		if(mvRotAngle.y != 0)
-		{
-			mvRotAngle.y = cMath::Wrap(mvRotAngle.y, 0, kPif);
-			mvRotAngle.y += afTimeStep*2.5f;
-			if(mvRotAngle.y>kPif) mvRotAngle.y =0;
-		}
-	}
+void cLuxCommentaryIcon::OnUpdate(float afTimeStep) {
+    if (mbPlayingSound) {
+        mvRotAngle.y += afTimeStep * 2.5f;
+    } else {
+        if (mvRotAngle.y != 0) {
+            mvRotAngle.y = cMath::Wrap(mvRotAngle.y, 0, kPif);
+            mvRotAngle.y += afTimeStep * 2.5f;
+            if (mvRotAngle.y > kPif)
+                mvRotAngle.y = 0;
+        }
+    }
 
-	for(int i=0; i<mpMeshEntity->GetSubMeshEntityNum(); ++i)
-	{
-		cSubMeshEntity *pSubEnt = mpMeshEntity->GetSubMeshEntity(i);
-		cSubMesh *pSubMesh = pSubEnt->GetSubMesh();
-		if(pSubMesh->GetName() != msRotateSubMesh) continue;
-		
-		cMatrixf mtxTrans = cMath::MatrixMul(mvSubMeshMatrix[i], cMath::MatrixRotate(mvRotAngle, eEulerRotationOrder_XYZ));
+    for (int i = 0; i < mpMeshEntity->GetSubMeshEntityNum(); ++i) {
+        cSubMeshEntity *pSubEnt = mpMeshEntity->GetSubMeshEntity(i);
+        cSubMesh *pSubMesh = pSubEnt->GetSubMesh();
+        if (pSubMesh->GetName() != msRotateSubMesh)
+            continue;
+
+        cMatrixf mtxTrans =
+            cMath::MatrixMul(mvSubMeshMatrix[i], cMath::MatrixRotate(mvRotAngle, eEulerRotationOrder_XYZ));
         pSubEnt->SetMatrix(mtxTrans);
-	}
+    }
 }
 
 //-----------------------------------------------------------------------
 
-bool cLuxCommentaryIcon::OnInteract(iPhysicsBody *apBody, const cVector3f &avPos)
-{
-	if(mbPlayingSound)
-	{
-		gpBase->mpEffectHandler->GetPlayCommentary()->Stop();
-	}
-	else
-	{
-		gpBase->mpEffectHandler->GetPlayCommentary()->Start(msTalker, msTopic, msSoundFile, mlID);
-	}
-	SetPlayingSound(!mbPlayingSound);
-	
-	return true;
+bool cLuxCommentaryIcon::OnInteract(iPhysicsBody *apBody, const cVector3f &avPos) {
+    if (mbPlayingSound) {
+        gpBase->mpEffectHandler->GetPlayCommentary()->Stop();
+    } else {
+        gpBase->mpEffectHandler->GetPlayCommentary()->Start(msTalker, msTopic, msSoundFile, mlID);
+    }
+    SetPlayingSound(!mbPlayingSound);
+
+    return true;
 }
 
 //-----------------------------------------------------------------------
 
-tWString cLuxCommentaryIcon::GetFocusText()
-{
-	return cString::To16Char(msTalker + "\n\""+msTopic+"\"");
-}
+tWString cLuxCommentaryIcon::GetFocusText() { return cString::To16Char(msTalker + "\n\"" + msTopic + "\""); }
 
 //-----------------------------------------------------------------------
 
-void cLuxCommentaryIcon::SetPlayingSound(bool abX)
-{
-	if(mbPlayingSound ==abX) return;
+void cLuxCommentaryIcon::SetPlayingSound(bool abX) {
+    if (mbPlayingSound == abX)
+        return;
 
-	mbPlayingSound = abX;
+    mbPlayingSound = abX;
 
-    if(mbPlayingSound)
-	{
-		cParticleSystem *pPS = mpMap->GetWorld()->CreateParticleSystem("_commentary_icon_ps","ps_commentary_icon.ps",1);
-		if(pPS)
-		{
-			pPS->SetPosition(mvBodies[0]->GetWorldPosition());
-			pPS->SetIsSaved(false);
-		}
-	}
-	else
-	{
-		cParticleSystem *pPS = mpMap->GetWorld()->GetParticleSystem("_commentary_icon_ps");
-		if(pPS)
-		{
-			pPS->Kill();
-		}
-	}
+    if (mbPlayingSound) {
+        cParticleSystem *pPS =
+            mpMap->GetWorld()->CreateParticleSystem("_commentary_icon_ps", "ps_commentary_icon.ps", 1);
+        if (pPS) {
+            pPS->SetPosition(mvBodies[0]->GetWorldPosition());
+            pPS->SetIsSaved(false);
+        }
+    } else {
+        cParticleSystem *pPS = mpMap->GetWorld()->GetParticleSystem("_commentary_icon_ps");
+        if (pPS) {
+            pPS->Kill();
+        }
+    }
 }
 
 //-----------------------------------------------------------------------
-
 
 //////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS
@@ -257,74 +235,63 @@ void cLuxCommentaryIcon::SetPlayingSound(bool abX)
 
 //-----------------------------------------------------------------------
 
-void cLuxCommentaryIcon::OnSetActive(bool abX)
-{	
-	///////////////
-	//Bodies
-	for(size_t i=0; i<mvBodies.size(); ++i)
-	{
-		mvBodies[i]->SetActive(abX);
-	}
+void cLuxCommentaryIcon::OnSetActive(bool abX) {
+    ///////////////
+    // Bodies
+    for (size_t i = 0; i < mvBodies.size(); ++i) {
+        mvBodies[i]->SetActive(abX);
+    }
 
-	///////////////////
-	//Mesh entity
-	if(mpMeshEntity)
-	{
-		mpMeshEntity->SetActive(abX);
-		mpMeshEntity->SetVisible(abX);
-	}
+    ///////////////////
+    // Mesh entity
+    if (mpMeshEntity) {
+        mpMeshEntity->SetActive(abX);
+        mpMeshEntity->SetVisible(abX);
+    }
 
-	///////////////////
-	//Lights
-	for(size_t i=0; i<mvLights.size(); ++i)
-	{
-		mvLights[i]->SetVisible(abX);
-		mvLights[i]->SetActive(abX);
-	}
+    ///////////////////
+    // Lights
+    for (size_t i = 0; i < mvLights.size(); ++i) {
+        mvLights[i]->SetVisible(abX);
+        mvLights[i]->SetActive(abX);
+    }
 
-	///////////////////
-	//Particle systems
-	for(size_t i=0; i<mvParticleSystems.size(); ++i) 
-	{
-		cParticleSystem *pPS = mvParticleSystems[i];
-		if(pPS)
-		{
-			pPS->SetVisible(abX);
-			pPS->SetActive(abX);
-		}
-	}
+    ///////////////////
+    // Particle systems
+    for (size_t i = 0; i < mvParticleSystems.size(); ++i) {
+        cParticleSystem *pPS = mvParticleSystems[i];
+        if (pPS) {
+            pPS->SetVisible(abX);
+            pPS->SetActive(abX);
+        }
+    }
 
-	///////////////////
-	//Billboards
-	for(size_t i=0; i<mvBillboards.size(); ++i)
-	{
-		mvBillboards[i]->SetActive(abX);
-		mvBillboards[i]->SetVisible(abX);
-	}
+    ///////////////////
+    // Billboards
+    for (size_t i = 0; i < mvBillboards.size(); ++i) {
+        mvBillboards[i]->SetActive(abX);
+        mvBillboards[i]->SetVisible(abX);
+    }
 }
-
 
 //-----------------------------------------------------------------------
 
-void cLuxCommentaryIcon::LoadCommentaryFile(const tString& asFile)
-{
-	tString sFile = cString::SetFileExt(asFile,"comment");
-	cResources *pResources = gpBase->mpEngine->GetResources();
+void cLuxCommentaryIcon::LoadCommentaryFile(const tString &asFile) {
+    tString sFile = cString::SetFileExt(asFile, "comment");
+    cResources *pResources = gpBase->mpEngine->GetResources();
 
-	iXmlDocument *pXmlDoc = pResources->LoadXmlDocument(sFile);
-	if(pXmlDoc==NULL)
-	{
-		Error("Could not load flashback file: '%s'\n", sFile.c_str());
-		return;
-	}
+    iXmlDocument *pXmlDoc = pResources->LoadXmlDocument(sFile);
+    if (pXmlDoc == NULL) {
+        Error("Could not load flashback file: '%s'\n", sFile.c_str());
+        return;
+    }
 
-	msTalker = pXmlDoc->GetAttributeString("Talker","");
-	msTopic = pXmlDoc->GetAttributeString("Topic","");
-	msSoundFile = pXmlDoc->GetAttributeString("SoundFile","");
-	
-	pResources->DestroyXmlDocument(pXmlDoc);
+    msTalker = pXmlDoc->GetAttributeString("Talker", "");
+    msTopic = pXmlDoc->GetAttributeString("Topic", "");
+    msSoundFile = pXmlDoc->GetAttributeString("SoundFile", "");
+
+    pResources->DestroyXmlDocument(pXmlDoc);
 }
-
 
 //-----------------------------------------------------------------------
 
@@ -334,88 +301,74 @@ void cLuxCommentaryIcon::LoadCommentaryFile(const tString& asFile)
 
 //-----------------------------------------------------------------------
 
-iLuxEntity_SaveData* cLuxCommentaryIcon::CreateSaveData()
-{
-	return hplNew(cLuxCommentaryIcon_SaveData, ());
-}
+iLuxEntity_SaveData *cLuxCommentaryIcon::CreateSaveData() { return hplNew(cLuxCommentaryIcon_SaveData, ()); }
 
 //-----------------------------------------------------------------------
 
 kBeginSerialize(cLuxCommentaryIcon_SaveData, iLuxEntity_SaveData)
 
-kSerializeVar(msFileName, eSerializeType_String)
-kSerializeVar(m_mtxOnLoadTransform, eSerializeType_Matrixf)
-kSerializeVar(mvOnLoadScale, eSerializeType_Vector3f)
+    kSerializeVar(msFileName, eSerializeType_String) kSerializeVar(m_mtxOnLoadTransform, eSerializeType_Matrixf)
+        kSerializeVar(mvOnLoadScale, eSerializeType_Vector3f)
 
-kSerializeVar(msTalker,eSerializeType_String)
-kSerializeVar(msTopic,eSerializeType_String)
-kSerializeVar(msSoundFile,eSerializeType_String)
+            kSerializeVar(msTalker, eSerializeType_String) kSerializeVar(msTopic, eSerializeType_String)
+                kSerializeVar(msSoundFile, eSerializeType_String)
 
-kEndSerialize()
+                    kEndSerialize()
+
+    //-----------------------------------------------------------------------
+
+    cLuxCommentaryIcon_SaveData::~cLuxCommentaryIcon_SaveData() {}
 
 //-----------------------------------------------------------------------
 
-cLuxCommentaryIcon_SaveData::~cLuxCommentaryIcon_SaveData()
-{
+iLuxEntity *cLuxCommentaryIcon_SaveData::CreateEntity(cLuxMap *apMap) {
+    cWorld *pWorld = apMap->GetWorld();
+    apMap->ResetLatestEntity();
+    pWorld->CreateEntity(msName, m_mtxOnLoadTransform, msFileName, mlID, true, mvOnLoadScale);
+
+    return apMap->GetLatestEntity();
 }
 
 //-----------------------------------------------------------------------
 
-iLuxEntity* cLuxCommentaryIcon_SaveData::CreateEntity(cLuxMap *apMap)
-{
-	cWorld *pWorld = apMap->GetWorld();
-	apMap->ResetLatestEntity();
-	pWorld->CreateEntity(msName,m_mtxOnLoadTransform, msFileName, mlID, true, mvOnLoadScale);
-
-	return apMap->GetLatestEntity();
-}
-
-//-----------------------------------------------------------------------
-
-void cLuxCommentaryIcon::SaveToSaveData(iLuxEntity_SaveData* apSaveData)
-{
-	///////////////////////
-	// Init
-	super_class::SaveToSaveData(apSaveData);
-	cLuxCommentaryIcon_SaveData *pData = static_cast<cLuxCommentaryIcon_SaveData*>(apSaveData);
+void cLuxCommentaryIcon::SaveToSaveData(iLuxEntity_SaveData *apSaveData) {
+    ///////////////////////
+    // Init
+    super_class::SaveToSaveData(apSaveData);
+    cLuxCommentaryIcon_SaveData *pData = static_cast<cLuxCommentaryIcon_SaveData *>(apSaveData);
 
     ///////////////////////
-	//Properties
-	kCopyToVar(pData, msFileName);
-	kCopyToVar(pData, m_mtxOnLoadTransform);
-	kCopyToVar(pData, mvOnLoadScale);
-	kCopyToVar(pData, msTalker);
-	kCopyToVar(pData, msTopic);
-	kCopyToVar(pData, msSoundFile);
-	
+    // Properties
+    kCopyToVar(pData, msFileName);
+    kCopyToVar(pData, m_mtxOnLoadTransform);
+    kCopyToVar(pData, mvOnLoadScale);
+    kCopyToVar(pData, msTalker);
+    kCopyToVar(pData, msTopic);
+    kCopyToVar(pData, msSoundFile);
 }
 
 //-----------------------------------------------------------------------
 
-void cLuxCommentaryIcon::LoadFromSaveData(iLuxEntity_SaveData* apSaveData)
-{
-	///////////////////////
-	// Init
-	super_class::LoadFromSaveData(apSaveData);
-	cLuxCommentaryIcon_SaveData *pData = static_cast<cLuxCommentaryIcon_SaveData*>(apSaveData);
+void cLuxCommentaryIcon::LoadFromSaveData(iLuxEntity_SaveData *apSaveData) {
+    ///////////////////////
+    // Init
+    super_class::LoadFromSaveData(apSaveData);
+    cLuxCommentaryIcon_SaveData *pData = static_cast<cLuxCommentaryIcon_SaveData *>(apSaveData);
 
-		///////////////////////
-	//CommentaryIconerties
-	kCopyFromVar(pData, m_mtxOnLoadTransform);
-	kCopyFromVar(pData, mvOnLoadScale);
-	kCopyFromVar(pData, msTalker);
-	kCopyFromVar(pData, msTopic);
-	kCopyFromVar(pData, msSoundFile);
-	
+    ///////////////////////
+    // CommentaryIconerties
+    kCopyFromVar(pData, m_mtxOnLoadTransform);
+    kCopyFromVar(pData, mvOnLoadScale);
+    kCopyFromVar(pData, msTalker);
+    kCopyFromVar(pData, msTopic);
+    kCopyFromVar(pData, msSoundFile);
 }
 
 //-----------------------------------------------------------------------
 
-void cLuxCommentaryIcon::SetupSaveData(iLuxEntity_SaveData *apSaveData)
-{
-	super_class::SetupSaveData(apSaveData);
-	cLuxCommentaryIcon_SaveData *pData = static_cast<cLuxCommentaryIcon_SaveData*>(apSaveData);
+void cLuxCommentaryIcon::SetupSaveData(iLuxEntity_SaveData *apSaveData) {
+    super_class::SetupSaveData(apSaveData);
+    cLuxCommentaryIcon_SaveData *pData = static_cast<cLuxCommentaryIcon_SaveData *>(apSaveData);
 }
 
 //-----------------------------------------------------------------------
-

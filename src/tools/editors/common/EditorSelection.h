@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -41,119 +41,117 @@ class iEntitySelector;
 
 //---------------------------------------------------------------------------
 
-class cEditorSelection
-{
-public:
-	cEditorSelection(iEditorBase* apEditor);
+class cEditorSelection {
+  public:
+    cEditorSelection(iEditorBase *apEditor);
 
-	bool IsUpdated() { return mbSelectionUpdated; }
-	void SetUpdated(bool abX) { mbSelectionUpdated = abX; }
+    bool IsUpdated() { return mbSelectionUpdated; }
+    void SetUpdated(bool abX) { mbSelectionUpdated = abX; }
 
-	///////////////////////////////////////////
-	// Entity management
-	void AddEntity(iEntityWrapper* apEntity);
-	void RemoveEntity(iEntityWrapper* apEntity);
-	void ClearEntities();
-	
-	bool HasEntity(iEntityWrapper* apEntity, tEntityWrapperListIt* apIt=NULL );
-	bool HasEntity(int alEntityID, tIntListIt* apIt=NULL );
+    ///////////////////////////////////////////
+    // Entity management
+    void AddEntity(iEntityWrapper *apEntity);
+    void RemoveEntity(iEntityWrapper *apEntity);
+    void ClearEntities();
 
-	// Action helpers
-	void AddEntitiesByID(const tIntList& alstIDs);
-	void RemoveEntitiesByID(const tIntList& alstIDs);
-	void ToggleEntitySelectionByID(const tIntList& alstIDs);
+    bool HasEntity(iEntityWrapper *apEntity, tEntityWrapperListIt *apIt = NULL);
+    bool HasEntity(int alEntityID, tIntListIt *apIt = NULL);
 
-	tEntityWrapperList& GetEntities() { return mlstEntities; }
-	tIntList& GetEntityIDs() { return mlstEntityIDs; }
-	
-	bool IsEmpty() { return mlstEntities.empty(); }
-	int GetNumEntities() { return (int)mlstEntities.size(); }
+    // Action helpers
+    void AddEntitiesByID(const tIntList &alstIDs);
+    void RemoveEntitiesByID(const tIntList &alstIDs);
+    void ToggleEntitySelectionByID(const tIntList &alstIDs);
 
-	//////////////////////////////////////////
-	// Transform related
-	void UpdateReferenceTransforms();
-	void FallToReferenceTransforms();
+    tEntityWrapperList &GetEntities() { return mlstEntities; }
+    tIntList &GetEntityIDs() { return mlstEntityIDs; }
 
-	void SetRelativeTranslation(const cVector3f& avPosition, bool abUseSnap);
-	void SetRelativeRotation(const cVector3f& avRotation, bool abUseSnap);
-	void SetRelativeScale(const cVector3f& avScale, bool abUseSnap);
+    bool IsEmpty() { return mlstEntities.empty(); }
+    int GetNumEntities() { return (int)mlstEntities.size(); }
 
-	void SnapScale(cVector3f &avVector);
-	void SnapValue(cVector3f &avVector, float afSnapAmount);
+    //////////////////////////////////////////
+    // Transform related
+    void UpdateReferenceTransforms();
+    void FallToReferenceTransforms();
 
-	void SnapRotate(const cVector3f &avBaseRotation, cVector3f &avAddedRotation);
+    void SetRelativeTranslation(const cVector3f &avPosition, bool abUseSnap);
+    void SetRelativeRotation(const cVector3f &avRotation, bool abUseSnap);
+    void SetRelativeScale(const cVector3f &avScale, bool abUseSnap);
 
-	/////////////////////////////////////////
-	// Selection Center (Handle)
-	void UpdateCenter();
+    void SnapScale(cVector3f &avVector);
+    void SnapValue(cVector3f &avVector, float afSnapAmount);
 
-	const cVector3f& GetSelectionAABBMin() { return mvSelectionMin; }
-	const cVector3f& GetSelectionAABBMax() { return mvSelectionMax; }
+    void SnapRotate(const cVector3f &avBaseRotation, cVector3f &avAddedRotation);
 
-	cVector3f& GetCenterTranslation() { return mvCenterTranslation; }
-	cVector3f& GetCenterRotation() { return mvCenterRotation; }
+    /////////////////////////////////////////
+    // Selection Center (Handle)
+    void UpdateCenter();
 
-	void SetCenterTranslation(const cVector3f& avTranslation);
-	void SetCenterRotation(const cVector3f& avRotation);
+    const cVector3f &GetSelectionAABBMin() { return mvSelectionMin; }
+    const cVector3f &GetSelectionAABBMax() { return mvSelectionMax; }
 
-	cVector3f& GetCenterOldTranslation() { return mvCenterOldTranslation; }
-	cVector3f& GetCenterOldRotation() { return mvCenterOldRotation; }
+    cVector3f &GetCenterTranslation() { return mvCenterTranslation; }
+    cVector3f &GetCenterRotation() { return mvCenterRotation; }
 
+    void SetCenterTranslation(const cVector3f &avTranslation);
+    void SetCenterRotation(const cVector3f &avRotation);
 
-	/////////////////////////////////////////
-	// Misc methods
-	bool CanTranslate();
-	bool CanRotate();
-	bool CanScale();
-	bool IsCloneable();
-	bool IsDeletable();
-	
-	bool IsHomogeneousSelection();
+    cVector3f &GetCenterOldTranslation() { return mvCenterOldTranslation; }
+    cVector3f &GetCenterOldRotation() { return mvCenterOldRotation; }
 
-	void UpdateProperties();
+    /////////////////////////////////////////
+    // Misc methods
+    bool CanTranslate();
+    bool CanRotate();
+    bool CanScale();
+    bool IsCloneable();
+    bool IsDeletable();
 
-	static void SetRotateSnap(float afX) { mfRotateSnap = afX; }
-	static void SetScaleSnap(float afX) { mfScaleSnap = afX; }
-	static float GetRotateSnap() { return mfRotateSnap; }
-	static float GetScaleSnap() { return mfScaleSnap; }
+    bool IsHomogeneousSelection();
 
-protected:
-	iEditorBase* mpEditor;
-	bool mbSelectionUpdated;
-	bool mbPropertiesUpdated;
+    void UpdateProperties();
 
-	tEntityWrapperList mlstEntities;
-	tIntList mlstEntityIDs;
-	tVector3fList mlstReferenceTranslations;
-	tVector3fList mlstReferenceRotations;
-	tVector3fList mlstReferenceScales;
+    static void SetRotateSnap(float afX) { mfRotateSnap = afX; }
+    static void SetScaleSnap(float afX) { mfScaleSnap = afX; }
+    static float GetRotateSnap() { return mfRotateSnap; }
+    static float GetScaleSnap() { return mfScaleSnap; }
 
-	tMatrixfList mlstEntityRelativeMatrices;
-	cMatrixf mmtxCenterTransform;
+  protected:
+    iEditorBase *mpEditor;
+    bool mbSelectionUpdated;
+    bool mbPropertiesUpdated;
 
-	cVector3f mvSelectionMax;
-	cVector3f mvSelectionMin;
+    tEntityWrapperList mlstEntities;
+    tIntList mlstEntityIDs;
+    tVector3fList mlstReferenceTranslations;
+    tVector3fList mlstReferenceRotations;
+    tVector3fList mlstReferenceScales;
 
-	cVector3f mvMouseOffset;
+    tMatrixfList mlstEntityRelativeMatrices;
+    cMatrixf mmtxCenterTransform;
 
-	cVector3f mvCenterTranslation;
-	cVector3f mvCenterRotation;
+    cVector3f mvSelectionMax;
+    cVector3f mvSelectionMin;
 
-	cVector3f mvCenterOldTranslation;
-	cVector3f mvCenterOldRotation;
-	
-	bool mbTransformed;
+    cVector3f mvMouseOffset;
 
-	bool mbCanTranslate;
-	bool mbCanRotate;
-	eScaleType mScaleType;
-	bool mbCloneable;
-	bool mbDeletable;
+    cVector3f mvCenterTranslation;
+    cVector3f mvCenterRotation;
 
-	bool mbHomogeneous;
+    cVector3f mvCenterOldTranslation;
+    cVector3f mvCenterOldRotation;
 
-	static float mfScaleSnap;
-	static float mfRotateSnap;
+    bool mbTransformed;
+
+    bool mbCanTranslate;
+    bool mbCanRotate;
+    eScaleType mScaleType;
+    bool mbCloneable;
+    bool mbDeletable;
+
+    bool mbHomogeneous;
+
+    static float mfScaleSnap;
+    static float mfRotateSnap;
 };
 
 #endif // HPLEDITOR_EDITOR_SELECTION_H

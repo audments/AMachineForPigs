@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,130 +26,130 @@
 
 //----------------------------------------------
 
-class cLuxRope_SaveData : public iLuxEntity_SaveData
-{
-	kSerializableClassInit(cLuxRope_SaveData)
-public:
-	////////////////
-	//Variables
-	bool mbRopeCreated;
+class cLuxRope_SaveData : public iLuxEntity_SaveData {
+    kSerializableClassInit(cLuxRope_SaveData) public :
+        ////////////////
+        // Variables
+        bool mbRopeCreated;
 
-	////////////////
-	//Properties
-	cVector3f mvStartPos;
-	cVector3f mvEndPos;
+    ////////////////
+    // Properties
+    cVector3f mvStartPos;
+    cVector3f mvEndPos;
 
-	tString msEndPosNode; 
-	tString msStartBody;
-	tString msEndBody;
+    tString msEndPosNode;
+    tString msStartBody;
+    tString msEndBody;
 
-	float mfMinTotalLength;
-	float mfMaxTotalLength;
-	float mfSegmentLength;
-	float mfDamping;
-	float mfStrength;
-	float mfStiffness;
-	tString msMaterial;
-	float mfRadius;
-	float mfLengthTileAmount;
-	float mfLengthTileSize;
-	tString msSound;
-	float mfSoundStartSpeed;
-	float mfSoundStopSpeed;
-	bool mbAutoMove;
-	float mfAutoMoveAcc;
-	float mfAutoMoveMaxSpeed;
-	
-	////////////////
-	//Methods
-	iLuxEntity* CreateEntity(cLuxMap *apMap);
+    float mfMinTotalLength;
+    float mfMaxTotalLength;
+    float mfSegmentLength;
+    float mfDamping;
+    float mfStrength;
+    float mfStiffness;
+    tString msMaterial;
+    float mfRadius;
+    float mfLengthTileAmount;
+    float mfLengthTileSize;
+    tString msSound;
+    float mfSoundStartSpeed;
+    float mfSoundStopSpeed;
+    bool mbAutoMove;
+    float mfAutoMoveAcc;
+    float mfAutoMoveMaxSpeed;
+
+    ////////////////
+    // Methods
+    iLuxEntity *CreateEntity(cLuxMap *apMap);
 };
 
 //----------------------------------------------
 
-class cLuxRope : public iLuxEntity
-{
-typedef iLuxEntity super_class;
-friend class cLuxAreaRopeLoader;
-public:
-	cLuxRope(const tString& asName, int alID, cLuxMap *apMap);
-	~cLuxRope();
+class cLuxRope : public iLuxEntity {
+    typedef iLuxEntity super_class;
+    friend class cLuxAreaRopeLoader;
 
-	void AfterWorldLoad();
+  public:
+    cLuxRope(const tString &asName, int alID, cLuxMap *apMap);
+    ~cLuxRope();
 
-	void OnSetActive(bool abX);
-	void OnUpdate(float afTimeStep);
+    void AfterWorldLoad();
 
-	//////////////////////
-	//Connection
-	void OnConnectionStateChange(iLuxEntity *apEntity, int alState);
+    void OnSetActive(bool abX);
+    void OnUpdate(float afTimeStep);
 
-	//////////////////////
-	//Quick and dirt entity implementations
-	eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos){ return eLuxFocusCrosshair_Default; }
-	iEntity3D* GetAttachEntity(){ return NULL;}
-	void GiveDamage(float afAmount, int alStrength){}
-	bool CanInteract(iPhysicsBody *apBody){ return false; }
-	bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos){ return false;}
-	int GetBodyNum(){ return 0;}
-	iPhysicsBody* GetBody(int alIdx){ return NULL;}
+    //////////////////////
+    // Connection
+    void OnConnectionStateChange(iLuxEntity *apEntity, int alState);
 
-	//////////////////////
-	//Save data stuff
-	iLuxEntity_SaveData* CreateSaveData();
-	void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
-	void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
-	void SetupSaveData(iLuxEntity_SaveData *apSaveData);
-private:
-	//First tries to find a body by name, if failed, searches for entity.
-	iPhysicsBody* GetBody(const tString& asName);
+    //////////////////////
+    // Quick and dirt entity implementations
+    eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos) {
+        return eLuxFocusCrosshair_Default;
+    }
+    iEntity3D *GetAttachEntity() { return NULL; }
+    void GiveDamage(float afAmount, int alStrength) {}
+    bool CanInteract(iPhysicsBody *apBody) { return false; }
+    bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos) { return false; }
+    int GetBodyNum() { return 0; }
+    iPhysicsBody *GetBody(int alIdx) { return NULL; }
 
-	//////////////////////////////
-	// Variables
-	bool mbRopeCreated;
+    //////////////////////
+    // Save data stuff
+    iLuxEntity_SaveData *CreateSaveData();
+    void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
+    void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
+    void SetupSaveData(iLuxEntity_SaveData *apSaveData);
 
-	iPhysicsRope *mpRope;
-	cRopeEntity *mpRopeGfx;
+  private:
+    // First tries to find a body by name, if failed, searches for entity.
+    iPhysicsBody *GetBody(const tString &asName);
 
-	//////////////////////////////
-	// Properties
-	cVector3f mvStartPos;
-	cVector3f mvEndPos;
+    //////////////////////////////
+    // Variables
+    bool mbRopeCreated;
 
-	tString msEndPosNode; 
-	tString msStartBody;
-	tString msEndBody;
-	
-	float mfMinTotalLength;
-	float mfMaxTotalLength;
-	float mfSegmentLength;
-	float mfDamping;
-	float mfStrength;
-	float mfStiffness;
-	tString msMaterial;
-	float mfRadius;
-	float mfLengthTileAmount;
-	float mfLengthTileSize;
-	tString msSound;
-	float mfSoundStartSpeed;
-	float mfSoundStopSpeed;
-	bool mbAutoMove;
-	float mfAutoMoveAcc;
-	float mfAutoMoveMaxSpeed;
+    iPhysicsRope *mpRope;
+    cRopeEntity *mpRopeGfx;
+
+    //////////////////////////////
+    // Properties
+    cVector3f mvStartPos;
+    cVector3f mvEndPos;
+
+    tString msEndPosNode;
+    tString msStartBody;
+    tString msEndBody;
+
+    float mfMinTotalLength;
+    float mfMaxTotalLength;
+    float mfSegmentLength;
+    float mfDamping;
+    float mfStrength;
+    float mfStiffness;
+    tString msMaterial;
+    float mfRadius;
+    float mfLengthTileAmount;
+    float mfLengthTileSize;
+    tString msSound;
+    float mfSoundStartSpeed;
+    float mfSoundStopSpeed;
+    bool mbAutoMove;
+    float mfAutoMoveAcc;
+    float mfAutoMoveMaxSpeed;
 };
 
 //----------------------------------------------
 
-class cLuxAreaRopeLoader : public iAreaLoader
-{
-public:
-	cLuxAreaRopeLoader(const tString& asName) : iAreaLoader(asName){}
-	virtual ~cLuxAreaRopeLoader(){}
+class cLuxAreaRopeLoader : public iAreaLoader {
+  public:
+    cLuxAreaRopeLoader(const tString &asName) : iAreaLoader(asName) {}
+    virtual ~cLuxAreaRopeLoader() {}
 
-	void Load(const tString &asName, int alID, bool abActive, const cVector3f &avSize, const cMatrixf &a_mtxTransform,cWorld *apWorld);
+    void Load(const tString &asName, int alID, bool abActive, const cVector3f &avSize, const cMatrixf &a_mtxTransform,
+              cWorld *apWorld);
 };
 
 //----------------------------------------------
 
-
-#endif// LUX_AREA_ROPE_H
+#endif // LUX_AREA_ROPE_H

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- * 
+ *
  * This file is part of Amnesia: A Machine For Pigs.
- * 
+ *
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * (at your option) any later version.
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -24,70 +24,69 @@
 #include "graphics/Renderable.h"
 
 namespace hpl {
-	
-	//------------------------------------------
 
-	class cCamera;
-	class cFrustum;
-	class iTexture;
-	class cResources;
-	
-	//------------------------------------------
+//------------------------------------------
 
-	class cFogArea : public iRenderable
-	{
-	public:
-		cFogArea(tString asName, cResources *apResources);
-		virtual ~cFogArea();
+class cCamera;
+class cFrustum;
+class iTexture;
+class cResources;
 
-		//////////////////////////////
-		//Properties
-		const cColor& GetColor(){ return mColor; }
-		void SetColor(const cColor& aCol){ mColor = aCol; }
-		
-		const cVector3f& GetSize(){ return mvSize;}
-		void SetSize(const cVector3f& avSize);
+//------------------------------------------
 
-		void SetStart(float afX){ mfStart = afX;}
-		void SetEnd(float afX){ mfEnd = afX;}
+class cFogArea : public iRenderable {
+  public:
+    cFogArea(tString asName, cResources *apResources);
+    virtual ~cFogArea();
 
-		float GetStart(){ return mfStart;}
-		float GetEnd(){ return mfEnd;}
+    //////////////////////////////
+    // Properties
+    const cColor &GetColor() { return mColor; }
+    void SetColor(const cColor &aCol) { mColor = aCol; }
 
-		void SetFalloffExp(float afX){ mfFalloffExp = afX;}
-		float GetFalloffExp(){ return mfFalloffExp;}
+    const cVector3f &GetSize() { return mvSize; }
+    void SetSize(const cVector3f &avSize);
 
-		void SetShowBacksideWhenOutside(bool abX){ mbShowBacksideWhenOutside=abX; }
-		void SetShowBacksideWhenInside(bool abX){ mbShowBacksideWhenInside=abX; }
-		bool GetShowBacksideWhenOutside(){ return mbShowBacksideWhenOutside; }
-		bool GetShowBacksideWhenInside(){ return mbShowBacksideWhenInside; }
+    void SetStart(float afX) { mfStart = afX; }
+    void SetEnd(float afX) { mfEnd = afX; }
 
-		//////////////////////////////
-		//iEntity implementation
-		tString GetEntityType(){ return "cFogArea";}
+    float GetStart() { return mfStart; }
+    float GetEnd() { return mfEnd; }
 
-		///////////////////////////////
-		//Renderable implementation:
-		cMaterial *GetMaterial(){ return NULL;}
-		iVertexBuffer* GetVertexBuffer(){ return NULL;}
+    void SetFalloffExp(float afX) { mfFalloffExp = afX; }
+    float GetFalloffExp() { return mfFalloffExp; }
 
-		eRenderableType GetRenderType(){ return eRenderableType_FogArea;}
+    void SetShowBacksideWhenOutside(bool abX) { mbShowBacksideWhenOutside = abX; }
+    void SetShowBacksideWhenInside(bool abX) { mbShowBacksideWhenInside = abX; }
+    bool GetShowBacksideWhenOutside() { return mbShowBacksideWhenOutside; }
+    bool GetShowBacksideWhenInside() { return mbShowBacksideWhenInside; }
 
-		int GetMatrixUpdateCount(){ return GetTransformUpdateCount();}
-		cMatrixf* GetModelMatrix(cFrustum* apFrustum);
-		
-	private:
-		cColor mColor;
-		cVector3f mvSize;
-		float mfStart;
-		float mfEnd;
-		float mfFalloffExp;
+    //////////////////////////////
+    // iEntity implementation
+    tString GetEntityType() { return "cFogArea"; }
 
-		bool mbShowBacksideWhenOutside;
-		bool mbShowBacksideWhenInside;
+    ///////////////////////////////
+    // Renderable implementation:
+    cMaterial *GetMaterial() { return NULL; }
+    iVertexBuffer *GetVertexBuffer() { return NULL; }
 
-		cMatrixf m_mtxModelOutput;
-	};
+    eRenderableType GetRenderType() { return eRenderableType_FogArea; }
 
+    int GetMatrixUpdateCount() { return GetTransformUpdateCount(); }
+    cMatrixf *GetModelMatrix(cFrustum *apFrustum);
+
+  private:
+    cColor mColor;
+    cVector3f mvSize;
+    float mfStart;
+    float mfEnd;
+    float mfFalloffExp;
+
+    bool mbShowBacksideWhenOutside;
+    bool mbShowBacksideWhenInside;
+
+    cMatrixf m_mtxModelOutput;
 };
+
+};     // namespace hpl
 #endif // HPL_FOG_AREA_H
