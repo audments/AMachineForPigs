@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -27,40 +27,43 @@
 
 //-----------------------------------------------------------------------
 
-cLuxNode_PlayerStart::cLuxNode_PlayerStart(const tString &asName) {
-    msName = asName;
-    mvPos = 0;
+cLuxNode_PlayerStart::cLuxNode_PlayerStart(const tString& asName)
+{
+	msName = asName;
+	mvPos =0;
 }
 
 //-----------------------------------------------------------------------
 
-cLuxAreaNodeLoader_PlayerStart::cLuxAreaNodeLoader_PlayerStart(const tString &asName) : iAreaLoader(asName) {
-    mbCreatesStaticArea = true;
+cLuxAreaNodeLoader_PlayerStart::cLuxAreaNodeLoader_PlayerStart(const tString& asName) : iAreaLoader(asName)
+{
+	mbCreatesStaticArea = true;
 }
 
 //-----------------------------------------------------------------------
 
-void cLuxAreaNodeLoader_PlayerStart::Load(const tString &asName, int alID, bool abActive, const cVector3f &avSize,
-                                          const cMatrixf &a_mtxTransform, cWorld *apWorld) {
-    cLuxMap *pMap = gpBase->mpCurrentMapLoading;
-    if (pMap == NULL) {
-        cStartPosEntity *pPos = apWorld->CreateStartPos(asName);
-        pPos->SetMatrix(a_mtxTransform);
+void cLuxAreaNodeLoader_PlayerStart::Load(const tString &asName, int alID, bool abActive, const cVector3f &avSize, const cMatrixf &a_mtxTransform,cWorld *apWorld)
+{
+	cLuxMap *pMap = gpBase->mpCurrentMapLoading;
+	if(pMap==NULL)
+	{
+		cStartPosEntity* pPos = apWorld->CreateStartPos(asName);
+		pPos->SetMatrix(a_mtxTransform);
 
-        return;
-    }
+		return;
+	}
 
-    cLuxNode_PlayerStart *pNode = hplNew(cLuxNode_PlayerStart, (asName));
-    pNode->mvPos = a_mtxTransform.GetTranslation() + cVector3f(0, 0.05f, 0);
+	cLuxNode_PlayerStart *pNode = hplNew(cLuxNode_PlayerStart, (asName));
+	pNode->mvPos = a_mtxTransform.GetTranslation() + cVector3f(0,0.05f, 0);
+	
+	cVector3f vForward = cMath::MatrixMul(a_mtxTransform.GetRotation(), cVector3f(0,0,1));
+	
+	pNode->mfAngle = -cMath::GetAngleFromPoints2D(0, cVector2f(vForward.x, vForward.z));
 
-    cVector3f vForward = cMath::MatrixMul(a_mtxTransform.GetRotation(), cVector3f(0, 0, 1));
+	//pNode->mfAngle = cMath::Vector3Angle(vForward, cVector3f(0,0,1));
+	//if(cMath::Vector3Dot(vForward, cVector3f(1,0,0)) < 0) pNode->mfAngle = -pNode->mfAngle;	
 
-    pNode->mfAngle = -cMath::GetAngleFromPoints2D(0, cVector2f(vForward.x, vForward.z));
-
-    // pNode->mfAngle = cMath::Vector3Angle(vForward, cVector3f(0,0,1));
-    // if(cMath::Vector3Dot(vForward, cVector3f(1,0,0)) < 0) pNode->mfAngle = -pNode->mfAngle;
-
-    pMap->AddPlayerStart(pNode);
+	pMap->AddPlayerStart(pNode);
 }
 
 //-----------------------------------------------------------------------
@@ -71,16 +74,17 @@ void cLuxAreaNodeLoader_PlayerStart::Load(const tString &asName, int alID, bool 
 
 //-----------------------------------------------------------------------
 
-cLuxAreaNodeLoader_PathNode::cLuxAreaNodeLoader_PathNode(const tString &asName) : iAreaLoader(asName) {
+cLuxAreaNodeLoader_PathNode::cLuxAreaNodeLoader_PathNode(const tString& asName)  : iAreaLoader(asName) 
+{
 
-    mbCreatesStaticArea = true;
+	mbCreatesStaticArea = true;
 }
 
 //-----------------------------------------------------------------------
 
-void cLuxAreaNodeLoader_PathNode::Load(const tString &asName, int alID, bool abActive, const cVector3f &avSize,
-                                       const cMatrixf &a_mtxTransform, cWorld *apWorld) {
-    apWorld->AddAINode(asName, alID, "Default", a_mtxTransform.GetTranslation() + cVector3f(0, 0.05f, 0));
+void cLuxAreaNodeLoader_PathNode::Load(const tString &asName, int alID, bool abActive, const cVector3f &avSize, const cMatrixf &a_mtxTransform,cWorld *apWorld)
+{
+	apWorld->AddAINode(asName,alID, "Default", a_mtxTransform.GetTranslation()+cVector3f(0,0.05f,0));
 }
 
 //-----------------------------------------------------------------------
@@ -91,20 +95,23 @@ void cLuxAreaNodeLoader_PathNode::Load(const tString &asName, int alID, bool abA
 
 //-----------------------------------------------------------------------
 
-cLuxAreaNodeLoader_PosNode::cLuxAreaNodeLoader_PosNode(const tString &asName) : iAreaLoader(asName) {
-    mbCreatesStaticArea = true;
+cLuxAreaNodeLoader_PosNode::cLuxAreaNodeLoader_PosNode(const tString& asName) : iAreaLoader(asName)
+{
+	mbCreatesStaticArea = true;
 }
 
 //-----------------------------------------------------------------------
 
-void cLuxAreaNodeLoader_PosNode::Load(const tString &asName, int alID, bool abActive, const cVector3f &avSize,
-                                      const cMatrixf &a_mtxTransform, cWorld *apWorld) {
-    cLuxMap *pMap = gpBase->mpCurrentMapLoading;
+void cLuxAreaNodeLoader_PosNode::Load(const tString &asName, int alID, bool abActive, const cVector3f &avSize, const cMatrixf &a_mtxTransform,cWorld *apWorld)
+{
+	cLuxMap *pMap = gpBase->mpCurrentMapLoading;
 
-    cLuxNode_Pos *pNode = hplNew(cLuxNode_Pos, (asName));
-    pNode->mvPos = a_mtxTransform.GetTranslation();
+	cLuxNode_Pos *pNode = hplNew(cLuxNode_Pos, (asName));
+	pNode->mvPos = a_mtxTransform.GetTranslation();
 
-    pMap->AddPosNode(pNode);
+	pMap->AddPosNode(pNode);
 }
 
 //-----------------------------------------------------------------------
+
+

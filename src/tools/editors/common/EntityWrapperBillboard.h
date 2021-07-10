@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,8 +20,8 @@
 #ifndef HPLEDITOR_ENTITY_WRAPPER_BILLBOARD_H
 #define HPLEDITOR_ENTITY_WRAPPER_BILLBOARD_H
 
-#include "EngineEntity.h"
 #include "EntityWrapper.h"
+#include "EngineEntity.h"
 
 //---------------------------------------------------------------------
 
@@ -31,182 +31,189 @@ class iEntityWrapperLight;
 
 //---------------------------------------------------------------------
 
-class cIconEntityBB : public iIconEntity {
-  public:
-    cIconEntityBB(iEntityWrapper *apParent);
-    ~cIconEntityBB();
+class cIconEntityBB : public iIconEntity
+{
+public:
+	cIconEntityBB(iEntityWrapper* apParent);
+	~cIconEntityBB();
 
-    void Update();
+	void Update();
 
-    void Draw(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions, bool abIsSelected,
-              bool abIsActive);
+	void Draw(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, bool abIsSelected, bool abIsActive);
 
-  protected:
-    bool ReCreateBB();
-    void DestroyBB();
+protected:
+	bool ReCreateBB();
+	void DestroyBB();
 };
 
 //---------------------------------------------------------------------
 
 #define BillboardPropIdStart 20
 
-enum eBillboardBool {
-    eBillboardBool_UseOffset = BillboardPropIdStart,
-    eBillboardBool_IsHalo,
+enum eBillboardBool
+{
+	eBillboardBool_UseOffset = BillboardPropIdStart,
+	eBillboardBool_IsHalo,
 
-    eBillboardBool_LastEnum
+	eBillboardBool_LastEnum
 };
 
-enum eBillboardStr {
-    eBillboardStr_Type = BillboardPropIdStart,
-    eBillboardStr_Material,
-    eBillboardStr_ConnectedLight,
+enum eBillboardStr
+{
+	eBillboardStr_Type = BillboardPropIdStart,
+	eBillboardStr_Material,
+	eBillboardStr_ConnectedLight,
 
-    eBillboardStr_LastEnum
+	eBillboardStr_LastEnum
 };
 
-enum eBillboardVec2f {
-    eBillboardVec2f_Size = BillboardPropIdStart,
+enum eBillboardVec2f
+{
+	eBillboardVec2f_Size = BillboardPropIdStart,
 
-    eBillboardVec2f_LastEnum
+	eBillboardVec2f_LastEnum
 };
 
-enum eBillboardVec3f {
-    eBillboardVec3f_HaloSourceSize = BillboardPropIdStart,
+enum eBillboardVec3f
+{
+	eBillboardVec3f_HaloSourceSize = BillboardPropIdStart,
 
-    eBillboardVec3f_LastEnum
+	eBillboardVec3f_LastEnum
 };
 
-enum eBillboardFloat {
-    eBillboardFloat_Offset = BillboardPropIdStart,
+enum eBillboardFloat
+{
+	eBillboardFloat_Offset = BillboardPropIdStart,
 
-    eBillboardFloat_LastEnum
+	eBillboardFloat_LastEnum
 };
 
-enum eBillboardCol {
-    eBillboardCol_Color = BillboardPropIdStart,
+enum eBillboardCol
+{
+	eBillboardCol_Color = BillboardPropIdStart,
 
-    eBillboardColor_LastEnum
-};
-
-//---------------------------------------------------------------------
-
-class cEntityWrapperTypeBillboard : public iEntityWrapperType {
-  public:
-    cEntityWrapperTypeBillboard();
-
-    bool IsScalableGrouped() { return false; }
-
-  protected:
-    iEntityWrapperData *CreateSpecificData();
+	eBillboardColor_LastEnum
 };
 
 //---------------------------------------------------------------------
 
-class cEntityWrapperDataBillboard : public iEntityWrapperData {
-  public:
-    cEntityWrapperDataBillboard(iEntityWrapperType *);
+class cEntityWrapperTypeBillboard : public iEntityWrapperType
+{
+public:
+	cEntityWrapperTypeBillboard();
 
-  protected:
-    iEntityWrapper *CreateSpecificEntity();
+	bool IsScalableGrouped() { return false; }
+
+protected:
+	iEntityWrapperData* CreateSpecificData();
 };
 
 //---------------------------------------------------------------------
 
-class cEntityWrapperBillboard : public iEntityWrapper {
-    friend class cIconEntityBB;
+class cEntityWrapperDataBillboard : public iEntityWrapperData
+{
+public:
+	cEntityWrapperDataBillboard(iEntityWrapperType*);
 
-  public:
-    cEntityWrapperBillboard(iEntityWrapperData *);
-    virtual ~cEntityWrapperBillboard();
+protected:
+	iEntityWrapper* CreateSpecificEntity();
+};
 
-    ///////////////////////////////////////////////////////////
-    // Property Interface
-    bool GetProperty(int, cVector2f &);
-    bool GetProperty(int, cVector3f &);
-    bool GetProperty(int, bool &);
-    bool GetProperty(int, float &);
-    bool GetProperty(int, tString &);
-    bool GetProperty(int, cColor &);
+//---------------------------------------------------------------------
 
-    bool SetProperty(int, const cVector2f &);
-    bool SetProperty(int, const cVector3f &);
-    bool SetProperty(int, const bool &);
-    bool SetProperty(int, const float &);
-    bool SetProperty(int, const tString &);
-    bool SetProperty(int, const cColor &);
+class cEntityWrapperBillboard : public iEntityWrapper
+{
+	friend class cIconEntityBB;
+public:
+	cEntityWrapperBillboard(iEntityWrapperData*);
+	virtual ~cEntityWrapperBillboard();
 
-    void Draw(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions, iEditorEditMode *apEditMode,
-              bool abIsSelected, const cColor &aHighlightCol, const cColor &aDisabledCol);
+	///////////////////////////////////////////////////////////
+	// Property Interface
+	bool GetProperty(int, cVector2f&);
+	bool GetProperty(int, cVector3f&);
+	bool GetProperty(int, bool&);
+	bool GetProperty(int, float&);
+	bool GetProperty(int, tString&);
+	bool GetProperty(int, cColor&);
 
-    void OnSetCulled(bool abX);
+	bool SetProperty(int, const cVector2f&);
+	bool SetProperty(int, const cVector3f&);
+	bool SetProperty(int, const bool&);
+	bool SetProperty(int, const float&);
+	bool SetProperty(int, const tString&);
+	bool SetProperty(int, const cColor&);
 
-    void UpdateEntity();
+	void Draw(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, iEditorEditMode* apEditMode, bool abIsSelected, const cColor& aHighlightCol, const cColor& aDisabledCol);
 
-    // void SaveToElement(cXmlElement* apElement);
+	void OnSetCulled(bool abX);
 
-    cEditorWindowEntityEditBox *CreateEditBox(cEditorEditModeSelect *apEditMode);
+	void UpdateEntity();
 
-    ///////////////////////////////////////////
-    // Own methods
-    void SetBillboardOffset(float afX);
-    float GetBillboardOffset() { return mfBillboardOffset; }
+	//void SaveToElement(cXmlElement* apElement);
 
-    void SetMaterialFile(const tString &asMatFile);
-    const tString &GetMaterialFile() { return msMatFile; }
+	cEditorWindowEntityEditBox* CreateEditBox(cEditorEditModeSelect* apEditMode);
 
-    void SetBillboardSize(const cVector2f &avSize);
-    const cVector2f &GetBillboardSize() { return mvBillboardSize; }
+	///////////////////////////////////////////
+	// Own methods
+	void SetBillboardOffset(float afX);
+	float GetBillboardOffset() { return mfBillboardOffset; }
 
-    void SetBillboardType(const tString &asType);
-    const tString &GetBillboardType() { return msType; }
+	void SetMaterialFile(const tString& asMatFile);
+	const tString& GetMaterialFile() { return msMatFile; }
 
-    void SetBillboardColor(const cColor &aCol);
-    cColor &GetBillboardColor() { return mCol; }
+	void SetBillboardSize(const cVector2f& avSize);
+	const cVector2f& GetBillboardSize() { return mvBillboardSize; }
 
-    void SetConnectedLightName(const tString &asLightName);
-    const tString &GetConnectedLightName() { return msConnectedLightName; }
-    void SetConnectedLight(iEntityWrapperLight *apLight);
+	void SetBillboardType(const tString& asType);
+	const tString& GetBillboardType() { return msType; }
 
-    void SetIsHalo(bool abX);
-    bool GetIsHalo() { return mbIsHalo; }
+	void SetBillboardColor(const cColor& aCol);
+	cColor& GetBillboardColor() { return mCol; }
 
-    void SetHaloSourceSize(const cVector3f &avX);
-    const cVector3f &GetHaloSourceSize() { return mvHaloSourceSize; }
+	void SetConnectedLightName(const tString& asLightName);
+	const tString& GetConnectedLightName() { return msConnectedLightName; }
+	void SetConnectedLight(iEntityWrapperLight* apLight);
 
-    void SetAbsScale(const cVector3f &avScale, int alAxis = -1);
-    const cVector3f &GetScale();
+	void SetIsHalo(bool abX);
+	bool GetIsHalo() { return mbIsHalo; }
 
-    void SetWorldMatrix(const cMatrixf &amtxX);
+	void SetHaloSourceSize(const cVector3f& avX);
+	const cVector3f& GetHaloSourceSize() { return mvHaloSourceSize; }
 
-  protected:
-    static eBillboardType GetBillboardTypeFromString(const tString &asType);
-    iEngineEntity *CreateSpecificEngineEntity();
+	void SetAbsScale(const cVector3f& avScale, int alAxis=-1);
+	const cVector3f& GetScale();
 
-    //////////////////////
-    // Data
-    cVector3f mvAxis;
+	void SetWorldMatrix(const cMatrixf& amtxX);
 
-    tString msMatFile;
-    tString msType;
-    float mfBillboardOffset;
-    cVector2f mvBillboardSize;
-    cColor mCol;
+protected:
+	static eBillboardType GetBillboardTypeFromString(const tString& asType);
+	iEngineEntity* CreateSpecificEngineEntity();
 
-    bool mbIsHalo;
-    cVector3f mvHaloSourceSize;
+	//////////////////////
+	// Data
+	cVector3f mvAxis;
 
-    tString msConnectedLightName;
-    iEntityWrapperLight *mpConnectedLight;
+	tString msMatFile;
+	tString msType;
+	float  mfBillboardOffset;
+	cVector2f mvBillboardSize;
+	cColor mCol;
 
-    bool mbBBUpdated;
-    bool mbTypeUpdated;
-    bool mbMatUpdated;
-    bool mbColorUpdated;
+	bool mbIsHalo;
+	cVector3f mvHaloSourceSize;
 
-    bool mbConnectLightUpdated;
+	tString msConnectedLightName;
+	iEntityWrapperLight* mpConnectedLight;
 
-    cVector3f mvBBScale;
+	bool mbBBUpdated;
+	bool mbTypeUpdated;
+	bool mbMatUpdated;
+	bool mbColorUpdated;
+	
+	bool mbConnectLightUpdated;
+
+	cVector3f mvBBScale;
 };
 
 //---------------------------------------------------------------------

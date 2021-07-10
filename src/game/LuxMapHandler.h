@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -30,149 +30,152 @@ class cLuxMap;
 class cLuxSavedGameMapCollection;
 class cLuxModelCache;
 
-typedef std::list<cLuxMap *> tLuxMapList;
+typedef std::list<cLuxMap*> tLuxMapList;
 typedef tLuxMapList::iterator tLuxMapListIt;
 
 //----------------------------------------------
 
-class cMapHandlerSoundCallback : public iSoundEntityGlobalCallback {
-  public:
-    cMapHandlerSoundCallback();
+class cMapHandlerSoundCallback : public iSoundEntityGlobalCallback
+{
+public:
+	cMapHandlerSoundCallback();
 
-    void OnStart(cSoundEntity *apSoundEntity);
+	void OnStart(cSoundEntity *apSoundEntity);
 
-  private:
-    tStringVec mvEnemyHearableSounds;
+private:
+	tStringVec mvEnemyHearableSounds;
 };
 
 //----------------------------------------------
 
-class cLuxDebugRenderCallback : public iRendererCallback {
-  public:
-    cLuxDebugRenderCallback();
+class cLuxDebugRenderCallback : public iRendererCallback
+{
+public:
+	cLuxDebugRenderCallback();
 
-    void OnPostSolidDraw(cRendererCallbackFunctions *apFunctions);
+	void OnPostSolidDraw(cRendererCallbackFunctions* apFunctions);
 
-    void OnPostTranslucentDraw(cRendererCallbackFunctions *apFunctions);
+	void OnPostTranslucentDraw(cRendererCallbackFunctions* apFunctions);
 
-    iPhysicsWorld *mpPhysicsWorld;
-    iLowLevelGraphics *mpLowLevelGfx;
+	iPhysicsWorld* mpPhysicsWorld;
+	iLowLevelGraphics* mpLowLevelGfx;
+};
+
+
+//----------------------------------------------
+
+class cLuxMapHandler_ChangeMap
+{
+public:
+	cLuxMapHandler_ChangeMap() : mbActive(false){}
+
+	bool mbActive;
+	tString msMapFile;
+	tString msStartPos;
+	tString msSound;
 };
 
 //----------------------------------------------
 
-class cLuxMapHandler_ChangeMap {
-  public:
-    cLuxMapHandler_ChangeMap() : mbActive(false) {}
-
-    bool mbActive;
-    tString msMapFile;
-    tString msStartPos;
-    tString msSound;
-};
-
-//----------------------------------------------
-
-class cLuxMapHandler : public iLuxUpdateable {
-    friend class cMapHandlerSoundCallback;
-
-  public:
-    cLuxMapHandler();
-    ~cLuxMapHandler();
-
-    void OnStart();
-    void Update(float afTimeStep);
-    void Reset();
+class cLuxMapHandler : public iLuxUpdateable
+{
+friend class cMapHandlerSoundCallback;
+public:	
+	cLuxMapHandler();
+	~cLuxMapHandler();
+	
+	void OnStart();
+	void Update(float afTimeStep);
+	void Reset();
     void OnQuit();
 
-    void LoadUserConfig();
-    void SaveUserConfig();
+	void LoadUserConfig();
+	void SaveUserConfig();
 
-    void CreateDataCache();
-    void DestroyDataCache();
+	void CreateDataCache();
+	void DestroyDataCache();
 
-    void UpdateViewportRenderProperties();
+	void UpdateViewportRenderProperties();
 
-    void SetUpdateActive(bool abX);
+	void SetUpdateActive(bool abX);
+	
+	void RenderSolid(cRendererCallbackFunctions* apFunctions);
 
-    void RenderSolid(cRendererCallbackFunctions *apFunctions);
+	void OnEnterContainer(const tString& asOldContainer);
+	void OnLeaveContainer(const tString& asNewContainer);
 
-    void OnEnterContainer(const tString &asOldContainer);
-    void OnLeaveContainer(const tString &asNewContainer);
+	void ChangeMap(const tString& asMapName, const tString& asStartPos, const tString& asStartSound, const tString& asEndSound);
 
-    void ChangeMap(const tString &asMapName, const tString &asStartPos, const tString &asStartSound,
-                   const tString &asEndSound);
+	bool MapIsLoaded(){ return mpCurrentMap != NULL;}
 
-    bool MapIsLoaded() { return mpCurrentMap != NULL; }
+	cLuxMap* LoadMap(const tString& asName, bool abLoadEntities);
+	void DestroyMap(cLuxMap* apMap, bool abRunScript);
 
-    cLuxMap *LoadMap(const tString &asName, bool abLoadEntities);
-    void DestroyMap(cLuxMap *apMap, bool abRunScript);
+	void SetCurrentMap(cLuxMap* apMap, bool abRunScript, bool abFirstTime, const tString& asPlayerPos);
+	cLuxMap* GetCurrentMap(){ return mpCurrentMap;}
 
-    void SetCurrentMap(cLuxMap *apMap, bool abRunScript, bool abFirstTime, const tString &asPlayerPos);
-    cLuxMap *GetCurrentMap() { return mpCurrentMap; }
+	cViewport* GetViewport(){ return mpViewport;}
 
-    cViewport *GetViewport() { return mpViewport; }
+	const tString& GetMapFolder(){ return msMapFolder;}
+	void SetMapFolder(const tString& asFolder){ msMapFolder = asFolder;}
 
-    const tString &GetMapFolder() { return msMapFolder; }
-    void SetMapFolder(const tString &asFolder) { msMapFolder = asFolder; }
+	void PauseSoundsAndMusic();
+	void ResumeSoundsAndMusic();
 
-    void PauseSoundsAndMusic();
-    void ResumeSoundsAndMusic();
-
-    iPostEffect *GetPostEffect_Bloom() { return mpPostEffect_Bloom; }
-    iPostEffect *GetPostEffect_ImageTrail() { return mpPostEffect_ImageTrail; }
-    iPostEffect *GetPostEffect_Sepia() { return mpPostEffect_Sepia; }
-    iPostEffect *GetPostEffect_RadialBlur() { return mpPostEffect_RadialBlur; }
+	iPostEffect *GetPostEffect_Bloom(){ return mpPostEffect_Bloom;}
+	iPostEffect *GetPostEffect_ImageTrail(){ return mpPostEffect_ImageTrail;}
+	iPostEffect *GetPostEffect_Sepia(){ return mpPostEffect_Sepia;}
+	iPostEffect *GetPostEffect_RadialBlur(){ return mpPostEffect_RadialBlur;}
     iPostEffect *GetPostEffect_ColorGrading() { return mpPostEffect_ColorGrading; }
 
-    void ClearSaveMapCollection();
-    cLuxSavedGameMapCollection *GetSavedMapCollection() { return mpSavedGame; }
-    void SetSavedMapCollection(cLuxSavedGameMapCollection *apMaps);
+	void ClearSaveMapCollection();
+	cLuxSavedGameMapCollection *GetSavedMapCollection(){ return mpSavedGame;}
+	void SetSavedMapCollection(cLuxSavedGameMapCollection *apMaps);
 
-    tString FileToMapName(const tString &asFile);
+	tString FileToMapName(const tString& asFile);
+	
+	void AppLostInputFocus();
+	void AppGotInputFocus();
 
-    void AppLostInputFocus();
-    void AppGotInputFocus();
+	//////////////////////////////////
+	// Used to lock the SavedMapCollection
+    iMutex *mpSavedGameMutex; 
+private:
+	void LoadMainConfig();
+	void SaveMainConfig();
 
-    //////////////////////////////////
-    // Used to lock the SavedMapCollection
-    iMutex *mpSavedGameMutex;
+	void CheckMapChange(float afTimeStep);
 
-  private:
-    void LoadMainConfig();
-    void SaveMainConfig();
+	cLuxDebugRenderCallback mRenderCallback;
 
-    void CheckMapChange(float afTimeStep);
+	tString msMapFolder;
 
-    cLuxDebugRenderCallback mRenderCallback;
+	cLuxModelCache *mpDataCache;
 
-    tString msMapFolder;
+	cLuxMap* mpCurrentMap;
 
-    cLuxModelCache *mpDataCache;
+	tLuxMapList mlstMaps;
 
-    cLuxMap *mpCurrentMap;
+	cViewport *mpViewport;
+	cMapHandlerSoundCallback* mpSoundCallback;
 
-    tLuxMapList mlstMaps;
+	bool mbPausedSoundsAndMusic;
 
-    cViewport *mpViewport;
-    cMapHandlerSoundCallback *mpSoundCallback;
+	bool mbUpdateActive;
 
-    bool mbPausedSoundsAndMusic;
-
-    bool mbUpdateActive;
-
-    iPostEffect *mpPostEffect_Bloom;
-    iPostEffect *mpPostEffect_ImageTrail;
-    iPostEffect *mpPostEffect_Sepia;
-    iPostEffect *mpPostEffect_RadialBlur;
-    iPostEffect *mpPostEffect_ToneMapping;
+	iPostEffect *mpPostEffect_Bloom;
+	iPostEffect *mpPostEffect_ImageTrail;
+	iPostEffect *mpPostEffect_Sepia;
+	iPostEffect *mpPostEffect_RadialBlur;
+	iPostEffect *mpPostEffect_ToneMapping;
     iPostEffect *mpPostEffect_ColorGrading;
 
-    cLuxMapHandler_ChangeMap mMapChangeData;
+	cLuxMapHandler_ChangeMap mMapChangeData;
 
-    cLuxSavedGameMapCollection *mpSavedGame;
+	cLuxSavedGameMapCollection *mpSavedGame;
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_MAP_HANDLER_H

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -27,185 +27,192 @@
 
 //----------------------------------------------
 
-class cLuxEnemy_ManPig_SaveData : public iLuxEnemy_SaveData {
-    kSerializableClassInit(cLuxEnemy_ManPig_SaveData) public :
-        ////////////////
-        // Properties
-        bool mbThreatenOnAlert;
-    bool mbFleeFromPlayer;
-    bool mbAutoDisableAfterFlee;
-    bool mbPlayActivateSound;
-    float mfLanternSensitivity;
+class cLuxEnemy_ManPig_SaveData : public iLuxEnemy_SaveData
+{
+	kSerializableClassInit(cLuxEnemy_ManPig_SaveData)
+public:
+	////////////////
+	//Properties
+	bool mbThreatenOnAlert;
+	bool mbFleeFromPlayer;
+	bool mbAutoDisableAfterFlee;
+	bool mbPlayActivateSound;
+	float mfLanternSensitivity;
 
-    bool mbAllowZeroWaitTime;
+	bool mbAllowZeroWaitTime;
+	
+	int mIdleBehavior;
+	int mPatrolMoveSpeed;
 
-    int mIdleBehavior;
-    int mPatrolMoveSpeed;
+	float mfInLanternLightCount;
+	float mfHuntPauseTimeMul;
 
-    float mfInLanternLightCount;
-    float mfHuntPauseTimeMul;
+	float mfDamageMul;
+	float mfRunSpeedMul;
 
-    float mfDamageMul;
-    float mfRunSpeedMul;
-
-    bool mbTeslaTerror;
-    bool mbTeslaFadeDisabled;
-    bool mbTeslaSoundDisabled;
-    bool mbTeslaEasyEscapeDisabled;
+	bool mbTeslaTerror;
+	bool mbTeslaFadeDisabled;
+	bool mbTeslaSoundDisabled;
+	bool mbTeslaEasyEscapeDisabled;
 };
 
 //----------------------------------------------
 
-class cLuxEnemy_ManPig : public iLuxEnemy {
-    friend class cLuxEnemyLoader_ManPig;
-    typedef iLuxEnemy super_class;
+class cLuxEnemy_ManPig : public iLuxEnemy
+{
+friend class cLuxEnemyLoader_ManPig;
+typedef iLuxEnemy super_class;
+public:	
+	cLuxEnemy_ManPig(const tString &asName, int alID, cLuxMap *apMap);
+	virtual ~cLuxEnemy_ManPig();
 
-  public:
-    cLuxEnemy_ManPig(const tString &asName, int alID, cLuxMap *apMap);
-    virtual ~cLuxEnemy_ManPig();
+	//////////////////////
+	//General
+	void OnSetupAfterLoad(cWorld *apWorld);
+	void OnAfterWorldLoad();
+	void UpdateEnemySpecific(float afTimeStep);
 
-    //////////////////////
-    // General
-    void OnSetupAfterLoad(cWorld *apWorld);
-    void OnAfterWorldLoad();
-    void UpdateEnemySpecific(float afTimeStep);
+	//////////////////////
+	//Actions
+	bool StateEventImplement(int alState, eLuxEnemyStateEvent aEvent, cLuxStateMessage *apMessage);
 
-    //////////////////////
-    // Actions
-    bool StateEventImplement(int alState, eLuxEnemyStateEvent aEvent, cLuxStateMessage *apMessage);
 
-    //////////////////////
-    // Debug
-    void OnRenderSolidImplemented(cRendererCallbackFunctions *apFunctions);
+	//////////////////////
+	//Debug
+	void OnRenderSolidImplemented(cRendererCallbackFunctions* apFunctions);
+		
+	
+	//////////////////////
+	//Save data stuff
+	iLuxEntity_SaveData* CreateSaveData();
+	void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
+	void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
+	void SetupSaveData(iLuxEntity_SaveData *apSaveData);
 
-    //////////////////////
-    // Save data stuff
-    iLuxEntity_SaveData *CreateSaveData();
-    void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
-    void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
-    void SetupSaveData(iLuxEntity_SaveData *apSaveData);
+	//////////////////////
+	//Tesla
+	void SetTeslaFadeDisabled(bool abX);
+	void SetTeslaSoundDisabled(bool abX);
+	void SetTeslaEasyEscapeDisabled(bool abX);
+	void ForceTeslaSighting();
+private:
+	//////////////////////
+	// Callbacks
+	bool PlayerIsDetected();
 
-    //////////////////////
-    // Tesla
-    void SetTeslaFadeDisabled(bool abX);
-    void SetTeslaSoundDisabled(bool abX);
-    void SetTeslaEasyEscapeDisabled(bool abX);
-    void ForceTeslaSighting();
+	void OnDisableTriggers();
 
-  private:
-    //////////////////////
-    // Callbacks
-    bool PlayerIsDetected();
+	float GetDamageMul(float afAmount, int alStrength);
 
-    void OnDisableTriggers();
+	void OnSetActiveEnemySpecific(bool abX);
 
-    float GetDamageMul(float afAmount, int alStrength);
+	//////////////////////
+	// State stuff
+	bool CheckEnemyAutoRemoval(float afDistance);
+	void PatrolUpdateGoal();
+	bool FleeTryToFindSafeNode();
+	bool StalkFindNode();
+	bool TrackFindNode();
+	bool TrackTeleportBehindPlayer();
 
-    void OnSetActiveEnemySpecific(bool abX);
+	//////////////////////
+	// Helper
+	void PlayHuntSound();
+	bool InsidePlayerView();
+	void UpdateCheckInLantern(float afTimeStep);
 
-    //////////////////////
-    // State stuff
-    bool CheckEnemyAutoRemoval(float afDistance);
-    void PatrolUpdateGoal();
-    bool FleeTryToFindSafeNode();
-    bool StalkFindNode();
-    bool TrackFindNode();
-    bool TrackTeleportBehindPlayer();
+	void SetTeslaEffectsAmount(float afX);
+	void ResetMindFuckEffects();
+	void UpdateTesla(float afTimeStep);
+		
+	//////////////
+	//Data
+	tString msNoticeSound;
+	tString msGiveUpNoticeSound;
+	tString msEnabledSound; 
+	tString msChaseSound;
 
-    //////////////////////
-    // Helper
-    void PlayHuntSound();
-    bool InsidePlayerView();
-    void UpdateCheckInLantern(float afTimeStep);
+	float mfGroggyDamageCount;
+	float mfAlertToHuntDistance;
+	float mfAlertToInstantHuntDistance;
+	float mfHuntPauseMinTime;
+	float mfHuntPauseMaxTime;
+	float mfIncreaseAlertSpeedDistance;
+	float mfIncreasedAlertSpeedMul;
+	float mfAlertRunTowardsToHuntLimit;
+	float mfAlertRunTowardsCheckDistance;
+	bool mbIsTelsa;
 
-    void SetTeslaEffectsAmount(float afX);
-    void ResetMindFuckEffects();
-    void UpdateTesla(float afTimeStep);
 
-    //////////////
-    // Data
-    tString msNoticeSound;
-    tString msGiveUpNoticeSound;
-    tString msEnabledSound;
-    tString msChaseSound;
+	std::vector<cColor> mvDefaultLightColors;
+	
+	//////////////
+	//Variables
+	float mfWaitTime;
+	float mfAlertRunTowardsCount;
+	bool mbPlayActivateSound;
+	float mfLanternSensitivity;
 
-    float mfGroggyDamageCount;
-    float mfAlertToHuntDistance;
-    float mfAlertToInstantHuntDistance;
-    float mfHuntPauseMinTime;
-    float mfHuntPauseMaxTime;
-    float mfIncreaseAlertSpeedDistance;
-    float mfIncreasedAlertSpeedMul;
-    float mfAlertRunTowardsToHuntLimit;
-    float mfAlertRunTowardsCheckDistance;
-    bool mbIsTelsa;
+	bool mbLastShortAttackWasMiss;
+	bool mbForceChargeAttack;
 
-    std::vector<cColor> mvDefaultLightColors;
+	cSoundEntry *mpMindFuckSound;
+	int mlMindFuckSoundId;
 
-    //////////////
-    // Variables
-    float mfWaitTime;
-    float mfAlertRunTowardsCount;
-    bool mbPlayActivateSound;
-    float mfLanternSensitivity;
+	float mfDamageMul;
+	float mfRunSpeedMul;
+	
+	bool mbThreatenOnAlert;
+	bool mbFleeFromPlayer;
+	bool mbAutoDisableAfterFlee;
 
-    bool mbLastShortAttackWasMiss;
-    bool mbForceChargeAttack;
+	float mfFleeCheckIfInvisbleCount;
 
-    cSoundEntry *mpMindFuckSound;
-    int mlMindFuckSoundId;
+	float mfHuntPauseTimeMul;
 
-    float mfDamageMul;
-    float mfRunSpeedMul;
+	float mfTeslaFlickerTimer;
+	int mlTeslaFlickerState;
+	float mfTeslaEffectAmount;
+	float mfTeslaSpecialNoticeCount;
+	bool mbTeslaMindFuckActive;
+	float mfTeslaMindFuckPulse;
+	float mfTeslaMindFuckPulseAdd;
+	float mfBlackOutCount;
+	float mfBlackOutDurationCount;
+	bool mbTeslaTerror;
+	float mfMindFuckBlinkCount;
+	float mfMindFuckBlinkAmount;
+	int mlMindFuckBlinkState;
+	bool mbTeslaForceSighting;
+	bool mbTeslaFadeDisabled; //Used to avoid tesla fades to override script fades
+	bool mbTeslaSoundDisabled;
+	bool mbTeslaEasyEscapeDisabled; //Allows for chase sequences with the tesla
 
-    bool mbThreatenOnAlert;
-    bool mbFleeFromPlayer;
-    bool mbAutoDisableAfterFlee;
+	eLuxIdleBehavior mIdleBehavior;
+	eLuxEnemyMoveSpeed mPatrolMoveSpeed;
+	bool mbAllowZeroWaitTime;
 
-    float mfFleeCheckIfInvisbleCount;
+	float mfCheckFlashLightShining;
 
-    float mfHuntPauseTimeMul;
-
-    float mfTeslaFlickerTimer;
-    int mlTeslaFlickerState;
-    float mfTeslaEffectAmount;
-    float mfTeslaSpecialNoticeCount;
-    bool mbTeslaMindFuckActive;
-    float mfTeslaMindFuckPulse;
-    float mfTeslaMindFuckPulseAdd;
-    float mfBlackOutCount;
-    float mfBlackOutDurationCount;
-    bool mbTeslaTerror;
-    float mfMindFuckBlinkCount;
-    float mfMindFuckBlinkAmount;
-    int mlMindFuckBlinkState;
-    bool mbTeslaForceSighting;
-    bool mbTeslaFadeDisabled; // Used to avoid tesla fades to override script fades
-    bool mbTeslaSoundDisabled;
-    bool mbTeslaEasyEscapeDisabled; // Allows for chase sequences with the tesla
-
-    eLuxIdleBehavior mIdleBehavior;
-    eLuxEnemyMoveSpeed mPatrolMoveSpeed;
-    bool mbAllowZeroWaitTime;
-
-    float mfCheckFlashLightShining;
-
-    cSoundEntity *mpHuntSound;
-    int mlHuntSoundId;
+	cSoundEntity *mpHuntSound;
+	int mlHuntSoundId;
+	
 };
 
 //----------------------------------------------
 
-class cLuxEnemyLoader_ManPig : public iLuxEnemyLoader {
-  public:
-    cLuxEnemyLoader_ManPig(const tString &asName);
-    virtual ~cLuxEnemyLoader_ManPig() {}
+class cLuxEnemyLoader_ManPig : public iLuxEnemyLoader
+{
+public:
+	cLuxEnemyLoader_ManPig(const tString& asName);
+	virtual ~cLuxEnemyLoader_ManPig(){}
 
-    iLuxEnemy *CreateEnemy(const tString &asName, int alID, cLuxMap *apMap);
-    void LoadVariables(iLuxEnemy *apEnemy, cXmlElement *apRootElem);
-    void LoadInstanceVariables(iLuxEnemy *apEnemy, cResourceVarsObject *apInstanceVars);
+	iLuxEnemy *CreateEnemy(const tString& asName, int alID, cLuxMap *apMap);
+	void LoadVariables(iLuxEnemy *apEnemy, cXmlElement *apRootElem);
+	void LoadInstanceVariables(iLuxEnemy *apEnemy, cResourceVarsObject *apInstanceVars);
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_ENEMY_MAN_PIG_H

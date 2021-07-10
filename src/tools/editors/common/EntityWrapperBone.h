@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,97 +26,99 @@
 
 class cEntityWrapperBone;
 
-typedef std::vector<cEntityWrapperBone *> tBoneWrapperVec;
-typedef tBoneWrapperVec::iterator tBoneWrapperVecIt;
+typedef std::vector<cEntityWrapperBone*> tBoneWrapperVec;
+typedef tBoneWrapperVec::iterator		 tBoneWrapperVecIt;
 
 //------------------------------------------------------------
 
-enum eBoneInt {
-    eBoneInt_ParentBoneID = eObjInt_LastEnum,
+enum eBoneInt
+{
+	eBoneInt_ParentBoneID = eObjInt_LastEnum,
 
-    eBoneInt_LastEnum,
+	eBoneInt_LastEnum,
 };
 
-class cEntityWrapperTypeBone : public iEntityWrapperType {
-    friend class cEntityWrapperBone;
+class cEntityWrapperTypeBone : public iEntityWrapperType
+{
+	friend class cEntityWrapperBone;
+public:
+	cEntityWrapperTypeBone();
 
-  public:
-    cEntityWrapperTypeBone();
+	tIntList GetBoneIDs();
 
-    tIntList GetBoneIDs();
+	void ClearBones(bool);
 
-    void ClearBones(bool);
+protected:
+	void AddBone(cEntityWrapperBone*);
+	void RemoveBone(cEntityWrapperBone*);
 
-  protected:
-    void AddBone(cEntityWrapperBone *);
-    void RemoveBone(cEntityWrapperBone *);
+	iEntityWrapperData* CreateSpecificData();
 
-    iEntityWrapperData *CreateSpecificData();
-
-    tBoneWrapperVec mvBones;
+	tBoneWrapperVec mvBones;
 };
 
-class cEntityWrapperDataBone : public iEntityWrapperData {
-  public:
-    cEntityWrapperDataBone(iEntityWrapperType *);
+class cEntityWrapperDataBone : public iEntityWrapperData
+{
+public:
+	cEntityWrapperDataBone(iEntityWrapperType*);
 
-    // void CopyToEntity(iEntityWrapper* apEntity);
-    // void Load(cXmlElement* apElement);
+	//void CopyToEntity(iEntityWrapper* apEntity);
+	//void Load(cXmlElement* apElement);
 
-  protected:
-    iEntityWrapper *CreateSpecificEntity();
+protected:
+	iEntityWrapper* CreateSpecificEntity();
 
-    int mlParentBoneID;
+	int mlParentBoneID;
 };
 
 //------------------------------------------------------------
 
-typedef std::vector<cEntityWrapperBone *> tBoneWrapperVec;
-typedef tBoneWrapperVec::iterator tBoneWrapperVecIt;
+typedef std::vector<cEntityWrapperBone*> tBoneWrapperVec;
+typedef tBoneWrapperVec::iterator		 tBoneWrapperVecIt;
 
 //------------------------------------------------------------
 
-class cEntityWrapperBone : public iEntityWrapper {
-  public:
-    cEntityWrapperBone(iEntityWrapperData *);
-    ~cEntityWrapperBone();
+class cEntityWrapperBone : public iEntityWrapper
+{
+public:
+	cEntityWrapperBone(iEntityWrapperData*);
+	~cEntityWrapperBone();
 
-    bool SetProperty(int, const int &);
-    bool GetProperty(int, int &);
+	bool SetProperty(int, const int&);
+	bool GetProperty(int, int&);
 
-    void Draw(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions, iEditorEditMode *apEditMode,
-              bool abIsSelected, const cColor &aHighlightCol, const cColor &aDisabledCol);
+	void Draw(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, 
+				iEditorEditMode* apEditMode, bool abIsSelected, const cColor& aHighlightCol, const cColor& aDisabledCol);
+	
+	bool CheckRayIntersect(cEditorWindowViewport*, cVector3f* , tVector3fVec*, float*);
+	//bool CheckRayBoundingVolumeIntersection(const cVector3f& avRayStart, const cVector3f& avRayEnd, cVector3f* apIntersection);
+	//bool CheckRayAccurateIntersection(const cVector3f& avRayStart, const cVector3f& avRayEnd, cVector3f* apIntersection, tVector3fVec* apTriangle=NULL);
 
-    bool CheckRayIntersect(cEditorWindowViewport *, cVector3f *, tVector3fVec *, float *);
-    // bool CheckRayBoundingVolumeIntersection(const cVector3f& avRayStart, const cVector3f& avRayEnd, cVector3f*
-    // apIntersection); bool CheckRayAccurateIntersection(const cVector3f& avRayStart, const cVector3f& avRayEnd,
-    // cVector3f* apIntersection, tVector3fVec* apTriangle=NULL);
+	void OnSetSelected(bool abX);
 
-    void OnSetSelected(bool abX);
+	cEditorWindowEntityEditBox* CreateEditBox(cEditorEditModeSelect* apEditMode);
 
-    cEditorWindowEntityEditBox *CreateEditBox(cEditorEditModeSelect *apEditMode);
+	void DrawBone(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, iEditorEditMode* apEditMode, bool abIsSelected);
 
-    void DrawBone(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions,
-                  iEditorEditMode *apEditMode, bool abIsSelected);
+	void SetParentBone(cEntityWrapperBone* apBone);
+	void AddChildBone(cEntityWrapperBone* apBone);
+	void RemoveChildBone(cEntityWrapperBone* apBone);
 
-    void SetParentBone(cEntityWrapperBone *apBone);
-    void AddChildBone(cEntityWrapperBone *apBone);
-    void RemoveChildBone(cEntityWrapperBone *apBone);
+	tBoneWrapperVec& GetChildBones() { return mvChildBones; }
 
-    tBoneWrapperVec &GetChildBones() { return mvChildBones; }
+	void CreateLinkToParent();
 
-    void CreateLinkToParent();
+	iVertexBuffer* GetBoneVB() { return mpVBBone; }
+	void SetBoneVBColor(const cColor& aCol);
 
-    iVertexBuffer *GetBoneVB() { return mpVBBone; }
-    void SetBoneVBColor(const cColor &aCol);
+protected:
+	void OnAddToWorld();
 
-  protected:
-    void OnAddToWorld();
+	cEntityWrapperBone* mpParentBone;
+	tBoneWrapperVec mvChildBones;
 
-    cEntityWrapperBone *mpParentBone;
-    tBoneWrapperVec mvChildBones;
-
-    iVertexBuffer *mpVBBone;
+	
+	iVertexBuffer* mpVBBone;
 };
 
 //------------------------------------------------------------

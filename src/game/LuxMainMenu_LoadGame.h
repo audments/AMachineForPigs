@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,67 +26,67 @@
 
 //----------------------------------------------
 
-class cLuxMainMenu_LoadGame : public iLuxMainMenuWindow {
-    friend class cLuxInputMenuEntry;
+class cLuxMainMenu_LoadGame : public iLuxMainMenuWindow
+{
+	friend class cLuxInputMenuEntry;
+public:
+	cLuxMainMenu_LoadGame(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin);
+	~cLuxMainMenu_LoadGame();
 
-  public:
-    cLuxMainMenu_LoadGame(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin);
-    ~cLuxMainMenu_LoadGame();
+	void CreateGui();
 
-    void CreateGui();
+	void ExitPressed();
 
-    void ExitPressed();
+private:
+	void OnSetActive(bool abX);
 
-  private:
-    void OnSetActive(bool abX);
+	void PopulateSavedGameList();
 
-    void PopulateSavedGameList();
+	////////////////////////
+	// Properties
+	cVector2f mvWindowSize;
 
-    ////////////////////////
-    // Properties
-    cVector2f mvWindowSize;
+	tWStringVec mvSavedGameFileNames;
 
-    tWStringVec mvSavedGameFileNames;
+	////////////////////////
+	// Layout
+	cWidgetListBox* mpLBSavedGames;
+	cWidgetImage* mpISavedGameSnapShot;
+	iWidget *mpLoadButton;
 
-    ////////////////////////
-    // Layout
-    cWidgetListBox *mpLBSavedGames;
-    cWidgetImage *mpISavedGameSnapShot;
-    iWidget *mpLoadButton;
+	////////////////////////
+	// Callbacks
+	void LoadGame(int alIdx);
 
-    ////////////////////////
-    // Callbacks
-    void LoadGame(int alIdx);
+	bool WindowOnUpdate(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(WindowOnUpdate);
 
-    bool WindowOnUpdate(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(WindowOnUpdate);
+	bool PressOK(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(PressOK);
 
-    bool PressOK(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(PressOK);
+	bool PressCancel(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(PressCancel);
 
-    bool PressCancel(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(PressCancel);
+	bool UIPressList(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(UIPressList);
 
-    bool UIPressList(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(UIPressList);
+	bool UIPress(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(UIPress);
 
-    bool UIPress(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(UIPress);
+	bool UIPressCancel(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(UIPressCancel);
 
-    bool UIPressCancel(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(UIPressCancel);
+	bool LoadGameCallback(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(LoadGameCallback);
 
-    bool LoadGameCallback(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(LoadGameCallback);
+	bool ExitCallback(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(ExitCallback);
 
-    bool ExitCallback(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(ExitCallback);
+	bool LoadSelectionClickChange(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(LoadSelectionClickChange);
 
-    bool LoadSelectionClickChange(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(LoadSelectionClickChange);
-
-    bool LockLoadList(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(LockLoadList);
+	bool LockLoadList(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(LockLoadList);
 };
 
 //----------------------------------------------

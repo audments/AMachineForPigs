@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,72 +26,76 @@
 
 namespace hpl {
 
-class cWidgetContextMenu : public iWidgetMenu {
-  public:
-    cWidgetContextMenu(cGuiSet *apSet, cGuiSkin *apSkin);
-    ~cWidgetContextMenu();
+	class cWidgetContextMenu : public iWidgetMenu
+	{
+	public:
+		cWidgetContextMenu(cGuiSet *apSet, cGuiSkin *apSkin);
+		~cWidgetContextMenu();
 
-    ////////////////////////////////////
-    // iWidgetMenu implemented functions
-    void AddSeparator();
-    void Hide();
+		////////////////////////////////////
+		// iWidgetMenu implemented functions
+		void AddSeparator();
+		void Hide();
 
-    void SavePrevAttentionWidget();
+		void SavePrevAttentionWidget();
 
-    float GetMenuItemWidth();
+		float GetMenuItemWidth();
 
-  protected:
-    ////////////////////////////////////
-    // iWidgetMenu implemented functions
+	protected:
 
-    void UpdateMenuItemsPos(cWidgetMenuItem *apNewItem);
-    void UpdateMenuItemsSize(cWidgetMenuItem *apNewItem);
-    void UpdateMenuWidth(float afWidth);
+		////////////////////////////////////
+		// iWidgetMenu implemented functions
 
-    void OnChildMenuHide();
+		void UpdateMenuItemsPos(cWidgetMenuItem* apNewItem);
+		void UpdateMenuItemsSize(cWidgetMenuItem* apNewItem);
+		void UpdateMenuWidth(float afWidth);
 
-    ////////////////////////////////////
-    // iWidget implemented functions
+		void OnChildMenuHide();
 
-    void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
+		////////////////////////////////////
+		// iWidget implemented functions
 
-    void OnUpdate(float afTimeStep);
+		void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
 
-    void OnInit();
+		void OnUpdate(float afTimeStep);
 
-    bool OnMouseDown(const cGuiMessageData &aData) { return true; }
-    bool OnMouseUp(const cGuiMessageData &aData) { return true; }
+		void OnInit();
 
-    bool OnMouseEnter(const cGuiMessageData &aData);
-    bool OnMouseLeave(const cGuiMessageData &aData);
+		bool OnMouseDown(const cGuiMessageData& aData) {return true;}
+		bool OnMouseUp(const cGuiMessageData& aData) {return true;}
 
-    bool OnKeyPress(const cGuiMessageData &aData);
+		bool OnMouseEnter(const cGuiMessageData& aData);
+		bool OnMouseLeave(const cGuiMessageData& aData);
 
-    bool OnLostFocus(const cGuiMessageData &aData);
-    bool OnGotFocus(const cGuiMessageData &aData);
+		bool OnKeyPress(const cGuiMessageData& aData);
 
-    void OnLoadGraphics();
+		bool OnLostFocus(const cGuiMessageData& aData);
+		bool OnGotFocus(const cGuiMessageData& aData);
 
-    /////////////////////////
-    // Data
-    float mfTimer;
-    float mfHideTime;
+		void OnLoadGraphics();
 
-    // Skin attributes
-    float mfItemHPadding;
-    float mfItemTextLeftPadding;
-    float mfItemTextRightPadding;
-    float mfItemVPadding;
-    float mfItemSeparation;
-    float mfItemArrowIconSize;
-    float mfItemCheckIconSize;
+		/////////////////////////
+		// Data
+		float mfTimer;
+		float mfHideTime;
 
-    // Graphics
-    cGuiGfxElement *mpGfxBackground;
+		// Skin attributes
+		float mfItemHPadding;
+		float mfItemTextLeftPadding;
+		float mfItemTextRightPadding;
+		float mfItemVPadding;
+		float mfItemSeparation;
+		float mfItemArrowIconSize;
+		float mfItemCheckIconSize;
+		
+		// Graphics
+		cGuiGfxElement* mpGfxBackground;
 
-    cGuiGfxElement *mvGfxBorders[4];
-    cGuiGfxElement *mvGfxCorners[4];
+		cGuiGfxElement* mvGfxBorders[4];
+		cGuiGfxElement* mvGfxCorners[4];
+	};
 };
-}; // namespace hpl
 
 #endif // HPL_WIDGET_CONTEXT_MENU
+
+

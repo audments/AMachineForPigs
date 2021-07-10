@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,49 +26,51 @@
 
 //----------------------------------------------
 
-class cLuxGlobalDataHandler : public iLuxUpdateable {
-    friend class cLuxGlobalDataHandler_SaveData;
+class cLuxGlobalDataHandler : public iLuxUpdateable
+{
+friend class cLuxGlobalDataHandler_SaveData;
+public:	
+	cLuxGlobalDataHandler();
+	~cLuxGlobalDataHandler();
+	
+	void LoadAndInitGlobalScript();
+	void OnGameStart();
+	void OnStart();
+	void Update(float afTimeStep);
+	void Reset();
 
-  public:
-    cLuxGlobalDataHandler();
-    ~cLuxGlobalDataHandler();
+	void OnMapEnter(cLuxMap *apMap);
+	void OnMapLeave(cLuxMap *apMap);
 
-    void LoadAndInitGlobalScript();
-    void OnGameStart();
-    void OnStart();
-    void Update(float afTimeStep);
-    void Reset();
+	void LoadScript();
+	bool RecompileScript(tString *apOutput);
 
-    void OnMapEnter(cLuxMap *apMap);
-    void OnMapLeave(cLuxMap *apMap);
+	void RunScript(const tString& asCommand);
 
-    void LoadScript();
-    bool RecompileScript(tString *apOutput);
+	cLuxScriptVar* GetVar(const tString &asName);
 
-    void RunScript(const tString &asCommand);
+	/////////////////////////////
+	// AI
+	bool GetEnemyActivateSoundAllowed();
+	void SetEnemyActivateSoundMade();
 
-    cLuxScriptVar *GetVar(const tString &asName);
 
-    /////////////////////////////
-    // AI
-    bool GetEnemyActivateSoundAllowed();
-    void SetEnemyActivateSoundMade();
+	/////////////////////////////
+	// Misc settings
+	float GetLightLampMaxInfectionIncrease(){return mfLightLampMaxInfectionIncrease;}
+	float GetLightLampMinInfectionIncrease(){return mfLightLampMinInfectionIncrease;}
 
-    /////////////////////////////
-    // Misc settings
-    float GetLightLampMaxInfectionIncrease() { return mfLightLampMaxInfectionIncrease; }
-    float GetLightLampMinInfectionIncrease() { return mfLightLampMinInfectionIncrease; }
+private:
+	tLuxScriptVarMap m_mapVars;
+	iScript *mpScript;
 
-  private:
-    tLuxScriptVarMap m_mapVars;
-    iScript *mpScript;
+	float mfEnemyActivateSoundCount;
 
-    float mfEnemyActivateSoundCount;
-
-    float mfLightLampMaxInfectionIncrease;
-    float mfLightLampMinInfectionIncrease;
+	float mfLightLampMaxInfectionIncrease;
+	float mfLightLampMinInfectionIncrease;
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_GLOBAL_DATA_HANDLER_H

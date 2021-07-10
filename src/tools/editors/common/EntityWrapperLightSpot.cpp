@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -21,8 +21,8 @@
 #include "EntityWrapperLight.h"
 
 #include "EditorBaseClasses.h"
-#include "EditorHelper.h"
 #include "EditorWorld.h"
+#include "EditorHelper.h"
 
 #include "EditorWindowViewport.h"
 
@@ -34,7 +34,9 @@
 
 //---------------------------------------------------------------------------
 
-cIconEntityLightSpot::cIconEntityLightSpot(iEntityWrapper *apParent) : iIconEntityLight(apParent, "Spot") {}
+cIconEntityLightSpot::cIconEntityLightSpot(iEntityWrapper* apParent) : iIconEntityLight(apParent, "Spot")
+{
+}
 
 //---------------------------------------------------------------------------
 
@@ -44,11 +46,12 @@ cIconEntityLightSpot::cIconEntityLightSpot(iEntityWrapper *apParent) : iIconEnti
 
 //---------------------------------------------------------------------------
 
-bool cIconEntityLightSpot::Create(const tString &asName) {
-    cWorld *pWorld = mpParent->GetEditorWorld()->GetWorld();
-    mpEntity = pWorld->CreateLightSpot(asName);
+bool cIconEntityLightSpot::Create(const tString& asName)
+{
+	cWorld* pWorld = mpParent->GetEditorWorld()->GetWorld();
+	mpEntity = pWorld->CreateLightSpot(asName);
 
-    return true;
+	return true;
 }
 
 //---------------------------------------------------------------------------
@@ -59,14 +62,14 @@ bool cIconEntityLightSpot::Create(const tString &asName) {
 
 //---------------------------------------------------------------------------
 
-cEntityWrapperTypeLightSpot::cEntityWrapperTypeLightSpot()
-    : iEntityWrapperTypeLight("SpotLight", eEditorEntityLightType_Spot) {
-    mScaleType = eScaleType_None;
+cEntityWrapperTypeLightSpot::cEntityWrapperTypeLightSpot() : iEntityWrapperTypeLight("SpotLight", eEditorEntityLightType_Spot)
+{
+	mScaleType = eScaleType_None;
 
-    AddFloat(eLightSpotFloat_FOV, "FOV", cMath::ToRad(60));
-    AddFloat(eLightSpotFloat_Aspect, "Aspect", 1);
-    AddFloat(eLightSpotFloat_NearClipPlane, "NearClipPlane", 0.1f);
-    AddString(eLightSpotStr_FalloffMap, "SpotFalloffMap");
+	AddFloat(eLightSpotFloat_FOV, "FOV", cMath::ToRad(60));
+	AddFloat(eLightSpotFloat_Aspect, "Aspect", 1);
+	AddFloat(eLightSpotFloat_NearClipPlane, "NearClipPlane", 0.1f);
+	AddString(eLightSpotStr_FalloffMap, "SpotFalloffMap");
 }
 
 //---------------------------------------------------------------------------
@@ -77,8 +80,10 @@ cEntityWrapperTypeLightSpot::cEntityWrapperTypeLightSpot()
 
 //---------------------------------------------------------------------------
 
-iEntityWrapperData *cEntityWrapperTypeLightSpot::CreateSpecificData() {
-    return hplNew(cEntityWrapperDataLightSpot, (this));
+
+iEntityWrapperData* cEntityWrapperTypeLightSpot::CreateSpecificData()
+{
+	return hplNew(cEntityWrapperDataLightSpot,(this));
 }
 
 //---------------------------------------------------------------------------
@@ -89,8 +94,9 @@ iEntityWrapperData *cEntityWrapperTypeLightSpot::CreateSpecificData() {
 
 //---------------------------------------------------------------------------
 
-cEntityWrapperDataLightSpot::cEntityWrapperDataLightSpot(iEntityWrapperType *apType)
-    : iEntityWrapperDataLight(apType) {}
+cEntityWrapperDataLightSpot::cEntityWrapperDataLightSpot(iEntityWrapperType *apType) : iEntityWrapperDataLight(apType)
+{
+}
 
 //---------------------------------------------------------------------------
 
@@ -100,7 +106,10 @@ cEntityWrapperDataLightSpot::cEntityWrapperDataLightSpot(iEntityWrapperType *apT
 
 //---------------------------------------------------------------------------
 
-iEntityWrapper *cEntityWrapperDataLightSpot::CreateSpecificEntity() { return hplNew(cEntityWrapperLightSpot, (this)); }
+iEntityWrapper* cEntityWrapperDataLightSpot::CreateSpecificEntity()
+{
+	return hplNew(cEntityWrapperLightSpot,(this));
+}
 
 //---------------------------------------------------------------------------
 
@@ -110,11 +119,15 @@ iEntityWrapper *cEntityWrapperDataLightSpot::CreateSpecificEntity() { return hpl
 
 //---------------------------------------------------------------------------
 
-cEntityWrapperLightSpot::cEntityWrapperLightSpot(iEntityWrapperData *apData) : iEntityWrapperLight(apData) {}
+cEntityWrapperLightSpot::cEntityWrapperLightSpot(iEntityWrapperData* apData) : iEntityWrapperLight(apData)
+{
+}
 
 //---------------------------------------------------------------------------
 
-cEntityWrapperLightSpot::~cEntityWrapperLightSpot() {}
+cEntityWrapperLightSpot::~cEntityWrapperLightSpot()
+{
+}
 
 //---------------------------------------------------------------------------
 
@@ -124,118 +137,134 @@ cEntityWrapperLightSpot::~cEntityWrapperLightSpot() {}
 
 //---------------------------------------------------------------------------
 
-bool cEntityWrapperLightSpot::SetProperty(int alPropID, const float &afX) {
-    switch (alPropID) {
-    case eLightSpotFloat_FOV:
-        SetFOV(afX);
-        break;
-    case eLightSpotFloat_Aspect:
-        SetAspect(afX);
-        break;
-    case eLightSpotFloat_NearClipPlane:
-        SetNearClipPlane(afX);
-        break;
-    default:
-        return iEntityWrapperLight::SetProperty(alPropID, afX);
-    }
+bool cEntityWrapperLightSpot::SetProperty(int alPropID, const float& afX)
+{
+	switch(alPropID)
+	{
+	case eLightSpotFloat_FOV:
+		SetFOV(afX);
+		break;
+	case eLightSpotFloat_Aspect:
+		SetAspect(afX);
+		break;
+	case eLightSpotFloat_NearClipPlane:
+		SetNearClipPlane(afX);
+		break;
+	default:
+		return iEntityWrapperLight::SetProperty(alPropID, afX);
+	}
 
-    return true;
+	return true;
 }
 
-bool cEntityWrapperLightSpot::SetProperty(int alPropID, const tString &asX) {
-    switch (alPropID) {
-    case eLightSpotStr_FalloffMap:
-        SetSpotFalloffMap(asX);
-        break;
-    default:
-        return iEntityWrapperLight::SetProperty(alPropID, asX);
-    }
+bool cEntityWrapperLightSpot::SetProperty(int alPropID, const tString& asX)
+{
+	switch(alPropID)
+	{
+	case eLightSpotStr_FalloffMap:
+		SetSpotFalloffMap(asX);
+		break;
+	default:
+		return iEntityWrapperLight::SetProperty(alPropID, asX);
+	}
 
-    return true;
+	return true;
 }
 
-bool cEntityWrapperLightSpot::GetProperty(int alPropID, float &afX) {
-    switch (alPropID) {
-    case eLightSpotFloat_FOV:
-        afX = GetFOV();
-        break;
-    case eLightSpotFloat_Aspect:
-        afX = GetAspect();
-        break;
-    case eLightSpotFloat_NearClipPlane:
-        afX = GetNearClipPlane();
-        break;
-    default:
-        return iEntityWrapperLight::GetProperty(alPropID, afX);
-    }
+bool cEntityWrapperLightSpot::GetProperty(int alPropID, float& afX)
+{
+	switch(alPropID)
+	{
+	case eLightSpotFloat_FOV:
+		afX = GetFOV();
+		break;
+	case eLightSpotFloat_Aspect:
+		afX = GetAspect();
+		break;
+	case eLightSpotFloat_NearClipPlane:
+		afX = GetNearClipPlane();
+		break;
+	default:
+		return iEntityWrapperLight::GetProperty(alPropID, afX);
+	}
 
-    return true;
+	return true;
 }
 
-bool cEntityWrapperLightSpot::GetProperty(int alPropID, tString &asX) {
-    switch (alPropID) {
-    case eLightSpotStr_FalloffMap:
-        asX = GetSpotFalloffMap();
-        break;
-    default:
-        return iEntityWrapperLight::GetProperty(alPropID, asX);
-    }
+bool cEntityWrapperLightSpot::GetProperty(int alPropID, tString& asX)
+{
+	switch(alPropID)
+	{
+	case eLightSpotStr_FalloffMap:
+		asX = GetSpotFalloffMap();
+		break;
+	default:
+		return iEntityWrapperLight::GetProperty(alPropID, asX);
+	}
 
-    return true;
-}
-
-//---------------------------------------------------------------------------
-
-void cEntityWrapperLightSpot::SetFOV(float afAngle) {
-    mfFOV = afAngle;
-
-    ((cLightSpot *)mpEngineEntity->GetEntity())->SetFOV(mfFOV);
-}
-
-//---------------------------------------------------------------------------
-
-void cEntityWrapperLightSpot::SetAspect(float afAngle) {
-    mfAspect = afAngle;
-
-    ((cLightSpot *)mpEngineEntity->GetEntity())->SetAspect(mfAspect);
+	return true;
 }
 
 //---------------------------------------------------------------------------
 
-void cEntityWrapperLightSpot::SetRadius(float afX) {
-    mfRadius = afX;
+void cEntityWrapperLightSpot::SetFOV(float afAngle)
+{
+	mfFOV = afAngle;
 
-    ((cLightSpot *)mpEngineEntity->GetEntity())->SetRadius(mfRadius);
+	((cLightSpot*)mpEngineEntity->GetEntity())->SetFOV(mfFOV);
 }
 
 //---------------------------------------------------------------------------
 
-void cEntityWrapperLightSpot::SetNearClipPlane(float afX) {
-    mfNearClipPlane = afX;
+void cEntityWrapperLightSpot::SetAspect(float afAngle)
+{
+	mfAspect = afAngle;
 
-    ((cLightSpot *)mpEngineEntity->GetEntity())->SetNearClipPlane(mfNearClipPlane);
+	((cLightSpot*)mpEngineEntity->GetEntity())->SetAspect(mfAspect);
 }
 
 //---------------------------------------------------------------------------
 
-void cEntityWrapperLightSpot::SetSpotFalloffMap(const tString &asFalloffMap) {
-    iTexture *pTex = NULL;
-    if (cEditorHelper::LoadTextureResource(eEditorTextureResourceType_1D, asFalloffMap, &pTex)) {
-        msSpotFalloffMap = GetEditorWorld()->GetEditor()->GetFilePathRelativeToWorkingDir(asFalloffMap);
-    } else {
-        cEditorHelper::LoadTextureResource(eEditorTextureResourceType_1D, "core_falloff_linear", &pTex);
-        msSpotFalloffMap = "";
-    }
+void cEntityWrapperLightSpot::SetRadius(float afX)
+{
+	mfRadius = afX;
 
-    ((cLightSpot *)mpEngineEntity->GetEntity())->SetSpotFalloffMap(pTex);
+	((cLightSpot*)mpEngineEntity->GetEntity())->SetRadius(mfRadius);
 }
 
 //---------------------------------------------------------------------------
 
-void cEntityWrapperLightSpot::DrawLightTypeSpecific(cEditorWindowViewport *apViewport,
-                                                    cRendererCallbackFunctions *apFunctions,
-                                                    iEditorEditMode *apEditMode, bool abIsSelected) {
-    ((cLightSpot *)mpEngineEntity->GetEntity())->GetFrustum()->Draw(apFunctions->GetLowLevelGfx(), cColor(1, 1));
+void cEntityWrapperLightSpot::SetNearClipPlane(float afX)
+{
+	mfNearClipPlane = afX;
+
+	((cLightSpot*)mpEngineEntity->GetEntity())->SetNearClipPlane(mfNearClipPlane);
+}
+
+//---------------------------------------------------------------------------
+
+void cEntityWrapperLightSpot::SetSpotFalloffMap(const tString& asFalloffMap)
+{
+	iTexture* pTex = NULL;
+	if(cEditorHelper::LoadTextureResource(eEditorTextureResourceType_1D, asFalloffMap, &pTex))
+	{
+		msSpotFalloffMap =	GetEditorWorld()->GetEditor()->GetFilePathRelativeToWorkingDir(asFalloffMap);
+	}
+	else
+	{
+		cEditorHelper::LoadTextureResource(eEditorTextureResourceType_1D, "core_falloff_linear", &pTex);
+		msSpotFalloffMap = "";
+	}
+
+	((cLightSpot*)mpEngineEntity->GetEntity())->SetSpotFalloffMap(pTex);	
+}
+
+//---------------------------------------------------------------------------
+
+void cEntityWrapperLightSpot::DrawLightTypeSpecific(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, 
+													iEditorEditMode* apEditMode, bool abIsSelected)
+{
+	((cLightSpot*)mpEngineEntity->GetEntity())->GetFrustum()->Draw(apFunctions->GetLowLevelGfx(), cColor(1,1));
 }
 
 //---------------------------------------------------------------------------
@@ -246,4 +275,7 @@ void cEntityWrapperLightSpot::DrawLightTypeSpecific(cEditorWindowViewport *apVie
 
 //---------------------------------------------------------------------------
 
-iEngineEntity *cEntityWrapperLightSpot::CreateSpecificEngineEntity() { return hplNew(cIconEntityLightSpot, (this)); }
+iEngineEntity* cEntityWrapperLightSpot::CreateSpecificEngineEntity()
+{
+	return hplNew(cIconEntityLightSpot,(this));
+}

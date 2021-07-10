@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,50 +26,52 @@ class cEditorEditModeSelect;
 
 enum eEditorEntityType;
 
-class cEditorWindowEntitySearch : public iEditorWindowPopUp {
-  public:
-    cEditorWindowEntitySearch(iEditorBase *apEditor);
-    ~cEditorWindowEntitySearch();
+class cEditorWindowEntitySearch : public iEditorWindowPopUp
+{
+public:
+	cEditorWindowEntitySearch(iEditorBase* apEditor);
+	~cEditorWindowEntitySearch();
 
-  protected:
-    bool SearchParam_OnChange(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(SearchParam_OnChange);
 
-    bool InputCallback(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(InputCallback);
+protected:
+	bool SearchParam_OnChange(iWidget* apWidget,const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(SearchParam_OnChange);
 
-    bool StringLocation_OnCheckChange(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(StringLocation_OnCheckChange);
+	bool InputCallback(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(InputCallback);
 
-    void UpdateFoundEntities();
-    void UpdateItemHighlight();
+	bool StringLocation_OnCheckChange(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(StringLocation_OnCheckChange);
 
-    void OnInitLayout();
-    void OnUpdate(float afTimeStep);
-    void OnWorldModify();
-    void OnSelectionChange();
+	void UpdateFoundEntities();
+	void UpdateItemHighlight();
 
-    void OnSetActive(bool abX);
+	void OnInitLayout();
+	void OnUpdate(float afTimeStep);
+	void OnWorldModify();
+	void OnSelectionChange();
 
-    ////////////////////////////////////
-    // Data
+	void OnSetActive(bool abX);
 
-    cEditorEditModeSelect *mpEditMode;
-    tEntityWrapperList mlstFoundEntities;
-    bool mbStartingWithLocation;
-    bool mbMustUpdateList;
-    bool mbUpdateHighlights;
+	////////////////////////////////////
+	// Data
 
-    ////////////////////////
-    // Layout stuff
+	cEditorEditModeSelect* mpEditMode;
+	tEntityWrapperList mlstFoundEntities;
+	bool mbStartingWithLocation;
+	bool mbMustUpdateList;
+	bool mbUpdateHighlights;
 
-    cWidgetLabel *mpLabelSearch;
-    cWidgetTextBox *mpInputSearch;
+	////////////////////////
+	// Layout stuff
 
-    cWidgetLabel *mpLabelInside;
-    cWidgetComboBox *mpComboBoxInside;
-    cWidgetMultiPropertyListBox *mpListFoundEntities;
-    cWidgetButton *mvButtons[4];
+	cWidgetLabel* mpLabelSearch;
+	cWidgetTextBox* mpInputSearch;
+
+	cWidgetLabel* mpLabelInside;
+	cWidgetComboBox* mpComboBoxInside;
+	cWidgetMultiPropertyListBox* mpListFoundEntities;
+	cWidgetButton* mvButtons[4];
 };
 
-#endif // HPLEDITOR_EDITOR_WINDOW_ENTITY_SEARCH_H
+#endif // HPLEDITOR_EDITOR_WINDOW_ENTITY_SEARCH_H 

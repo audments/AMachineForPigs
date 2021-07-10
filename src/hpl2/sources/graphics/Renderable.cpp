@@ -1,156 +1,160 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include "graphics/Renderable.h"
 
-#include "math/Frustum.h"
 #include "math/Math.h"
+#include "math/Frustum.h"
 #include "system/LowLevelSystem.h"
 
 namespace hpl {
 
-//////////////////////////////////////////////////////////////////////////
-// CONSTRUCTORS
-//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	// CONSTRUCTORS
+	//////////////////////////////////////////////////////////////////////////
 
-//-----------------------------------------------------------------------
+	//-----------------------------------------------------------------------
+	
+	iRenderable::iRenderable(const tString &asName) : iEntity3D(asName)
+	{
+		mlLastMatrixCount = -1;
 
-iRenderable::iRenderable(const tString &asName) : iEntity3D(asName) {
-    mlLastMatrixCount = -1;
+		mbStatic = false;
 
-    mbStatic = false;
+		mlRenderFlags =eRenderableFlag_VisibleInReflection | eRenderableFlag_VisibleInNonReflection;
+		
+		mfIlluminationAmount = 1.0f;
+		mfCoverageAmount = 1.0f;
 
-    mlRenderFlags = eRenderableFlag_VisibleInReflection | eRenderableFlag_VisibleInNonReflection;
+		mlRenderFrameCount = -1;
+		
+		mlCalcScaleMatrixCount = -1;
+		mvCalcScale = cVector3f(1,1,1);
 
-    mfIlluminationAmount = 1.0f;
-    mfCoverageAmount = 1.0f;
+		mbForceShadow = false;
 
-    mlRenderFrameCount = -1;
+		mbIsOneSided = false;
+		mvOneSidedNormal =0;
 
-    mlCalcScaleMatrixCount = -1;
-    mvCalcScale = cVector3f(1, 1, 1);
+		mpModelMatrix = NULL;
 
-    mbForceShadow = false;
+		mfViewSpaceZ = 0;
 
-    mbIsOneSided = false;
-    mvOneSidedNormal = 0;
+		mbIsVisible = true;
 
-    mpModelMatrix = NULL;
+		mlLargePlaneSurfacePlacement = 0;
 
-    mfViewSpaceZ = 0;
+		mpRenderCallback = NULL;
 
-    mbIsVisible = true;
+		mpRenderContainerNode = NULL;
 
-    mlLargePlaneSurfacePlacement = 0;
+		mpRenderableUserData = NULL;
 
-    mpRenderCallback = NULL;
+        mfShaderTimer = 0.0f;
+	}
+	
+	//-----------------------------------------------------------------------
 
-    mpRenderContainerNode = NULL;
+	//////////////////////////////////////////////////////////////////////////
+	// PUBLIC METHODS
+	//////////////////////////////////////////////////////////////////////////
+	
+	//-----------------------------------------------------------------------
 
-    mpRenderableUserData = NULL;
+	void iRenderable::SetRenderFlagBit(tRenderableFlag alFlagBit, bool abSet)
+	{
+		if(abSet)	mlRenderFlags |= alFlagBit;
+		else		mlRenderFlags &= (~alFlagBit); 
 
-    mfShaderTimer = 0.0f;
+		if(mpRenderCallback) mpRenderCallback->OnRenderFlagsChange(this);
+	}
+
+	//-----------------------------------------------------------------------
+
+	void iRenderable::SetVisible(bool abVisible)
+	{
+		mbIsVisible = abVisible;
+
+		OnChangeVisible();
+
+		if(mpRenderCallback) mpRenderCallback->OnVisibleChange(this);
+	}
+
+	//-----------------------------------------------------------------------
+	
+	cMatrixf* iRenderable::GetInvModelMatrix()
+	{
+		cMatrixf *pModelMatrix = GetModelMatrix(NULL);
+		if(pModelMatrix==NULL) return NULL;
+
+		if(mlLastMatrixCount != GetMatrixUpdateCount())
+		{
+			mlLastMatrixCount = GetMatrixUpdateCount();
+						
+			m_mtxInvModel = cMath::MatrixInverse(*pModelMatrix);
+		}
+		
+		return &m_mtxInvModel;
+	}
+
+	//-----------------------------------------------------------------------
+
+	void iRenderable::SetCoverageAmount(float afX)
+	{
+		if(mfCoverageAmount == afX) return;
+
+		mfCoverageAmount = afX;
+
+        //A little hack so that shadows are updated
+		SetTransformUpdated(false);
+	}
+
+	//-----------------------------------------------------------------------
+	
+	const cVector3f& iRenderable::GetCalcScale()
+	{
+		cMatrixf *pModelMatrix = GetModelMatrix(NULL);
+		
+		if(pModelMatrix != NULL && mlCalcScaleMatrixCount != GetMatrixUpdateCount())
+		{
+			mlCalcScaleMatrixCount = GetMatrixUpdateCount();
+			mvCalcScale.x = pModelMatrix->GetRight().Length();
+			mvCalcScale.y = pModelMatrix->GetUp().Length();
+			mvCalcScale.z = pModelMatrix->GetForward().Length();
+		}
+
+		return mvCalcScale;
+	}
+	
+	//-----------------------------------------------------------------------
+	
+	bool iRenderable::CollidesWithBV(cBoundingVolume *apBV)
+	{
+		return cMath::CheckBVIntersection(*GetBoundingVolume(), *apBV);
+	}
+	
+	//-----------------------------------------------------------------------
+
+	bool iRenderable::CollidesWithFrustum(cFrustum *apFrustum)
+	{
+		return apFrustum->CollideBoundingVolume(GetBoundingVolume()) != eCollision_Outside; 
+	}
+	
+	//-----------------------------------------------------------------------
 }
-
-//-----------------------------------------------------------------------
-
-//////////////////////////////////////////////////////////////////////////
-// PUBLIC METHODS
-//////////////////////////////////////////////////////////////////////////
-
-//-----------------------------------------------------------------------
-
-void iRenderable::SetRenderFlagBit(tRenderableFlag alFlagBit, bool abSet) {
-    if (abSet)
-        mlRenderFlags |= alFlagBit;
-    else
-        mlRenderFlags &= (~alFlagBit);
-
-    if (mpRenderCallback)
-        mpRenderCallback->OnRenderFlagsChange(this);
-}
-
-//-----------------------------------------------------------------------
-
-void iRenderable::SetVisible(bool abVisible) {
-    mbIsVisible = abVisible;
-
-    OnChangeVisible();
-
-    if (mpRenderCallback)
-        mpRenderCallback->OnVisibleChange(this);
-}
-
-//-----------------------------------------------------------------------
-
-cMatrixf *iRenderable::GetInvModelMatrix() {
-    cMatrixf *pModelMatrix = GetModelMatrix(NULL);
-    if (pModelMatrix == NULL)
-        return NULL;
-
-    if (mlLastMatrixCount != GetMatrixUpdateCount()) {
-        mlLastMatrixCount = GetMatrixUpdateCount();
-
-        m_mtxInvModel = cMath::MatrixInverse(*pModelMatrix);
-    }
-
-    return &m_mtxInvModel;
-}
-
-//-----------------------------------------------------------------------
-
-void iRenderable::SetCoverageAmount(float afX) {
-    if (mfCoverageAmount == afX)
-        return;
-
-    mfCoverageAmount = afX;
-
-    // A little hack so that shadows are updated
-    SetTransformUpdated(false);
-}
-
-//-----------------------------------------------------------------------
-
-const cVector3f &iRenderable::GetCalcScale() {
-    cMatrixf *pModelMatrix = GetModelMatrix(NULL);
-
-    if (pModelMatrix != NULL && mlCalcScaleMatrixCount != GetMatrixUpdateCount()) {
-        mlCalcScaleMatrixCount = GetMatrixUpdateCount();
-        mvCalcScale.x = pModelMatrix->GetRight().Length();
-        mvCalcScale.y = pModelMatrix->GetUp().Length();
-        mvCalcScale.z = pModelMatrix->GetForward().Length();
-    }
-
-    return mvCalcScale;
-}
-
-//-----------------------------------------------------------------------
-
-bool iRenderable::CollidesWithBV(cBoundingVolume *apBV) {
-    return cMath::CheckBVIntersection(*GetBoundingVolume(), *apBV);
-}
-
-//-----------------------------------------------------------------------
-
-bool iRenderable::CollidesWithFrustum(cFrustum *apFrustum) {
-    return apFrustum->CollideBoundingVolume(GetBoundingVolume()) != eCollision_Outside;
-}
-
-//-----------------------------------------------------------------------
-} // namespace hpl

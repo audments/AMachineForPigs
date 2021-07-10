@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -25,6 +25,7 @@
 #include "LuxEntity.h"
 #include "LuxSavedEngineTypes.h"
 
+
 //----------------------------------------------
 
 class iLuxInteractConnection;
@@ -32,58 +33,67 @@ class iLuxInteractConnection_SaveData;
 
 //----------------------------------------------
 
-class cLuxInteractData_Grab {
-  public:
-    bool mbGrabUseDepth;
-    float mfGrabDepth;
-    float mfGrabDepthInc;
-    float mfGrabMinDepth;
-    float mfGrabMaxDepth;
-    bool mbGrabUseOffset;
-    cVector3f mvGrabPositionOffset;
-    cVector3f mvGrabRotationOffset;
-    float mfGrabThrowImpulse;
-    float mfGrabMassMul;
-    float mfForceMul;
-    float mfTorqueMul;
-    bool mbUseRotation;
+class cLuxInteractData_Grab
+{
+public:
+	bool mbGrabUseDepth;
+	float mfGrabDepth;
+	float mfGrabDepthInc;
+	float mfGrabMinDepth;
+	float mfGrabMaxDepth;
+	bool mbGrabUseOffset;
+	cVector3f mvGrabPositionOffset;
+	cVector3f mvGrabRotationOffset;
+	float mfGrabThrowImpulse;
+	float mfGrabMassMul;
+	float mfForceMul;
+	float mfTorqueMul;
+	bool mbUseRotation;
 };
 
-class cLuxInteractData_Push {
-  public:
-    bool mbPushAtPoint;
-    float mfPushForceMul;
-    float mfPushImpulse;
+class cLuxInteractData_Push
+{
+public:
+	bool mbPushAtPoint;
+	float mfPushForceMul;
+	float mfPushImpulse;
 };
 
-class cLuxInteractData_Slide {
-  public:
-    float mfSlideMaxSpeed;
-    float mfSlideSlowDownFactor;
-    float mfSlideSpeedFactor;
-    float mfSlideThrowImpulse;
+class cLuxInteractData_Slide
+{
+public:
+	float mfSlideMaxSpeed;
+	float mfSlideSlowDownFactor;
+	float mfSlideSpeedFactor;
+	float mfSlideThrowImpulse;
 };
 
-class iLuxInteractData_RotateBase {
-  public:
-    virtual ~iLuxInteractData_RotateBase() {}
+class iLuxInteractData_RotateBase
+{
+public:
+	virtual ~iLuxInteractData_RotateBase() {}
 
-    float mfMoveMaxSpeed;
-    float mfMoveSlowDownFactor;
-    float mfMoveSpeedFactor;
-    float mfMoveThrowImpulse;
+	float mfMoveMaxSpeed;
+	float mfMoveSlowDownFactor;
+	float mfMoveSpeedFactor;
+	float mfMoveThrowImpulse;
 };
 
-class cLuxInteractData_SwingDoor : public iLuxInteractData_RotateBase {
-  public:
+class cLuxInteractData_SwingDoor : public iLuxInteractData_RotateBase
+{
+public:
+	
 };
 
-class cLuxInteractData_Lever : public iLuxInteractData_RotateBase {
-  public:
+class cLuxInteractData_Lever : public iLuxInteractData_RotateBase
+{
+public:
 };
 
-class cLuxInteractData_Wheel : public iLuxInteractData_RotateBase {
-  public:
+class cLuxInteractData_Wheel : public iLuxInteractData_RotateBase
+{
+public:
+	
 };
 
 //----------------------------------------------
@@ -91,60 +101,66 @@ class iLuxProp;
 
 //----------------------------------------------
 
-class cLuxPropConnectedProp : public iSerializable {
-    kSerializableClassInit(cLuxPropConnectedProp) public : tString msName;
+class cLuxPropConnectedProp  : public iSerializable
+{
+	kSerializableClassInit(cLuxPropConnectedProp)
+public:
+	tString msName;
 };
 
 //----------------------------------------------
 
-class iLuxProp_SaveData : public iLuxEntity_SaveData {
-    kSerializableClassInit(iLuxProp_SaveData) public : virtual ~iLuxProp_SaveData();
+class iLuxProp_SaveData : public iLuxEntity_SaveData
+{
+	kSerializableClassInit(iLuxProp_SaveData)
+public:
+	virtual ~iLuxProp_SaveData();
 
-    ////////////////
-    // Properties
-    tString msFileName;
-    cMatrixf m_mtxOnLoadTransform;
-    cVector3f mvOnLoadScale;
+	////////////////
+	//Properties
+	tString msFileName;
+	cMatrixf m_mtxOnLoadTransform;
+	cVector3f mvOnLoadScale;
 
-    float mfHealth;
+	float mfHealth;
 
-    bool mbCheckOutsidePlayer;
+	bool mbCheckOutsidePlayer;
 
-    bool mbEffectsActive;
-    float mfEffectsAlpha;
+	bool mbEffectsActive;
+	float mfEffectsAlpha;
 
-    bool mbStaticPhysics;
+	bool mbStaticPhysics;
 
-    bool mbMoving;
+	bool mbMoving;
 
-    bool mbMovingLinear;
-    float mfMoveLinearMaxSpeed;
-    float mfMoveLinearAcc;
-    float mfMoveLinearSpeed;
-    float mfMoveLinearSlowdownDist;
-    cVector3f mvMoveLinearGoal;
+	bool mbMovingLinear;
+	float mfMoveLinearMaxSpeed;
+	float mfMoveLinearAcc;
+	float mfMoveLinearSpeed;
+	float mfMoveLinearSlowdownDist;
+	cVector3f mvMoveLinearGoal;
 
-    bool mbMovingAngular;
-    float mfMoveAngularMaxSpeed;
-    float mfMoveAngularAcc;
-    float mfMoveAngularSpeed;
-    float mfMoveAngularSlowdownDist;
-    cMatrixf m_mtxMoveAngularGoal;
-
-    bool mbMoveAngularNoGoal;
-    cVector3f mvMoveAngularNoGoalDir;
-
-    bool mbMoveAngularUseOffset;
-    cVector3f mvMoveAngularWorldOffset;
-    cVector3f mvMoveAngularLocalOffset;
+	bool mbMovingAngular;
+	float mfMoveAngularMaxSpeed;
+	float mfMoveAngularAcc;
+	float mfMoveAngularSpeed;
+	float mfMoveAngularSlowdownDist;
+	cMatrixf m_mtxMoveAngularGoal;
+	
+	bool mbMoveAngularNoGoal;
+	cVector3f mvMoveAngularNoGoalDir;
+	
+	bool mbMoveAngularUseOffset;
+	cVector3f mvMoveAngularWorldOffset;
+	cVector3f mvMoveAngularLocalOffset;
     bool mbGlowEnabled;
 
-    int mlCurrentNonLoopAnimIndex;
-    tString msAnimCallback;
+	int mlCurrentNonLoopAnimIndex;
+	tString msAnimCallback;
 
     cMatrixf mpParentBoneOffsetMatrix;
     tString msParentEntityName;
-    tString msParentBoneName;
+	tString msParentBoneName;
 
     float mfBodyMassBackup;
     bool mbBodyCollideBackup;
@@ -152,253 +168,256 @@ class iLuxProp_SaveData : public iLuxEntity_SaveData {
     bool mbBodyActiveBackup;
     cMatrixf mBodyMatrixBackup;
 
-    cContainerVec<cLuxProp_AttachedProp> mvAttachedProps;
+	cContainerVec<cLuxProp_AttachedProp> mvAttachedProps;
 
-    cContainerVec<cLuxPropConnectedProp> mvConnectedProps;
+	cContainerVec<cLuxPropConnectedProp> mvConnectedProps;
 
-    ////////////////
-    // Data
-    cEngineMeshEntity_SaveData mMeshEntity;
+	////////////////
+	//Data
+	cEngineMeshEntity_SaveData mMeshEntity;
 
-    cContainerVec<cEngineBody_SaveData> mvBodies;
-    cContainerVec<cEngineJoint_SaveData> mvJoints;
-    cContainerVec<cEnginePS_SaveData> mvPS;
-    cContainerVec<cEngineBeam_SaveData> mvBeams;
-    cContainerVec<cEngineLight_SaveData> mvLights;
-    cContainerVec<cEngineSound_SaveData> mvSounds;
-    cContainerVec<cEngineBillboard_SaveData> mvBillboards;
+	cContainerVec<cEngineBody_SaveData> mvBodies;
+	cContainerVec<cEngineJoint_SaveData> mvJoints;
+	cContainerVec<cEnginePS_SaveData> mvPS;
+	cContainerVec<cEngineBeam_SaveData> mvBeams;
+	cContainerVec<cEngineLight_SaveData> mvLights;
+	cContainerVec<cEngineSound_SaveData> mvSounds;
+	cContainerVec<cEngineBillboard_SaveData> mvBillboards;
 
-    cContainerVec<iLuxInteractConnection_SaveData *> mvInteractConnections;
+	cContainerVec<iLuxInteractConnection_SaveData*> mvInteractConnections;
 
-    ////////////////
-    // Methods
-    cEnginePS_SaveData *GetParticleSystem(cParticleSystem *apPS);
-    cEngineSound_SaveData *GetSoundEntity(cSoundEntity *apSound);
-    cEngineJoint_SaveData *GetJoint(iPhysicsJoint *apJoint);
+	////////////////
+	//Methods
+	cEnginePS_SaveData* GetParticleSystem(cParticleSystem* apPS);
+	cEngineSound_SaveData* GetSoundEntity(cSoundEntity* apSound);
+	cEngineJoint_SaveData* GetJoint(iPhysicsJoint* apJoint);
 
-    iLuxEntity *CreateEntity(cLuxMap *apMap);
-    iLuxEntity *CreateAndAddEntity(cLuxMap *apMap);
+	iLuxEntity* CreateEntity(cLuxMap *apMap);
+	iLuxEntity* CreateAndAddEntity(cLuxMap *apMap);
 };
 
 //----------------------------------------------
 
-class cLuxProp_LightData {
-  public:
-    cColor mOnColor;
-    float mfOnRadius;
-    bool mbFlickering;
+class cLuxProp_LightData
+{
+public:
+	cColor mOnColor;
+	float mfOnRadius;
+	bool mbFlickering;
 };
 
-class cLuxProp_BillboardData {
-  public:
-    cColor mOnColor;
-    bool mbConnectedToLight;
+class cLuxProp_BillboardData
+{
+public:
+	cColor mOnColor;
+	bool mbConnectedToLight;
 };
 
-class cLuxProp_PSData {
-  public:
-    iEntity3D *mpParent;
-    tString msName;
-    tString msDataName;
-    cMatrixf m_mtxLocalTransform;
+class cLuxProp_PSData
+{
+public:
+	iEntity3D *mpParent;
+	tString msName;
+	tString msDataName;
+	cMatrixf m_mtxLocalTransform;
 };
 
-class cLuxProp_BodyData {
-  public:
+class cLuxProp_BodyData
+{
+public:
     float mfMass;
 };
 
 //----------------------------------------------
 
-class LuxPropDefaultBodySettings {
-  public:
-    bool mbCollideCharacter;
+class LuxPropDefaultBodySettings
+{
+public:
+	bool mbCollideCharacter;
 };
 
 //----------------------------------------------
 
-class iLuxProp : public iLuxEntity {
-    typedef iLuxEntity super_class;
-    friend class cLuxSavedGameEntity;
-    friend class iLuxPropLoader;
-    friend class cLuxProp_WorldCollisionCallback;
+class iLuxProp : public iLuxEntity
+{
+typedef iLuxEntity super_class;
+friend class cLuxSavedGameEntity;
+friend class iLuxPropLoader;
+friend class cLuxProp_WorldCollisionCallback;
+public:	
+	iLuxProp(const tString &asName, int alID, cLuxMap *apMap, eLuxPropType aPropType);
+	virtual ~iLuxProp();
 
-  public:
-    iLuxProp(const tString &asName, int alID, cLuxMap *apMap, eLuxPropType aPropType);
-    virtual ~iLuxProp();
+	//////////////////////
+	//General
+	void SetupAfterLoad(cWorld *apWorld);
 
-    //////////////////////
-    // General
-    void SetupAfterLoad(cWorld *apWorld);
+	void OnUpdate(float afTimeStep);
 
-    void OnUpdate(float afTimeStep);
+	virtual float OnInteractDebugDraw(cGuiSet *apSet,iFontData *apFont, float afStartY){return afStartY;}
 
-    virtual float OnInteractDebugDraw(cGuiSet *apSet, iFontData *apFont, float afStartY) { return afStartY; }
+	void BeforeEntityDestruction();
 
-    void BeforeEntityDestruction();
+	virtual void OnRenderSolid(cRendererCallbackFunctions* apFunctions);
+    
+	//////////////////////
+	//Actions
+	void GiveDamage(float afAmount, int alStrength);
 
-    virtual void OnRenderSolid(cRendererCallbackFunctions *apFunctions);
+	void SetDisableCollisionUntilOutSidePlayer(bool abX);
 
-    //////////////////////
-    // Actions
-    void GiveDamage(float afAmount, int alStrength);
+	void MoveLinearTo(const cVector3f& avGoal, float afAcc, float afMaxSpeed, float afSlowdownDist, bool abResetSpeed);
+	void MoveAngularTo(	const cMatrixf& a_mtxGoal, float afAcc, float afMaxSpeed, float afSlowdownDist, bool abResetSpeed, bool abUseOffset,
+						const cVector3f &avWorldOffset, const cVector3f &avLocalOffset);
+	void RotateAtSpeed(	float afAcc, float afGoalSpeed, const cVector3f& avAxis, bool abResetSpeed,
+						bool abUseOffset, const cVector3f &avWorldOffset, const cVector3f &avLocalOffset);
+	void StopMove();
+	
+	void FadeInMeshEntity(float afTime);
 
-    void SetDisableCollisionUntilOutSidePlayer(bool abX);
+	void ResetProperties();
 
-    void MoveLinearTo(const cVector3f &avGoal, float afAcc, float afMaxSpeed, float afSlowdownDist, bool abResetSpeed);
-    void MoveAngularTo(const cMatrixf &a_mtxGoal, float afAcc, float afMaxSpeed, float afSlowdownDist,
-                       bool abResetSpeed, bool abUseOffset, const cVector3f &avWorldOffset,
-                       const cVector3f &avLocalOffset);
-    void RotateAtSpeed(float afAcc, float afGoalSpeed, const cVector3f &avAxis, bool abResetSpeed, bool abUseOffset,
-                       const cVector3f &avWorldOffset, const cVector3f &avLocalOffset);
-    void StopMove();
+	/**
+	 * asCallback only used if loop is false! Callback syntax: MyFunc(string asProp)
+	 */
+	void PlayAnimation(const tString& asName, float afFadeTime, bool abLoop, const tString& asCallback);
 
-    void FadeInMeshEntity(float afTime);
+	void StopAnimation();
 
-    void ResetProperties();
+	void PlayCurrentAnimation(float afFadeTime, bool abLoop);
+	void PauseCurrentAnimation(float afFadeTime);
+	void SetAnimationSpeed(float afSpeed);
+	void SetAnimationPosition(float afPos);
 
-    /**
-     * asCallback only used if loop is false! Callback syntax: MyFunc(string asProp)
-     */
-    void PlayAnimation(const tString &asName, float afFadeTime, bool abLoop, const tString &asCallback);
+	//////////////////////
+	//Properties
+	eLuxPropType GetPropType(){ return mPropType;}
+	
+	void SetHealth(float afX);
+	float GetHealth(){ return mfHealth;}
 
-    void StopAnimation();
+	void SetEffectsActive(bool abActive, bool abFadeAndPlaySounds);
 
-    void PlayCurrentAnimation(float afFadeTime, bool abLoop);
-    void PauseCurrentAnimation(float afFadeTime);
-    void SetAnimationSpeed(float afSpeed);
-    void SetAnimationPosition(float afPos);
+	float GetEffectsAlpha(){ return mfEffectsAlpha;}
 
-    //////////////////////
-    // Properties
-    eLuxPropType GetPropType() { return mPropType; }
+	void SetIsInteractedWith(bool abX){  mbIsInteractedWith = abX;}
+	bool IsInteractedWith(){  return mbIsInteractedWith;}
 
-    void SetHealth(float afX);
-    float GetHealth() { return mfHealth; }
+	bool IsMoving(){ return mbMoving; }
+	
+	virtual cLuxInteractData_Grab* GetGrabData(){ return NULL;}
+	virtual cLuxInteractData_Push* GetPushData(){ return NULL;}
+	virtual cLuxInteractData_Slide* GetSlideData(){ return NULL;}
+	virtual iLuxInteractData_RotateBase* GetMoveBaseData(){ return NULL;}
 
-    void SetEffectsActive(bool abActive, bool abFadeAndPlaySounds);
+	virtual iEntity3D* GetAttachEntity();
 
-    float GetEffectsAlpha() { return mfEffectsAlpha; }
+	virtual bool ShowOutlinesOnConnectedBodies(){ return true;}
+	
+	const cMatrixf& GetOnLoadTransform(){ return m_mtxOnLoadTransform; }
 
-    void SetIsInteractedWith(bool abX) { mbIsInteractedWith = abX; }
-    bool IsInteractedWith() { return mbIsInteractedWith; }
-
-    bool IsMoving() { return mbMoving; }
-
-    virtual cLuxInteractData_Grab *GetGrabData() { return NULL; }
-    virtual cLuxInteractData_Push *GetPushData() { return NULL; }
-    virtual cLuxInteractData_Slide *GetSlideData() { return NULL; }
-    virtual iLuxInteractData_RotateBase *GetMoveBaseData() { return NULL; }
-
-    virtual iEntity3D *GetAttachEntity();
-
-    virtual bool ShowOutlinesOnConnectedBodies() { return true; }
-
-    const cMatrixf &GetOnLoadTransform() { return m_mtxOnLoadTransform; }
-
-    bool GetStaticPhysics(bool abX) { return mbStaticPhysics; }
-    void SetStaticPhysics(bool abX);
+	bool GetStaticPhysics(bool abX){ return mbStaticPhysics;}
+	void SetStaticPhysics(bool abX);
 
     void FlashIfNearPlayer(float afTimeStep);
-    void SetGlowColor(const cColor &acGlowColor) { mcGlowColor = acGlowColor; }
-    void SetGlowOutlineColor(const cColor &acGlowOutlineColor) { mcGlowOutlineColor = acGlowOutlineColor; }
-    void SetGlowEnabled(bool abGlowEnabled) { mbGlowEnabled = abGlowEnabled; }
+    void SetGlowColor(const cColor & acGlowColor) { mcGlowColor = acGlowColor; }
+    void SetGlowOutlineColor(const cColor & acGlowOutlineColor) { mcGlowOutlineColor = acGlowOutlineColor; }
+    void SetGlowEnabled( bool abGlowEnabled ) { mbGlowEnabled = abGlowEnabled; }
 
-    const cColor &GetGlowColor() { return mcGlowColor; }
-    const cColor &GetGlowOutlineColor() { return mcGlowOutlineColor; }
+    const cColor & GetGlowColor() { return mcGlowColor; }
+    const cColor & GetGlowOutlineColor() { return mcGlowOutlineColor; }
     bool GetGlowEnabled() { return mbGlowEnabled; }
 
-    //////////////////////
-    // Attached Prop
-    iLuxProp *GetAttachmentParent() { return mpAttachmentParent; }
-    void SetAttachmentParent(iLuxProp *apProp) { mpAttachmentParent = apProp; }
+	//////////////////////
+	//Attached Prop
+	iLuxProp* GetAttachmentParent(){ return mpAttachmentParent;}
+	void SetAttachmentParent(iLuxProp *apProp){mpAttachmentParent = apProp; }
 
-    void AddAndAttachProp(const tString &asName, const tString &asFileName, const cMatrixf &a_mtxOffset);
-    bool DestroyAttachedProp(const tString &asName);
-    void DestroyAttachedProp(cLuxProp_AttachedProp *pProp);
-    bool RemoveAttachedProp(iLuxProp *apProp);
-    bool HasAttachedProp() { return mlstAttachedProps.empty() == false; }
-
-    //////////////////////
-    // Connections
-    int AddInteractConnection(iLuxInteractConnection *apConnection);
-    iLuxInteractConnection *GetInteractionConnectionFromIndex(int alIndex);
-    iLuxInteractConnection *GetInteractionConnectionFromName(const tString &asName);
-    void DestroyInteractConnection(iLuxInteractConnection *apConnection);
-    int GetInteractionConnectionNum() { return (int)mvInteractConnections.size(); }
-
-    void InteractConnectionLimit(int alState);
-    void InteractConnectionTurn(float afAngle, float afPrevAngle, float afMinAngle, float afMaxAngle);
+	void AddAndAttachProp(const tString& asName, const tString& asFileName, const cMatrixf& a_mtxOffset);
+	bool DestroyAttachedProp(const tString& asName);
+	void DestroyAttachedProp(cLuxProp_AttachedProp *pProp);
+	bool RemoveAttachedProp(iLuxProp *apProp);
+	bool HasAttachedProp(){ return mlstAttachedProps.empty()==false; }
+	
 
     //////////////////////
-    // Data
-    cMeshEntity *GetMeshEntity() { return mpMeshEntity; }
-    virtual cMeshEntity *GetEffectMeshEntity() { return mpMeshEntity; }
+	//Connections
+	int AddInteractConnection(iLuxInteractConnection *apConnection);
+	iLuxInteractConnection* GetInteractionConnectionFromIndex(int alIndex);
+	iLuxInteractConnection* GetInteractionConnectionFromName(const tString& asName);
+	void DestroyInteractConnection(iLuxInteractConnection *apConnection);
+	int GetInteractionConnectionNum(){ return (int)mvInteractConnections.size(); }
 
-    int GetBodyNum() { return (int)mvBodies.size(); }
-    iPhysicsBody *GetBody(int alIdx) { return mvBodies[alIdx]; }
-    iPhysicsBody *GetBodyFromID(int alID);
-    int GetBodyIndexFromName(const tString &asName);
+	void InteractConnectionLimit(int alState);
+	void InteractConnectionTurn(float afAngle, float afPrevAngle, float afMinAngle, float afMaxAngle);
 
-    iPhysicsBody *GetMainBody() { return mpMainBody ? mpMainBody : mvBodies[0]; }
+	//////////////////////
+	//Data
+	cMeshEntity * GetMeshEntity(){ return mpMeshEntity;}
+	virtual cMeshEntity* GetEffectMeshEntity(){ return mpMeshEntity;}
 
-    //////////////////////
-    // Save data stuff
-    virtual void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
-    virtual void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
-    virtual void SetupSaveData(iLuxEntity_SaveData *apSaveData);
+	int GetBodyNum(){ return (int)mvBodies.size();}
+	iPhysicsBody* GetBody(int alIdx){ return mvBodies[alIdx];}
+	iPhysicsBody* GetBodyFromID(int alID);
+	int GetBodyIndexFromName(const tString& asName);
 
-    void SetParentBone(cBoneState *apParentBone, const cMatrixf &apParentBoneOffsetMatrix, tString asParentName,
-                       tString asParentBoneName);
+	iPhysicsBody* GetMainBody(){ return mpMainBody ? mpMainBody : mvBodies[0];}
+		
+	//////////////////////
+	//Save data stuff
+	virtual void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
+	virtual void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
+	virtual void SetupSaveData(iLuxEntity_SaveData *apSaveData);
+
+    void SetParentBone(cBoneState * apParentBone, const cMatrixf & apParentBoneOffsetMatrix, tString asParentName, tString asParentBoneName);
     void DetachFromParentBone();
-
-  protected:
+protected:
     void UpdateParentBone(float afTimeStep);
 
-    void OnSetActive(bool abX);
+	void OnSetActive(bool abX);
 
-    virtual void OnHealthChange() {}
-    virtual void OnDamage(float afAmount, int alStrength) {}
+	virtual void OnHealthChange(){}
+	virtual void OnDamage(float afAmount, int alStrength){}
 
-    virtual void OnResetProperties() = 0;
+	virtual void OnResetProperties()=0;
 
-    virtual void OnSetupAfterLoad(cWorld *apWorld) = 0;
-    virtual void UpdatePropSpecific(float afTimeStep) = 0;
-    virtual void ImplementedOnSetActive(bool abX) {}
-    virtual void BeforePropDestruction() {}
+	virtual void OnSetupAfterLoad(cWorld *apWorld)=0;
+	virtual void UpdatePropSpecific(float afTimeStep)=0;
+	virtual void ImplementedOnSetActive(bool abX){}
+	virtual void BeforePropDestruction(){}
 
-    virtual void OnStartMove() {}
+	virtual void OnStartMove(){}
 
-    void UpdateAttachedProps(float afTimeStep, bool abForceUpdate);
+	void UpdateAttachedProps(float afTimeStep, bool abForceUpdate);
 
-    void UpdateAnimation(float afTimeStep);
+	void UpdateAnimation(float afTimeStep);
 
-    void SetupEffectData();
-    bool BillboardConnectedToLight(cBillboard *apBB);
-    void UpdateEffectFading(float afTimeStep);
+	void SetupEffectData();
+	bool BillboardConnectedToLight(cBillboard *apBB);
+	void UpdateEffectFading(float afTimeStep);
+	
+	void UpdateMoveSoundVolume();
 
-    void UpdateMoveSoundVolume();
+	void UpdateMoving(float afTimeStep);
+	void UpdateLinearMoving(float afTimeStep);
+	void UpdateAngularMoving(float afTimeStep);
+	
+	void UpdateMeshFading(float afTimeStep);
 
-    void UpdateMoving(float afTimeStep);
-    void UpdateLinearMoving(float afTimeStep);
-    void UpdateAngularMoving(float afTimeStep);
+	void CheckMoveCollision(cVector3f& avMoveVel, float &afSpeed, float afTimeStep);
 
-    void UpdateMeshFading(float afTimeStep);
+	void UpdateCheckIfOutsidePlayer(float afTimeStep);
 
-    void CheckMoveCollision(cVector3f &avMoveVel, float &afSpeed, float afTimeStep);
+	cVector3f GetWorldCenterPos();
 
-    void UpdateCheckIfOutsidePlayer(float afTimeStep);
+	//////////////
+	//Variables
+	float mfHealth;
 
-    cVector3f GetWorldCenterPos();
-
-    //////////////
-    // Variables
-    float mfHealth;
-
-    cBoneState *mpParentBone;
+    cBoneState * mpParentBone;
     cMatrixf mpParentBoneOffsetMatrix;
     tString msParentEntityName;
-    tString msParentBoneName;
+	tString msParentBoneName;
 
     float mfBodyMassBackup;
     bool mbBodyCollideBackup;
@@ -406,143 +425,143 @@ class iLuxProp : public iLuxEntity {
     bool mbBodyActiveBackup;
     cMatrixf mBodyMatrixBackup;
 
-    bool mbCheckOutsidePlayer;
+	bool mbCheckOutsidePlayer;
 
-    bool mbIsInteractedWith;
+	bool mbIsInteractedWith;
 
-    bool mbEffectsActive;
-    float mfEffectsAlpha;
-    bool mbEffectAlphaFading;
+	bool mbEffectsActive;
+	float mfEffectsAlpha;
+	bool mbEffectAlphaFading;
 
     bool mbStaticPhysics;
+	
+	bool mbHasFlickering;
 
-    bool mbHasFlickering;
-
-    bool mbMoving;
-
-    float mfMovingVolume;
-    float mfMoveStartCount;
+	bool mbMoving;
+	
+	float mfMovingVolume;
+	float mfMoveStartCount;
 
     float mfFlashAlpha;
     cColor mcGlowColor, mcGlowOutlineColor;
     bool mbGlowEnabled;
 
-    bool mbMovingLinear;
-    float mfMoveLinearMaxSpeed;
-    float mfMoveLinearAcc;
-    float mfMoveLinearSpeed;
-    float mfMoveLinearSlowdownDist;
-    cVector3f mvMoveLinearGoal;
+	bool mbMovingLinear;
+	float mfMoveLinearMaxSpeed;
+	float mfMoveLinearAcc;
+	float mfMoveLinearSpeed;
+	float mfMoveLinearSlowdownDist;
+	cVector3f mvMoveLinearGoal;
 
-    bool mbMovingAngular;
-    float mfMoveAngularMaxSpeed;
-    float mfMoveAngularAcc;
-    float mfMoveAngularSpeed;
-    float mfMoveAngularSlowdownDist;
-    cMatrixf m_mtxMoveAngularGoal;
-    bool mbMoveAngularNoGoal;
-    cVector3f mvMoveAngularNoGoalDir;
+	bool mbMovingAngular;
+	float mfMoveAngularMaxSpeed;
+	float mfMoveAngularAcc;
+	float mfMoveAngularSpeed;
+	float mfMoveAngularSlowdownDist;
+	cMatrixf m_mtxMoveAngularGoal;
+	bool mbMoveAngularNoGoal;
+	cVector3f mvMoveAngularNoGoalDir;
 
-    bool mbMoveAngularUseOffset;
-    cVector3f mvMoveAngularWorldOffset;
-    cVector3f mvMoveAngularLocalOffset;
+	bool mbMoveAngularUseOffset;
+	cVector3f mvMoveAngularWorldOffset;
+	cVector3f mvMoveAngularLocalOffset;
 
-    cMatrixf m_mtxLastBodyMoveMatrix;
+	cMatrixf m_mtxLastBodyMoveMatrix;
 
-    int mlCurrentNonLoopAnimIndex;
-    tString msAnimCallback;
+	int mlCurrentNonLoopAnimIndex;
+	tString msAnimCallback;
 
-    bool mbDissolveOnDestruction;
-    float mfDissolveTime;
+	bool mbDissolveOnDestruction;
+	float mfDissolveTime;
 
-    float mfFadeInAlpha;
-    float mfFadeInSpeed;
+	float mfFadeInAlpha;
+	float mfFadeInSpeed;
 
-    iLuxProp *mpAttachmentParent;
-    tLuxProp_AttachedPropList mlstAttachedProps;
+	iLuxProp *mpAttachmentParent;
+	tLuxProp_AttachedPropList mlstAttachedProps;
 
-    tStringVec mvConnectedProps;
+	tStringVec mvConnectedProps;
 
-    //////////////
-    // Data
-    int mlToughness;
+	//////////////
+	//Data
+	int mlToughness;
 
-    bool mbShowMesh;
+	bool mbShowMesh;
+	
+	cWorld *mpWorld;
+	std::vector<iPhysicsBody*> mvBodies;
+	std::vector<iPhysicsJoint*> mvJoints;
 
-    cWorld *mpWorld;
-    std::vector<iPhysicsBody *> mvBodies;
-    std::vector<iPhysicsJoint *> mvJoints;
+	std::vector<cEntityBodyExtraData> mvBodyExtraData;
 
-    std::vector<cEntityBodyExtraData> mvBodyExtraData;
+	std::vector<LuxPropDefaultBodySettings> mvDefaultBodySettings;
 
-    std::vector<LuxPropDefaultBodySettings> mvDefaultBodySettings;
+	std::vector<iLight*> mvLights;
+	std::vector<cParticleSystem*> mvParticleSystems;
+	std::vector<cBillboard*> mvBillboards;
+	std::vector<cBeam*> mvBeams;
+	std::vector<cSoundEntity*> mvSoundEntities;
 
-    std::vector<iLight *> mvLights;
-    std::vector<cParticleSystem *> mvParticleSystems;
-    std::vector<cBillboard *> mvBillboards;
-    std::vector<cBeam *> mvBeams;
-    std::vector<cSoundEntity *> mvSoundEntities;
+	std::vector<iLuxInteractConnection*> mvInteractConnections;
 
-    std::vector<iLuxInteractConnection *> mvInteractConnections;
+	std::vector<cLuxProp_BodyData> mvBodyData;
+	std::vector<cLuxProp_PSData> mvEffectPSData;
+	std::vector<cLuxProp_BillboardData> mvEffectBillboardData;
+	std::vector<cLuxProp_LightData> mvEffectLightData;
 
-    std::vector<cLuxProp_BodyData> mvBodyData;
-    std::vector<cLuxProp_PSData> mvEffectPSData;
-    std::vector<cLuxProp_BillboardData> mvEffectBillboardData;
-    std::vector<cLuxProp_LightData> mvEffectLightData;
+	cMeshEntity *mpMeshEntity;
 
-    cMeshEntity *mpMeshEntity;
+	tString msMainBodyName;
+	iPhysicsBody *mpMainBody;
 
-    tString msMainBodyName;
-    iPhysicsBody *mpMainBody;
+	bool mbMoveCheckCollision;
+	tString msMoveStartSound;
+	tString msMoveStopSound;
+	tString msMoveLoopSound;
 
-    bool mbMoveCheckCollision;
-    tString msMoveStartSound;
-    tString msMoveStopSound;
-    tString msMoveLoopSound;
+	cSoundEntity* mpMoveLoopSound;
+	int mlMoveLoopSoundID;
 
-    cSoundEntity *mpMoveLoopSound;
-    int mlMoveLoopSoundID;
+	tString msEffectsOnSound;
+	tString msEffectsOffSound;
+	float mfEffectsOnTime;
+	float mfEffectsOffTime;
+	cColor mEffectsOffLightColor;
+	float mfEffectsOffLightRadius;
 
-    tString msEffectsOnSound;
-    tString msEffectsOffSound;
-    float mfEffectsOnTime;
-    float mfEffectsOffTime;
-    cColor mEffectsOffLightColor;
-    float mfEffectsOffLightRadius;
+	bool mbShowHints;
 
-    bool mbShowHints;
-
-    //////////////
-    // Save specific
-    tString msFileName;
-    cMatrixf m_mtxOnLoadTransform;
-    cVector3f mvOnLoadScale;
-
-  private:
-    eLuxPropType mPropType;
+	//////////////
+	//Save specific
+	tString msFileName;
+	cMatrixf m_mtxOnLoadTransform;
+	cVector3f mvOnLoadScale;
+	
+private:
+	eLuxPropType mPropType;
 };
 
 //----------------------------------------------
 
-class iLuxPropLoader : public cEntityLoader_Object {
-  public:
-    iLuxPropLoader(const tString &asName);
-    virtual ~iLuxPropLoader() {}
+class iLuxPropLoader : public cEntityLoader_Object
+{
+public:
+	iLuxPropLoader(const tString& asName);
+	virtual ~iLuxPropLoader(){}
 
-    void BeforeLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform, cWorld *apWorld,
-                    cResourceVarsObject *apInstanceVars);
-    void AfterLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform, cWorld *apWorld,
-                   cResourceVarsObject *apInstanceVars);
+	void BeforeLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform,cWorld *apWorld, cResourceVarsObject *apInstanceVars);
+	void AfterLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform,cWorld *apWorld, cResourceVarsObject *apInstanceVars);
+	
+	virtual iLuxProp *CreateProp(const tString& asName, int alID, cLuxMap *apMap)=0;
+	virtual void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem)=0;
+	virtual void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars)=0;
 
-    virtual iLuxProp *CreateProp(const tString &asName, int alID, cLuxMap *apMap) = 0;
-    virtual void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem) = 0;
-    virtual void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars) = 0;
-
-  protected:
-    float mfDefaultMaxFocusDistance;
-    bool mbForceFullGameSave;
+protected:
+	float mfDefaultMaxFocusDistance;
+	bool mbForceFullGameSave;
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_PROP_H

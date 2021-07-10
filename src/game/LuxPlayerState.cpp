@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -29,37 +29,40 @@
 //-----------------------------------------------------------------------
 
 ///////////////////////
-// General
+//General
 tString cLuxPlayerStateVars::msHandObject = "";
 
 ///////////////////////
-// Interaction
+//Interaction
 cVector3f cLuxPlayerStateVars::mvInteractPos;
 iPhysicsBody *cLuxPlayerStateVars::mpInteractBody = NULL;
 iLuxProp *cLuxPlayerStateVars::mpInteractProp = NULL;
 
 ///////////////////////
-// Use Item
-cLuxInventory_Item *cLuxPlayerStateVars::mpInventoryItem = NULL;
+//Use Item
+cLuxInventory_Item *cLuxPlayerStateVars::mpInventoryItem  = NULL;
 
 ///////////////////////
-// Ladder
+//Ladder
 cLuxArea_Ladder *cLuxPlayerStateVars::mpLadder = NULL;
 cVector3f cLuxPlayerStateVars::mvLadderStartPos = 0;
 //-----------------------------------------------------------------------
 
-void cLuxPlayerStateVars::SetupInteraction(iPhysicsBody *apBody, const cVector3f &avInteractPos) {
-    mpInteractBody = apBody;
+void cLuxPlayerStateVars::SetupInteraction(iPhysicsBody *apBody, const cVector3f &avInteractPos)
+{
+	mpInteractBody = apBody;
+	
+	iLuxEntity *pEntity = (iLuxEntity*)apBody->GetUserData();
+	if(pEntity && pEntity->GetEntityType() == eLuxEntityType_Prop)
+	{
+		mpInteractProp = static_cast<iLuxProp*>(pEntity);
+	}
 
-    iLuxEntity *pEntity = (iLuxEntity *)apBody->GetUserData();
-    if (pEntity && pEntity->GetEntityType() == eLuxEntityType_Prop) {
-        mpInteractProp = static_cast<iLuxProp *>(pEntity);
-    }
-
-    mvInteractPos = avInteractPos;
+	mvInteractPos = avInteractPos;
 }
 
 //-----------------------------------------------------------------------
+
 
 //////////////////////////////////////////////////////////////////////////
 // CONSTRUCTORS
@@ -67,21 +70,24 @@ void cLuxPlayerStateVars::SetupInteraction(iPhysicsBody *apBody, const cVector3f
 
 //-----------------------------------------------------------------------
 
-iLuxPlayerState::iLuxPlayerState(cLuxPlayer *apPlayer, eLuxPlayerState aType) {
-    mpPlayer = apPlayer;
+iLuxPlayerState::iLuxPlayerState(cLuxPlayer *apPlayer, eLuxPlayerState aType)
+{
+	mpPlayer = apPlayer;
 
-    mType = aType;
+	mType = aType;
 
-    cGui *pGui = gpBase->mpEngine->GetGui();
-    mpDefaultCrosshairGfx = pGui->CreateGfxImage("hud_crosshair_default.tga", eGuiMaterial_Alpha);
-    mpSimpleInteractCrosshairGfx = pGui->CreateGfxImage("hud_crosshair_active.tga", eGuiMaterial_Alpha);
-
-    mPreviousState = eLuxPlayerState_LastEnum;
+	cGui *pGui = gpBase->mpEngine->GetGui();
+	mpDefaultCrosshairGfx = pGui->CreateGfxImage("hud_crosshair_default.tga",eGuiMaterial_Alpha);
+	mpSimpleInteractCrosshairGfx = pGui->CreateGfxImage("hud_crosshair_active.tga",eGuiMaterial_Alpha);
+	
+	mPreviousState = eLuxPlayerState_LastEnum;
 }
 
 //-----------------------------------------------------------------------
 
-iLuxPlayerState::~iLuxPlayerState() {}
+iLuxPlayerState::~iLuxPlayerState()
+{
+}
 
 //-----------------------------------------------------------------------
 
@@ -91,13 +97,16 @@ iLuxPlayerState::~iLuxPlayerState() {}
 
 //-----------------------------------------------------------------------
 
+
 //-----------------------------------------------------------------------
+
 
 //////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS
 //////////////////////////////////////////////////////////////////////////
 
 //-----------------------------------------------------------------------
+
 
 //-----------------------------------------------------------------------
 
@@ -107,23 +116,31 @@ iLuxPlayerState::~iLuxPlayerState() {}
 
 //-----------------------------------------------------------------------
 
-kBeginSerializeBaseVirtual(iLuxPlayerState_SaveData) kSerializeVar(mlPreviousState, eSerializeType_Int32)
-    kEndSerialize()
+kBeginSerializeBaseVirtual(iLuxPlayerState_SaveData)
+kSerializeVar(mlPreviousState, eSerializeType_Int32)
+kEndSerialize()
 
-    //-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
-    void iLuxPlayerState::SaveToSaveData(iLuxPlayerState_SaveData *apSaveData) {
-    apSaveData->mlPreviousState = mPreviousState;
+void iLuxPlayerState::SaveToSaveData(iLuxPlayerState_SaveData* apSaveData)
+{
+	apSaveData->mlPreviousState = mPreviousState;
 }
 
 //-----------------------------------------------------------------------
 
-void iLuxPlayerState::LoadFromSaveDataBeforeEnter(cLuxMap *apMap, iLuxPlayerState_SaveData *apSaveData) {}
+void iLuxPlayerState::LoadFromSaveDataBeforeEnter(cLuxMap *apMap, iLuxPlayerState_SaveData* apSaveData)
+{
 
-//-----------------------------------------------------------------------
-
-void iLuxPlayerState::LoadFromSaveDataAfterEnter(cLuxMap *apMap, iLuxPlayerState_SaveData *apSaveData) {
-    mPreviousState = (eLuxPlayerState)apSaveData->mlPreviousState;
 }
 
 //-----------------------------------------------------------------------
+
+void iLuxPlayerState::LoadFromSaveDataAfterEnter(cLuxMap *apMap, iLuxPlayerState_SaveData* apSaveData)
+{
+	mPreviousState = (eLuxPlayerState)apSaveData->mlPreviousState;
+}
+
+//-----------------------------------------------------------------------
+
+

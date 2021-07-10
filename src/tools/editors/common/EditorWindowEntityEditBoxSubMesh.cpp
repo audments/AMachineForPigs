@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -47,15 +47,17 @@
 
 //----------------------------------------------------------------------------
 
-cEditorWindowEntityEditBoxSubMesh::cEditorWindowEntityEditBoxSubMesh(cEditorEditModeSelect *apEditMode,
-                                                                     cEntityWrapperSubMesh *apObject)
-    : cEditorWindowEntityEditBox(apEditMode, apObject) {
-    mpEntity = apObject;
+cEditorWindowEntityEditBoxSubMesh::cEditorWindowEntityEditBoxSubMesh(cEditorEditModeSelect* apEditMode,cEntityWrapperSubMesh* apObject) : cEditorWindowEntityEditBox(apEditMode,apObject)
+{
+	mpEntity = apObject;
 }
 
 //----------------------------------------------------------------------------
 
-cEditorWindowEntityEditBoxSubMesh::~cEditorWindowEntityEditBoxSubMesh() {}
+cEditorWindowEntityEditBoxSubMesh::~cEditorWindowEntityEditBoxSubMesh()
+{
+	
+}
 
 //----------------------------------------------------------------------------
 
@@ -65,48 +67,49 @@ cEditorWindowEntityEditBoxSubMesh::~cEditorWindowEntityEditBoxSubMesh() {}
 
 //----------------------------------------------------------------------------
 
-void cEditorWindowEntityEditBoxSubMesh::Create() {
-    mpTabGeneral = mpTabs->AddTab(_W("General"));
+void cEditorWindowEntityEditBoxSubMesh::Create()
+{
+	mpTabGeneral = mpTabs->AddTab(_W("General"));
 
-    ////////////////////////////////////////
-    // Properties in Tab 'General'
-    AddPropertyName(mpTabGeneral);
-    AddPropertyPosition(mpTabGeneral);
-    AddPropertyRotation(mpTabGeneral);
-    AddPropertyScale(mpTabGeneral);
+	////////////////////////////////////////
+	// Properties in Tab 'General'
+	AddPropertyName(mpTabGeneral);
+	AddPropertyPosition(mpTabGeneral);
+	AddPropertyRotation(mpTabGeneral);
+	AddPropertyScale(mpTabGeneral);
 
-    cVector3f vPos = cVector3f(10, 10, 0.1f);
-    mpInpName->SetPosition(vPos);
-    vPos.y += mpInpName->GetSize().y + 5;
-    mpInpPosition->SetPosition(vPos);
-    vPos.y += mpInpPosition->GetSize().y + 5;
-    mpInpRotation->SetPosition(vPos);
-    vPos.y += mpInpRotation->GetSize().y + 5;
-    mpInpScale->SetPosition(vPos);
-    vPos.y += mpInpScale->GetSize().y + 5;
+	cVector3f vPos = cVector3f(10,10,0.1f);
+	mpInpName->SetPosition(vPos);
+	vPos.y += mpInpName->GetSize().y +5;
+	mpInpPosition->SetPosition(vPos);
+	vPos.y += mpInpPosition->GetSize().y +5;
+	mpInpRotation->SetPosition(vPos);
+	vPos.y += mpInpRotation->GetSize().y +5;
+	mpInpScale->SetPosition(vPos);
+	vPos.y += mpInpScale->GetSize().y +5;
 
-    mpInpMaterial = CreateInputFile(vPos, _W("Material"), "", mpTabGeneral);
-    mpInpMaterial->SetBrowserType(eEditorResourceType_Material);
+	mpInpMaterial = CreateInputFile(vPos, _W("Material"), "", mpTabGeneral);
+	mpInpMaterial->SetBrowserType(eEditorResourceType_Material);
 }
 
 //----------------------------------------------------------------------------
 
-bool cEditorWindowEntityEditBoxSubMesh::WindowSpecificInputCallback(iEditorInput *apInput) {
-    if (cEditorWindowEntityEditBox::WindowSpecificInputCallback(apInput) == true)
-        return true;
+bool cEditorWindowEntityEditBoxSubMesh::WindowSpecificInputCallback(iEditorInput* apInput)
+{
+	if(cEditorWindowEntityEditBox::WindowSpecificInputCallback(apInput)==true)
+		return true;
 
-    iEditorAction *pAction = NULL;
+	iEditorAction* pAction = NULL;
 
-    if (apInput == mpInpMaterial) {
-        pAction =
-            mpEntity->CreateSetPropertyActionString(eSubMeshStr_Material, cString::To8Char(mpInpMaterial->GetValue()));
-        // pAction = hplNew(cEditorActionSubMeshSetStringProperty,(lID, pWorld, eSubMeshStringProperty_Material,
-        // cString::To8Char(mpInpMaterial->GetValue())));
-    }
+	if(apInput==mpInpMaterial)
+	{
+		pAction = mpEntity->CreateSetPropertyActionString(eSubMeshStr_Material, cString::To8Char(mpInpMaterial->GetValue()));
+		//pAction = hplNew(cEditorActionSubMeshSetStringProperty,(lID, pWorld, eSubMeshStringProperty_Material, cString::To8Char(mpInpMaterial->GetValue())));
+	}
 
-    mpEditor->AddAction(pAction);
+	mpEditor->AddAction(pAction);
 
-    return true;
+	return true;
 }
 
 //----------------------------------------------------------------------------
@@ -117,6 +120,9 @@ bool cEditorWindowEntityEditBoxSubMesh::WindowSpecificInputCallback(iEditorInput
 
 //----------------------------------------------------------------------------
 
-void cEditorWindowEntityEditBoxSubMesh::OnUpdate(float afTimeStep) { cEditorWindowEntityEditBox::OnUpdate(afTimeStep); }
+void cEditorWindowEntityEditBoxSubMesh::OnUpdate(float afTimeStep)
+{
+	cEditorWindowEntityEditBox::OnUpdate(afTimeStep);
+}
 
 //----------------------------------------------------------------------------

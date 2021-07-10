@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -31,62 +31,66 @@ class iEditorBase;
 
 //-------------------------------------------------------------------
 
-class cThumbnailRenderCallback : public iRendererCallback {
-  public:
-    cThumbnailRenderCallback();
+class cThumbnailRenderCallback : public iRendererCallback
+{
+public:
+	cThumbnailRenderCallback();
 
-    void OnPostSolidDraw(cRendererCallbackFunctions *apFunctions);
-    void OnPostTranslucentDraw(cRendererCallbackFunctions *apFunctions);
+	void OnPostSolidDraw(cRendererCallbackFunctions* apFunctions);
+	void OnPostTranslucentDraw(cRendererCallbackFunctions* apFunctions);
 
-    cMeshEntity *mpObject;
+	cMeshEntity* mpObject;
 };
 
 //-------------------------------------------------------------------
 
-class cEditorThumbnailBuilder {
-  public:
-    cEditorThumbnailBuilder(iEditorBase *apEditor);
+class cEditorThumbnailBuilder
+{
+public:
+	cEditorThumbnailBuilder(iEditorBase* apEditor);
 
-    void BuildThumbnailFromMeshEntity(cMeshEntity *apEntity, const tWString &asDestName);
-    void BuildThumbnailFromMesh(const tWString &asMeshFilename, const tWString &asDestName);
-    void BuildThumbnailFromImage(const tWString &asImageFilename, const tWString &asDestName);
 
-    tString GetThumbnailNameFromFile(const tWString &asFile);
-    tWString GetThumbnailNameFromFileW(const tWString &asFile);
+	void BuildThumbnailFromMeshEntity(cMeshEntity* apEntity, const tWString& asDestName);
+	void BuildThumbnailFromMesh(const tWString& asMeshFilename, const tWString& asDestName);
+	void BuildThumbnailFromImage(const tWString& asImageFilename, const tWString& asDestName);
 
-    void VtxBufferAddNormals(const cMatrixf a_mtxTransform, iVertexBuffer *apVtxBuffer, cVector3f &avVecSum,
-                             float &afCount);
-    void FocusCameraOnEntity(cMeshEntity *apEntity);
+	tString GetThumbnailNameFromFile(const tWString& asFile);
+	tWString GetThumbnailNameFromFileW(const tWString& asFile);
 
-    void PreBuild();
-    void PostBuild();
+	void VtxBufferAddNormals(const cMatrixf a_mtxTransform, iVertexBuffer *apVtxBuffer, cVector3f &avVecSum, float& afCount);
+	void FocusCameraOnEntity(cMeshEntity* apEntity);
 
-    void CleanUp();
+	void PreBuild();
+	void PostBuild();
 
-    void Render();
-    void SaveToFile(iTexture *apTexture);
+	void CleanUp();
 
-  protected:
-    /////////////////////////////////////
-    // Data
-    cViewport *mpViewport;
+	void Render();
+	void SaveToFile(iTexture* apTexture);
 
-    cLightPoint *mpCamLight;
+protected:
+	/////////////////////////////////////
+	// Data
+	cViewport* mpViewport;
 
-    iTexture *mpRenderTarget128;
+	cLightPoint* mpCamLight;
 
-    iFrameBuffer *mpFB64;
-    iFrameBuffer *mpFB128;
+	iTexture* mpRenderTarget128;
 
-    iEditorBase *mpEditor;
+	iFrameBuffer* mpFB64;
+	iFrameBuffer* mpFB128;
 
-    cThumbnailRenderCallback mThumbnailCallback;
+	iEditorBase* mpEditor;
 
-    tMeshEntityList mlstThumbnailEntities;
+	cThumbnailRenderCallback mThumbnailCallback;
 
-    SHA1 mSha;
+	tMeshEntityList mlstThumbnailEntities;
+
+	SHA1 mSha;
 };
 
 //-------------------------------------------------------------------
 
-#endif // HPLEDITOR_EDITOR_THUMBNAIL_BUILDER_H
+#endif //HPLEDITOR_EDITOR_THUMBNAIL_BUILDER_H
+
+

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -22,8 +22,9 @@
 #include "../common/EditorInput.h"
 #include "../common/EntityWrapper.h"
 #include "EntityWrapperParticleEmitter.h"
-#include "ParticleEditorWindowEmitterParams.h"
 #include "ParticleEditorWorld.h"
+#include "ParticleEditorWindowEmitterParams.h"
+
 
 //-------------------------------------------------------------
 
@@ -33,14 +34,16 @@
 
 //-------------------------------------------------------------
 
-cParticleEditorWindowEmitters::cParticleEditorWindowEmitters(iEditorBase *apEditor)
-    : iEditorWindow(apEditor, "Emitters window") {
-    mbEmittersUpdated = false;
+cParticleEditorWindowEmitters::cParticleEditorWindowEmitters(iEditorBase* apEditor) : iEditorWindow(apEditor, "Emitters window")
+{
+	mbEmittersUpdated = false;
 }
 
 //-------------------------------------------------------------
 
-cParticleEditorWindowEmitters::~cParticleEditorWindowEmitters() {}
+cParticleEditorWindowEmitters::~cParticleEditorWindowEmitters()
+{
+}
 
 //-------------------------------------------------------------
 
@@ -50,13 +53,17 @@ cParticleEditorWindowEmitters::~cParticleEditorWindowEmitters() {}
 
 //-------------------------------------------------------------
 
-void cParticleEditorWindowEmitters::SelectEntry(int alIdx) { mpEnumEmitters->SetValue(alIdx); }
+void cParticleEditorWindowEmitters::SelectEntry(int alIdx)
+{
+	mpEnumEmitters->SetValue(alIdx);
+}
 
 //-------------------------------------------------------------
 
-void cParticleEditorWindowEmitters::Reset() {
-    mpEnumEmitters->SetValue(-1);
-    mpWEmitterParams->SetCurrentEmitter(NULL);
+void cParticleEditorWindowEmitters::Reset()
+{
+	mpEnumEmitters->SetValue(-1);
+	mpWEmitterParams->SetCurrentEmitter(NULL);
 }
 
 //-------------------------------------------------------------
@@ -67,107 +74,116 @@ void cParticleEditorWindowEmitters::Reset() {
 
 //-------------------------------------------------------------
 
-void cParticleEditorWindowEmitters::OnInitLayout() {
-    SetSize(cVector2f(512, 100));
-    SetPosition(cVector3f(0, 25, 0.1f));
+void cParticleEditorWindowEmitters::OnInitLayout()
+{
+	SetSize(cVector2f(512,100));
+	SetPosition(cVector3f(0,25,0.1f));
 
-    cVector3f vPos = cVector3f(10, 10, 0.1f);
-    mpEnumEmitters = CreateInputEnum(vPos, _W("Emitters"), "InpEmitters", tWStringList());
+	cVector3f vPos = cVector3f(10,10,0.1f);
+	mpEnumEmitters = CreateInputEnum(vPos, _W("Emitters"), "InpEmitters", tWStringList());
 
-    vPos.y += mpEnumEmitters->GetSize().y;
+	vPos.y += mpEnumEmitters->GetSize().y;
 
-    mpBNewEmitter = mpSet->CreateWidgetButton(vPos, cVector2f(70, 25), _W("Add"), mpBGFrame);
-    mpBNewEmitter->AddCallback(eGuiMessage_ButtonPressed, this, kGuiCallback(Button_OnPressed));
+	mpBNewEmitter = mpSet->CreateWidgetButton(vPos, cVector2f(70,25), _W("Add"), mpBGFrame);
+	mpBNewEmitter->AddCallback(eGuiMessage_ButtonPressed, this, kGuiCallback(Button_OnPressed));
 
-    mpBCopyEmitter = mpSet->CreateWidgetButton(vPos + cVector3f(80, 0, 0), cVector2f(70, 25), _W("Copy"), mpBGFrame);
-    mpBCopyEmitter->AddCallback(eGuiMessage_ButtonPressed, this, kGuiCallback(Button_OnPressed));
+	mpBCopyEmitter = mpSet->CreateWidgetButton(vPos + cVector3f(80,0,0), cVector2f(70,25), _W("Copy"), mpBGFrame);
+	mpBCopyEmitter->AddCallback(eGuiMessage_ButtonPressed, this, kGuiCallback(Button_OnPressed));
 
-    mpBDeleteEmitter =
-        mpSet->CreateWidgetButton(vPos + cVector3f(160, 0, 0), cVector2f(70, 25), _W("Delete"), mpBGFrame);
-    mpBDeleteEmitter->AddCallback(eGuiMessage_ButtonPressed, this, kGuiCallback(Button_OnPressed));
+	mpBDeleteEmitter = mpSet->CreateWidgetButton(vPos + cVector3f(160,0,0), cVector2f(70,25), _W("Delete"), mpBGFrame);
+	mpBDeleteEmitter->AddCallback(eGuiMessage_ButtonPressed, this, kGuiCallback(Button_OnPressed));
 
-    mpWEmitterParams = hplNew(cParticleEditorWindowEmitterParams, (mpEditor));
-    mpWEmitterParams->Init();
-    mpWEmitterParams->SetActive(true);
-    mpEditor->AddWindow(mpWEmitterParams);
+	mpWEmitterParams = hplNew(cParticleEditorWindowEmitterParams,(mpEditor));
+	mpWEmitterParams->Init();
+	mpWEmitterParams->SetActive(true);
+	mpEditor->AddWindow(mpWEmitterParams);
 }
 
 //-------------------------------------------------------------
 
-void cParticleEditorWindowEmitters::OnUpdate(float afTimeStep) {
-    cParticleEditorWorld *pWorld = (cParticleEditorWorld *)mpEditor->GetEditorWorld();
-    if (pWorld->GetEmittersUpdated() == false)
-        return;
+void cParticleEditorWindowEmitters::OnUpdate(float afTimeStep)
+{
+	cParticleEditorWorld* pWorld = (cParticleEditorWorld*)mpEditor->GetEditorWorld();
+	if(pWorld->GetEmittersUpdated()==false) return;
 
-    pWorld->SetEmittersUpdated(false);
+	pWorld->SetEmittersUpdated(false);
 
-    int lSelectedItem = mpEnumEmitters->GetValue();
+	int lSelectedItem = mpEnumEmitters->GetValue();
 
-    mvEmitters.clear();
-    mpEnumEmitters->ClearValues();
-    tEntityWrapperMap &mapEmitters = mpEditor->GetEditorWorld()->GetEntities();
+	mvEmitters.clear();
+	mpEnumEmitters->ClearValues();
+	tEntityWrapperMap& mapEmitters = mpEditor->GetEditorWorld()->GetEntities();
 
-    tEntityWrapperMapIt itEmitters = mapEmitters.begin();
-    for (; itEmitters != mapEmitters.end(); ++itEmitters) {
-        iEntityWrapper *pEmitter = itEmitters->second;
-        mpEnumEmitters->AddValue(cString::To16Char(pEmitter->GetName()));
-        mvEmitters.push_back((cEntityWrapperParticleEmitter *)pEmitter);
-    }
+	tEntityWrapperMapIt itEmitters = mapEmitters.begin();
+	for(;itEmitters!=mapEmitters.end();++itEmitters)
+	{
+		iEntityWrapper* pEmitter = itEmitters->second;
+		mpEnumEmitters->AddValue(cString::To16Char(pEmitter->GetName()));
+		mvEmitters.push_back((cEntityWrapperParticleEmitter*)pEmitter);
+	}
 
-    mpEnumEmitters->SetValue(lSelectedItem);
+	mpEnumEmitters->SetValue(lSelectedItem);
 }
 
 //-------------------------------------------------------------
 
-bool cParticleEditorWindowEmitters::WindowSpecificInputCallback(iEditorInput *apInput) {
-    if (apInput == mpEnumEmitters) {
-        int lIdx = mpEnumEmitters->GetValue();
-        cEntityWrapperParticleEmitter *pEmitter = NULL;
-        if (lIdx >= 0)
-            pEmitter = mvEmitters[lIdx];
-        mpWEmitterParams->SetCurrentEmitter(pEmitter);
-        mpEditor->SetLayoutNeedsUpdate(true);
-    }
-    return true;
+bool cParticleEditorWindowEmitters::WindowSpecificInputCallback(iEditorInput* apInput)
+{
+	if(apInput==mpEnumEmitters)
+	{
+		int lIdx = mpEnumEmitters->GetValue();
+		cEntityWrapperParticleEmitter* pEmitter = NULL;
+		if(lIdx>=0)pEmitter = mvEmitters[lIdx];
+		mpWEmitterParams->SetCurrentEmitter(pEmitter);
+		mpEditor->SetLayoutNeedsUpdate(true);
+	}
+	return true;
 }
 
 //-------------------------------------------------------------
 
-bool cParticleEditorWindowEmitters::Button_OnPressed(iWidget *apWidget, const cGuiMessageData &aData) {
-    cParticleEditorWorld *pWorld = (cParticleEditorWorld *)mpEditor->GetEditorWorld();
-    iEntityWrapper *pEmitter = NULL;
-    int lEnumItem = mpEnumEmitters->GetValue();
+bool cParticleEditorWindowEmitters::Button_OnPressed(iWidget* apWidget, const cGuiMessageData& aData)
+{
+	cParticleEditorWorld* pWorld = (cParticleEditorWorld*)mpEditor->GetEditorWorld();
+	iEntityWrapper* pEmitter = NULL;
+	int lEnumItem = mpEnumEmitters->GetValue();
 
-    if (apWidget == mpBNewEmitter) {
-        lEnumItem = mpEnumEmitters->GetNumValues();
-        pEmitter = pWorld->AddEmitter();
-    } else if (apWidget == mpBCopyEmitter) {
-        if (lEnumItem >= 0) {
-            iEntityWrapperData *pCopyData = mvEmitters[lEnumItem]->CreateCopyData();
-            ;
+	if(apWidget==mpBNewEmitter)
+	{
+		lEnumItem = mpEnumEmitters->GetNumValues();
+		pEmitter = pWorld->AddEmitter();
+	}
+	else if(apWidget==mpBCopyEmitter)
+	{
+		if(lEnumItem>=0)
+		{
+			iEntityWrapperData* pCopyData = mvEmitters[lEnumItem]->CreateCopyData();;
+			
+			pWorld->AddEmitter(pCopyData);
+			lEnumItem = mpEnumEmitters->GetNumValues();
+		}
 
-            pWorld->AddEmitter(pCopyData);
-            lEnumItem = mpEnumEmitters->GetNumValues();
-        }
+	}
+	else if(apWidget==mpBDeleteEmitter)
+	{
+		if(mpEnumEmitters->GetNumValues()==1)
+			mpEditor->ShowMessageBox(_W("Warning!"), _W("Particle System must have at least one emitter"), _W("OK"),_W(""), NULL, NULL);
+		else
+		{
+			if(lEnumItem>=0 && lEnumItem<(int)mvEmitters.size())
+			{
+				iEntityWrapper* pEmitter = mvEmitters[lEnumItem];
 
-    } else if (apWidget == mpBDeleteEmitter) {
-        if (mpEnumEmitters->GetNumValues() == 1)
-            mpEditor->ShowMessageBox(_W("Warning!"), _W("Particle System must have at least one emitter"), _W("OK"),
-                                     _W(""), NULL, NULL);
-        else {
-            if (lEnumItem >= 0 && lEnumItem < (int)mvEmitters.size()) {
-                iEntityWrapper *pEmitter = mvEmitters[lEnumItem];
+				pWorld->RemoveEmitter(pEmitter);
+				if(lEnumItem!=0)
+					--lEnumItem;
+			}
+		}
+	}
 
-                pWorld->RemoveEmitter(pEmitter);
-                if (lEnumItem != 0)
-                    --lEnumItem;
-            }
-        }
-    }
+	Update(0);
+	mpEnumEmitters->SetValue(lEnumItem);
 
-    Update(0);
-    mpEnumEmitters->SetValue(lEnumItem);
-
-    return true;
+	return true;
 }
-kGuiCallbackDeclaredFuncEnd(cParticleEditorWindowEmitters, Button_OnPressed);
+kGuiCallbackDeclaredFuncEnd(cParticleEditorWindowEmitters,Button_OnPressed);

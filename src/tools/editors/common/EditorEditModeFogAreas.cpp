@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -23,8 +23,8 @@
 
 #include "EditorWindowFogAreas.h"
 
-#include "EditorWorld.h"
 #include "EntityWrapperFogArea.h"
+#include "EditorWorld.h"
 
 //-----------------------------------------------------------------
 
@@ -34,8 +34,10 @@
 
 //-----------------------------------------------------------------
 
-cEditorEditModeFogAreas::cEditorEditModeFogAreas(iEditorBase *apEditor, iEditorWorld *apEditorWorld)
-    : iEditorEditModeObjectCreator(apEditor, "FogAreas", apEditorWorld) {}
+cEditorEditModeFogAreas::cEditorEditModeFogAreas(iEditorBase* apEditor,
+										   iEditorWorld* apEditorWorld) : iEditorEditModeObjectCreator(apEditor, "FogAreas", apEditorWorld)
+{
+}
 
 //-----------------------------------------------------------------
 
@@ -55,22 +57,30 @@ cEditorEditModeFogAreas::cEditorEditModeFogAreas(iEditorBase *apEditor, iEditorW
 
 //-----------------------------------------------------------------
 
-iEditorWindow *cEditorEditModeFogAreas::CreateSpecificWindow() { return hplNew(cEditorWindowFogAreas, (this)); }
-
-//-----------------------------------------------------------------
-
-bool cEditorEditModeFogAreas::SetUpCreationData(iEntityWrapperData *apData) {
-    if (iEditorEditModeObjectCreator::SetUpCreationData(apData) == false)
-        return false;
-
-    cEditorWindowFogAreas *pWin = (cEditorWindowFogAreas *)mpWindow;
-    apData->SetColor(eFogAreaCol_Color, pWin->GetFogAreaColor());
-
-    return true;
+iEditorWindow* cEditorEditModeFogAreas::CreateSpecificWindow()
+{
+	return hplNew(cEditorWindowFogAreas,(this));
 }
 
 //-----------------------------------------------------------------
 
-void cEditorEditModeFogAreas::CreateTypes() { mvTypes.push_back(hplNew(cEntityWrapperTypeFogArea, ())); }
+bool cEditorEditModeFogAreas::SetUpCreationData(iEntityWrapperData* apData)
+{
+	if(iEditorEditModeObjectCreator::SetUpCreationData(apData)==false)
+		return false;
+
+	cEditorWindowFogAreas* pWin = (cEditorWindowFogAreas*)mpWindow;
+	apData->SetColor(eFogAreaCol_Color, pWin->GetFogAreaColor());
+
+	return true;
+}
 
 //-----------------------------------------------------------------
+
+void cEditorEditModeFogAreas::CreateTypes()
+{
+	mvTypes.push_back(hplNew(cEntityWrapperTypeFogArea,()));
+}
+
+//-----------------------------------------------------------------
+

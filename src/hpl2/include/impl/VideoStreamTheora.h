@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -27,84 +27,85 @@
 
 namespace hpl {
 
-//-----------------------------------------
-class cVideoStreamTheora_Loader;
+	//-----------------------------------------
+	class  cVideoStreamTheora_Loader;
 
-class cVideoStreamTheora : public iVideoStream {
-  public:
-    cVideoStreamTheora(const tString &asName, cVideoStreamTheora_Loader *apLoader);
-    ~cVideoStreamTheora();
+	class cVideoStreamTheora : public iVideoStream
+	{
+	public:
+		cVideoStreamTheora(const tString& asName, cVideoStreamTheora_Loader* apLoader);
+		~cVideoStreamTheora();
 
-    bool LoadFromFile(const tWString &asFilePath);
+        bool LoadFromFile(const tWString& asFilePath);
+		
+		void Update(float afTimeStep);
 
-    void Update(float afTimeStep);
+		void Play();
+		void Stop();
 
-    void Play();
-    void Stop();
+		void Pause(bool abX);
+		bool IsPaused(){ return mbPaused;}
 
-    void Pause(bool abX);
-    bool IsPaused() { return mbPaused; }
+		void SetLoop(bool abX);
+		bool IsLooping(){ return mbLooping;}
 
-    void SetLoop(bool abX);
-    bool IsLooping() { return mbLooping; }
+		void CopyToTexture(iTexture *apTexture);
 
-    void CopyToTexture(iTexture *apTexture);
+	private:
+		void DrawFrameToBuffer();
+		int BufferData(FILE *pFile ,ogg_sync_state *apOggSynchState);
+		void QueuePage(ogg_page *apPage);
+		bool GetHeaders();
+		bool InitDecoders();
+		void ResetStreams();
+		
+		cVideoStreamTheora_Loader *mpLoader;
 
-  private:
-    void DrawFrameToBuffer();
-    int BufferData(FILE *pFile, ogg_sync_state *apOggSynchState);
-    void QueuePage(ogg_page *apPage);
-    bool GetHeaders();
-    bool InitDecoders();
-    void ResetStreams();
+		FILE *mpFile;
 
-    cVideoStreamTheora_Loader *mpLoader;
+		bool mbLooping;
+		bool mbPaused;
+		bool mbPlaying;
 
-    FILE *mpFile;
+		float mfTime;
 
-    bool mbLooping;
-    bool mbPaused;
-    bool mbPlaying;
+		unsigned char *mpFrameBuffer;
+		
+		ogg_sync_state   mOggSyncState;
+		ogg_stream_state mTheoraStreamState;
+		theora_info      mTheoraInfo;
+		theora_comment mTheoraComment;
+		theora_state	mTheoraState;
 
-    float mfTime;
+		int          mlVideobufReady;
+		ogg_int64_t  mlVideobufGranulePos;
+		double       mfVideobufTime;
 
-    unsigned char *mpFrameBuffer;
+		bool mbVideoLoaded;
+		bool mbVideoFrameReady;
+		int mlBufferSize;
+	};
 
-    ogg_sync_state mOggSyncState;
-    ogg_stream_state mTheoraStreamState;
-    theora_info mTheoraInfo;
-    theora_comment mTheoraComment;
-    theora_state mTheoraState;
+	//-----------------------------------------
 
-    int mlVideobufReady;
-    ogg_int64_t mlVideobufGranulePos;
-    double mfVideobufTime;
+	class cVideoStreamTheora_Loader : public iVideoLoader
+	{
+	friend class cVideoStreamTheora;
+	public:
+		cVideoStreamTheora_Loader();
+		~cVideoStreamTheora_Loader();
+		
+		iVideoStream* LoadVideo(const tWString& asName);
+	
+	private:
+		unsigned char* mpYuvToR;
+		unsigned char* mpYuvToB;
+		
+		unsigned short* mpYuv_G_UV;
+		unsigned char* mpYuv_G_Y_UV;
+	};
 
-    bool mbVideoLoaded;
-    bool mbVideoFrameReady;
-    int mlBufferSize;
+	//-----------------------------------------
+
 };
-
-//-----------------------------------------
-
-class cVideoStreamTheora_Loader : public iVideoLoader {
-    friend class cVideoStreamTheora;
-
-  public:
-    cVideoStreamTheora_Loader();
-    ~cVideoStreamTheora_Loader();
-
-    iVideoStream *LoadVideo(const tWString &asName);
-
-  private:
-    unsigned char *mpYuvToR;
-    unsigned char *mpYuvToB;
-
-    unsigned short *mpYuv_G_UV;
-    unsigned char *mpYuv_G_Y_UV;
-};
-
-//-----------------------------------------
-
-};     // namespace hpl
 #endif // HPL_VIDEO_STREAM_THEORA_H

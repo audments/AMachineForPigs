@@ -1,21 +1,22 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 
 #ifndef HPLEDITOR_EDITOR_WINDOW_FACTORY_H
 #define HPLEDITOR_EDITOR_WINDOW_FACTORY_H
@@ -55,60 +56,76 @@ class cEditorEditModeSelect;
 
 //--------------------------------------------
 
-class cEditorWindowFactory {
-  public:
-    static cEditorWindowViewport *CreateWindowViewport(iEditorBase *apEditor, iFrameBuffer *apFB,
-                                                       const cVector2l &avFBViewPos, const cVector2l &avFBViewSize,
-                                                       const cVector3f &avPosition, const cVector2f &avSize,
-                                                       bool abAddViewMenu = true);
+class cEditorWindowFactory
+{
+public:
+	static cEditorWindowViewport* CreateWindowViewport(iEditorBase* apEditor,
+													   iFrameBuffer* apFB,
+													   const cVector2l& avFBViewPos,
+													   const cVector2l& avFBViewSize,
+													   const cVector3f& avPosition,
+													   const cVector2f& avSize,
+													   bool abAddViewMenu=true);
 
-    ///////////////////////////////////////////////////////////////
-    // Edit Mode windows
-    static cEditorWindowStaticObjects *CreateWindowStaticObjects(iEditorBase *apEditor, const cVector3f &avPosition,
-                                                                 const tWString &asBaseDir);
+	///////////////////////////////////////////////////////////////
+	// Edit Mode windows
+	static cEditorWindowStaticObjects* CreateWindowStaticObjects(iEditorBase* apEditor,
+																 const cVector3f& avPosition,
+																 const tWString& asBaseDir);
 
-    static cEditorWindowEntities *CreateWindowEntities(iEditorBase *apEditor, const cVector3f &avPosition,
-                                                       const tWString &asBaseDir);
+	static cEditorWindowEntities* CreateWindowEntities(iEditorBase* apEditor,
+													   const cVector3f& avPosition,
+													   const tWString& asBaseDir);
 
-    static cEditorWindowSelect *CreateWindowSelect(iEditorBase *apEditor, const cVector3f &avPosition);
+	static cEditorWindowSelect* CreateWindowSelect(iEditorBase* apEditor,
+												   const cVector3f& avPosition);
 
-    static cEditorWindowEntityEditBox *CreateEditBoxWindow(iEditorBase *apEditor, cEditorEditModeSelect *apEditMode,
-                                                           const cVector3f &avPosition,
-                                                           tEntityWrapperList alstEntities);
+	static cEditorWindowEntityEditBox* CreateEditBoxWindow(iEditorBase* apEditor,
+														   cEditorEditModeSelect* apEditMode,
+														   const cVector3f& avPosition,
+														   tEntityWrapperList alstEntities);
 
-    static cEditorWindowLights *CreateWindowLights(iEditorBase *apEditor, const cVector3f &avPosition);
+	static cEditorWindowLights* CreateWindowLights(iEditorBase* apEditor,
+												   const cVector3f& avPosition);
 
-    static cEditorWindowBodies *CreateWindowBodies(iEditorBase *apEditor, const cVector3f &avPosition);
+	static cEditorWindowBodies* CreateWindowBodies(iEditorBase* apEditor,
+													const cVector3f& avPosition);
 
-    static cEditorWindowJoints *CreateWindowJoints(iEditorBase *apEditor, const cVector3f &avPosition);
+	static cEditorWindowJoints* CreateWindowJoints(iEditorBase* apEditor,
+													const cVector3f& avPosition);
 
-    static cEditorWindowAreas *CreateWindowAreas(iEditorBase *apEditor, const cVector3f &avPosition);
+	static cEditorWindowAreas* CreateWindowAreas(iEditorBase* apEditor,
+												 const cVector3f& avPosition);
 
-    static cEditorWindowBillboards *CreateWindowBillboards(iEditorBase *apEditor, const cVector3f &avPosition);
+	static cEditorWindowBillboards* CreateWindowBillboards(iEditorBase* apEditor,
+														   const cVector3f& avPosition);
 
-    static cEditorWindowSounds *CreateWindowSounds(iEditorBase *apEditor, const cVector3f &avPosition);
+	static cEditorWindowSounds* CreateWindowSounds(iEditorBase* apEditor,
+												   const cVector3f& avPosition);
 
-    static cEditorWindowParticleSystems *CreateWindowParticleSystems(iEditorBase *apEditor,
-                                                                     const cVector3f &avPosition);
+	static cEditorWindowParticleSystems* CreateWindowParticleSystems(iEditorBase* apEditor,
+																	 const cVector3f& avPosition);
 
-    static cEditorWindowPrimitives *CreateWindowPrimitives(iEditorBase *apEditor, const cVector3f &avPosition);
+	static cEditorWindowPrimitives* CreateWindowPrimitives(iEditorBase* apEditor,
+														   const cVector3f& avPosition);
 
-    /////////////////////////////////////////////////////////
-    // Utility windows
+	/////////////////////////////////////////////////////////
+	// Utility windows
 
-    static cEditorWindowEntitySearch *CreateSearchWindow(iEditorBase *apEditor, cEditorEditModeSelect *apEditMode);
+	static cEditorWindowEntitySearch* CreateSearchWindow(iEditorBase* apEditor,
+														 cEditorEditModeSelect* apEditMode);
 
-    static cEditorWindowTextureBrowser *CreateTextureBrowserWindow(iEditorBase *apEditor);
+	static cEditorWindowTextureBrowser* CreateTextureBrowserWindow(iEditorBase* apEditor);
 
-    static cEditorWindowLoaderStatus *CreateLoaderStatusWindow(iEditorBase *apEditor);
+	static cEditorWindowLoaderStatus* CreateLoaderStatusWindow(iEditorBase* apEditor);
 
-    static cEditorWindowMaterialEditor *CreateMaterialEditor(iEditorBase *apEditor, iFrameBuffer *apFB);
+	static cEditorWindowMaterialEditor* CreateMaterialEditor(iEditorBase* apEditor, iFrameBuffer* apFB);
 
-    static void DestroyEditorWindow(iEditorWindow *apWindow);
+	static void DestroyEditorWindow(iEditorWindow* apWindow);
 
-  protected:
+protected:
 };
 
 //--------------------------------------------
 
-#endif // HPLEDITOR_EDITOR_WINDOW_FACTORY_H
+#endif //HPLEDITOR_EDITOR_WINDOW_FACTORY_H

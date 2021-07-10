@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,120 +26,131 @@
 
 //----------------------------------------------
 
-class cLuxProp_Chest_SaveData : public iLuxProp_SaveData {
-    kSerializableClassInit(cLuxProp_Chest_SaveData) public : bool mbLocked;
-
-    int mlCoinsNeeded;
+class cLuxProp_Chest_SaveData : public iLuxProp_SaveData
+{
+	kSerializableClassInit(cLuxProp_Chest_SaveData)
+public:
+	bool mbLocked;
+	
+	int mlCoinsNeeded;
 };
 
 //----------------------------------------------
 
-class cLuxChestJointData {
-  public:
-    iPhysicsJointHinge *mpHingeJoint;
-    iPhysicsBody *mpChildBody;
+class cLuxChestJointData
+{
+public:
+	iPhysicsJointHinge *mpHingeJoint;
+	iPhysicsBody *mpChildBody;
 
     float mfMaxAngle;
 };
+
 
 //----------------------------------------------
 
 class cLuxProp_Chest;
 
-class cLuxChestMessageCallback : public iLuxMessageCallback {
-  public:
-    cLuxChestMessageCallback(cLuxProp_Chest *apChest);
+class cLuxChestMessageCallback : public iLuxMessageCallback
+{
+public:
+	cLuxChestMessageCallback(cLuxProp_Chest *apChest);
 
-    void OnPress(bool abYes);
+	void OnPress(bool abYes);
 
-  private:
-    cLuxProp_Chest *mpChest;
+private:
+	cLuxProp_Chest *mpChest;
 };
 
 //----------------------------------------------
 
-class cLuxProp_Chest : public iLuxProp {
-    typedef iLuxProp super_class;
-    friend class cLuxPropLoader_Chest;
-    friend class cLuxChestMessageCallback;
 
-  public:
-    cLuxProp_Chest(const tString &asName, int alID, cLuxMap *apMap);
-    virtual ~cLuxProp_Chest();
+class cLuxProp_Chest : public iLuxProp
+{
+typedef iLuxProp super_class;
+friend class cLuxPropLoader_Chest;
+friend class cLuxChestMessageCallback;
+public:	
+	cLuxProp_Chest(const tString &asName, int alID, cLuxMap *apMap);
+	virtual ~cLuxProp_Chest();
 
-    //////////////////////
-    // General
-    bool CanInteract(iPhysicsBody *apBody);
-    bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
+	//////////////////////
+	//General
+	bool CanInteract(iPhysicsBody *apBody);
+	bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
+	
+	void OnSetupAfterLoad(cWorld *apWorld);
 
-    void OnSetupAfterLoad(cWorld *apWorld);
+	void OnResetProperties();
 
-    void OnResetProperties();
+	void UpdatePropSpecific(float afTimeStep);
+	
+	void BeforePropDestruction();
 
-    void UpdatePropSpecific(float afTimeStep);
+	eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
+	tWString GetFocusText();
 
-    void BeforePropDestruction();
+	void ImplementedOnSetActive(bool abX);
 
-    eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
-    tWString GetFocusText();
+	void OnDamage(float afAmount, int alStrength);
 
-    void ImplementedOnSetActive(bool abX);
+	void InFocusDraw(cGuiSet *apGuiSet,float afFrameTime);
 
-    void OnDamage(float afAmount, int alStrength);
+	//////////////////////
+	//Properties
+	iLuxInteractData_RotateBase* GetMoveBaseData(){ return &mSwingDoorData;}
+	
+	void SetLocked(bool abLocked, bool abEffects);
+	bool GetLocked(){ return mbLocked;}
+	
+	//////////////////////
+	//Connection callbacks
+	void OnConnectionStateChange(iLuxEntity *apEntity, int alState);
 
-    void InFocusDraw(cGuiSet *apGuiSet, float afFrameTime);
 
-    //////////////////////
-    // Properties
-    iLuxInteractData_RotateBase *GetMoveBaseData() { return &mSwingDoorData; }
+	//////////////////////
+	//Save data stuff
+	iLuxEntity_SaveData* CreateSaveData();
+	void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
+	void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
+	void SetupSaveData(iLuxEntity_SaveData *apSaveData);
 
-    void SetLocked(bool abLocked, bool abEffects);
-    bool GetLocked() { return mbLocked; }
+private:
+	cLuxChestJointData* GetJointDataFromBody(iPhysicsBody *apBody);
+	cLuxChestJointData* GetJointDataFromJoint(iPhysicsJoint *apJoint);
 
-    //////////////////////
-    // Connection callbacks
-    void OnConnectionStateChange(iLuxEntity *apEntity, int alState);
+	//////////////////////
+	// Data
+	std::vector<cLuxChestJointData> mvJointData;
 
-    //////////////////////
-    // Save data stuff
-    iLuxEntity_SaveData *CreateSaveData();
-    void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
-    void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
-    void SetupSaveData(iLuxEntity_SaveData *apSaveData);
+	cLuxInteractData_SwingDoor mSwingDoorData;
 
-  private:
-    cLuxChestJointData *GetJointDataFromBody(iPhysicsBody *apBody);
-    cLuxChestJointData *GetJointDataFromJoint(iPhysicsJoint *apJoint);
+	cLuxChestMessageCallback *mpMessageCallback;
 
-    //////////////////////
-    // Data
-    std::vector<cLuxChestJointData> mvJointData;
+	//////////////////////
+	// Variables
+	bool mbLocked;
+	
+	int mlCoinsNeeded;
 
-    cLuxInteractData_SwingDoor mSwingDoorData;
-
-    cLuxChestMessageCallback *mpMessageCallback;
-
-    //////////////////////
-    // Variables
-    bool mbLocked;
-
-    int mlCoinsNeeded;
 };
 
 //----------------------------------------------
 
-class cLuxPropLoader_Chest : public iLuxPropLoader {
-  public:
-    cLuxPropLoader_Chest(const tString &asName);
-    virtual ~cLuxPropLoader_Chest() {}
+class cLuxPropLoader_Chest : public iLuxPropLoader
+{
+public:
+	cLuxPropLoader_Chest(const tString& asName);
+	virtual ~cLuxPropLoader_Chest(){}
 
-    iLuxProp *CreateProp(const tString &asName, int alID, cLuxMap *apMap);
-    void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem);
-    void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars);
+	iLuxProp *CreateProp(const tString& asName, int alID, cLuxMap *apMap);
+	void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem);
+	void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars);
 
-  private:
+private:
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_PROP_CHEST_H

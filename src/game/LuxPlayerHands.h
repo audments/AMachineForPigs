@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -34,116 +34,119 @@ class cLuxHandObjectLoader;
 
 class cLuxPlayerHands;
 
-class cLuxPlayerHandsLoader : public cEntityLoader_Object {
-  public:
-    cLuxPlayerHandsLoader(const tString &asName, cLuxPlayerHands *apPlayerHands);
+class cLuxPlayerHandsLoader : public cEntityLoader_Object
+{
+public:
+	cLuxPlayerHandsLoader(const tString& asName, cLuxPlayerHands *apPlayerHands);
 
-    void BeforeLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform, cWorld *apWorld,
-                    cResourceVarsObject *apInstanceVars);
-    void AfterLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform, cWorld *apWorld,
-                   cResourceVarsObject *apInstanceVars);
+	void BeforeLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform,cWorld *apWorld, cResourceVarsObject *apInstanceVars);
+	void AfterLoad(cXmlElement *apRootElem, const cMatrixf &a_mtxTransform,cWorld *apWorld, cResourceVarsObject *apInstanceVars);
 
-  private:
-    cLuxPlayerHands *mpPlayerHands;
+private:
+	cLuxPlayerHands *mpPlayerHands;
 };
 
 //----------------------------------------------
 
-enum eLuxHandsState {
-    eLuxHandsState_Disabled,
-    eLuxHandsState_Holster,
-    eLuxHandsState_Draw,
-    eLuxHandsState_Idle,
-    eLuxHandsState_HandObject,
+enum eLuxHandsState
+{
+	eLuxHandsState_Disabled, 
+	eLuxHandsState_Holster,
+	eLuxHandsState_Draw,
+	eLuxHandsState_Idle,
+	eLuxHandsState_HandObject,
 };
 
 //----------------------------------------------
 
-class cLuxPlayerHands : public iLuxPlayerHelper {
-    friend class cLuxPlayerHands_SaveData;
-    friend class cLuxPlayerHandsLoader;
+class cLuxPlayerHands : public iLuxPlayerHelper
+{
+friend class cLuxPlayerHands_SaveData;
+friend class cLuxPlayerHandsLoader;
+public:	
+	cLuxPlayerHands(cLuxPlayer *apPlayer);
+	~cLuxPlayerHands();
+	
+	///////////////////////////////
+	// General
+	void OnStart();
+	void Update(float afTimeStep);
+	void PostUpdate(float afTimeStep);
+	void Reset();
 
-  public:
-    cLuxPlayerHands(cLuxPlayer *apPlayer);
-    ~cLuxPlayerHands();
+	void OnMapEnter(cLuxMap *apMap);
+	void OnMapLeave(cLuxMap *apMap);
 
-    ///////////////////////////////
-    // General
-    void OnStart();
-    void Update(float afTimeStep);
-    void PostUpdate(float afTimeStep);
-    void Reset();
+	void CreateWorldEntities(cLuxMap *apMap);
+	void DestroyWorldEntities(cLuxMap *apMap);
 
-    void OnMapEnter(cLuxMap *apMap);
-    void OnMapLeave(cLuxMap *apMap);
+	void RenderSolid(cRendererCallbackFunctions* apFunctions);
+	void RenderTrans(cRendererCallbackFunctions* apFunctions);
 
-    void CreateWorldEntities(cLuxMap *apMap);
-    void DestroyWorldEntities(cLuxMap *apMap);
+	///////////////////////////////
+	// Actions
+	void PlayAnim(const tString& asAnim, bool abLoop);
+	bool AnimOver();
+	bool CheckAnimationEvent(float afRelTime);
 
-    void RenderSolid(cRendererCallbackFunctions *apFunctions);
-    void RenderTrans(cRendererCallbackFunctions *apFunctions);
+	void DoAction(eLuxPlayerAction aAction, bool abPressed);
 
-    ///////////////////////////////
-    // Actions
-    void PlayAnim(const tString &asAnim, bool abLoop);
-    bool AnimOver();
-    bool CheckAnimationEvent(float afRelTime);
+	///////////////////////////////
+	// Properties
+	void SetActiveHandObject(const tString& asName);
+	iLuxHandObject* GetHandObject(const tString& asName);
 
-    void DoAction(eLuxPlayerAction aAction, bool abPressed);
+	void SetCurrentHandObject(iLuxHandObject *apObject);
+	iLuxHandObject* GetCurrentHandObject(){ return mpCurrentHandObject;}
 
-    ///////////////////////////////
-    // Properties
-    void SetActiveHandObject(const tString &asName);
-    iLuxHandObject *GetHandObject(const tString &asName);
+	void SetState(eLuxHandsState aState);
+	eLuxHandsState GetState(){ return mHandState; }
 
-    void SetCurrentHandObject(iLuxHandObject *apObject);
-    iLuxHandObject *GetCurrentHandObject() { return mpCurrentHandObject; }
+	const tString& GetCurrentAnimation(){ return msCurrentAnim; }
+	cMeshEntity *GetHandsEntity(){ return mpHandsEntity;}
 
-    void SetState(eLuxHandsState aState);
-    eLuxHandsState GetState() { return mHandState; }
+    
+public://Only used by hand object
+	float mfHandObjectChargeCount;
+	int mlHandObjectState;
+	bool mbHandObjectAttackDown;
+	bool mbHandObjectInteractDown;
+	float mfHandObjectAlpha;
 
-    const tString &GetCurrentAnimation() { return msCurrentAnim; }
-    cMeshEntity *GetHandsEntity() { return mpHandsEntity; }
+private:
+	void ResetHandObjectVars();
 
-  public: // Only used by hand object
-    float mfHandObjectChargeCount;
-    int mlHandObjectState;
-    bool mbHandObjectAttackDown;
-    bool mbHandObjectInteractDown;
-    float mfHandObjectAlpha;
+	void CreateHandEntity(cLuxMap *apMap);
+	void DestroyHandEntity(cLuxMap *apMap);
+	void CreateAndAttachHandObject(cLuxMap *apMap, iLuxHandObject *apHandObject);
+	void HideAllHandObjects();
+	
+	void UpdatePlayerHandsPos(float afTimeStep);
 
-  private:
-    void ResetHandObjectVars();
+	iLuxHandObject* LoadHandObject(const tString& asName);
+	iLuxHandObject* CreateObjectFromType(const tString& asName, eLuxHandObjectType aType);
+	eLuxHandObjectType ToHandObjectType(const tString& asType);
 
-    void CreateHandEntity(cLuxMap *apMap);
-    void DestroyHandEntity(cLuxMap *apMap);
-    void CreateAndAttachHandObject(cLuxMap *apMap, iLuxHandObject *apHandObject);
-    void HideAllHandObjects();
+	cMeshEntity *mpHandsEntity;
+	cMesh *mpHandsMesh;
+	std::vector<cAnimation*> mvHandAnimations;
 
-    void UpdatePlayerHandsPos(float afTimeStep);
+	iLuxHandObject *mpCurrentHandObject;
+	std::vector<iLuxHandObject*> mvHandObjects;
 
-    iLuxHandObject *LoadHandObject(const tString &asName);
-    iLuxHandObject *CreateObjectFromType(const tString &asName, eLuxHandObjectType aType);
-    eLuxHandObjectType ToHandObjectType(const tString &asType);
+	cLuxHandObjectLoader *mpHandObjectLoader;
 
-    cMeshEntity *mpHandsEntity;
-    cMesh *mpHandsMesh;
-    std::vector<cAnimation *> mvHandAnimations;
+	float mfPosAddMul;
 
-    iLuxHandObject *mpCurrentHandObject;
-    std::vector<iLuxHandObject *> mvHandObjects;
+	int mlMaxCamRotations;
+	tVector3fList mlstCamRotations;
 
-    cLuxHandObjectLoader *mpHandObjectLoader;
-
-    float mfPosAddMul;
-
-    int mlMaxCamRotations;
-    tVector3fList mlstCamRotations;
-
-    eLuxHandsState mHandState;
-    tString msCurrentAnim;
+	eLuxHandsState mHandState;
+	tString msCurrentAnim;
 };
 
 //----------------------------------------------
+
+
 
 #endif // LUX_PLAYER_HANDS_H

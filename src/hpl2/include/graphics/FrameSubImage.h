@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -29,71 +29,74 @@
 
 namespace hpl {
 
-class cFrameTexture;
-class cFrameBitmap;
-class iTexture;
-class cFBitmapImage;
+	class cFrameTexture;
+	class cFrameBitmap;
+	class iTexture;
+	class cFBitmapImage;
 
-//----------------------------------------------------
+	//----------------------------------------------------
 
-class cFrameSubImage : public iResourceBase {
-    friend class cFBitmapImage;
-    friend class cFrameBitmap;
-    friend class cImageManager;
+	class cFrameSubImage : public iResourceBase
+	{
+	friend class cFBitmapImage;
+	friend class cFrameBitmap;
+	friend class cImageManager;
+	public:
+		cFrameSubImage(const tString& asName,const tWString& asFullPath, cFrameTexture *apFrameTex, 
+						cFrameBitmap *apFrameBmp,
+						cRect2l aRect,
+						cVector2l avSrcSize, int alHandle,
+						cFBitmapImage *apFrameBitmapImage);
+		~cFrameSubImage();
 
-  public:
-    cFrameSubImage(const tString &asName, const tWString &asFullPath, cFrameTexture *apFrameTex,
-                   cFrameBitmap *apFrameBmp, cRect2l aRect, cVector2l avSrcSize, int alHandle,
-                   cFBitmapImage *apFrameBitmapImage);
-    ~cFrameSubImage();
+		
+		bool Reload();
+		void Unload();
+		void Destroy();
 
-    bool Reload();
-    void Unload();
-    void Destroy();
+		//Image specific
+		int GetHeight()const{return mRect.h;}
+		int GetWidth()const{return mRect.w;}
+		cVector2l GetSize()const{return cVector2l(mRect.w,mRect.h);}
+        cVector2l GetPosition()const{return cVector2l(mRect.x,mRect.y);}
 
-    // Image specific
-    int GetHeight() const { return mRect.h; }
-    int GetWidth() const { return mRect.w; }
-    cVector2l GetSize() const { return cVector2l(mRect.w, mRect.h); }
-    cVector2l GetPosition() const { return cVector2l(mRect.x, mRect.y); }
+		int GetSourceWidth()const{return mvSourceSize.x;}
+		int GetSourceHeight()const{return mvSourceSize.y;}
 
-    int GetSourceWidth() const { return mvSourceSize.x; }
-    int GetSourceHeight() const { return mvSourceSize.y; }
+		iTexture *GetTexture()const;
 
-    iTexture *GetTexture() const;
+		cFrameTexture *GetFrameTexture()const{return mpFrameTexture;}
+		cFrameBitmap *GetFrameBitmap()const{return mpFrameBitmap;}
 
-    cFrameTexture *GetFrameTexture() const { return mpFrameTexture; }
-    cFrameBitmap *GetFrameBitmap() const { return mpFrameBitmap; }
+		tVertexVec GetVertexVecCopy(const cVector2f &avPos, const cVector2f &avSize);
+		const tVertexVec& GetVertexVec(){return mvVtx;}
 
-    tVertexVec GetVertexVecCopy(const cVector2f &avPos, const cVector2f &avSize);
-    const tVertexVec &GetVertexVec() { return mvVtx; }
+		int GetUpdateCount(){ return mlUpdateCount;}
 
-    int GetUpdateCount() { return mlUpdateCount; }
+		void Flush();
 
-    void Flush();
+		void SetNeedUpdateUvs();
 
-    void SetNeedUpdateUvs();
+    private:
+		void UpdateUvs();
+        		
+		cFrameTexture *mpFrameTexture;
+		cFrameBitmap *mpFrameBitmap;
+		cFBitmapImage *mpFrameBitmapImage;
+		
+		cVector2l mvSourceSize;
+		cRect2l mRect;
+		tVertexVec mvVtx;
 
-  private:
-    void UpdateUvs();
+		int mlHandle;
 
-    cFrameTexture *mpFrameTexture;
-    cFrameBitmap *mpFrameBitmap;
-    cFBitmapImage *mpFrameBitmapImage;
+		bool mbNeedUvUpdate;
+		int mlUpdateCount;
+	};
 
-    cVector2l mvSourceSize;
-    cRect2l mRect;
-    tVertexVec mvVtx;
+	typedef std::vector<cFrameSubImage*> tResourceImageVec;
+	typedef tResourceImageVec::iterator tResourceImageVecIt;
 
-    int mlHandle;
-
-    bool mbNeedUvUpdate;
-    int mlUpdateCount;
 };
-
-typedef std::vector<cFrameSubImage *> tResourceImageVec;
-typedef tResourceImageVec::iterator tResourceImageVecIt;
-
-}; // namespace hpl
 
 #endif // HPL_RESOURCE_IMAGE_H

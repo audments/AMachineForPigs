@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -32,101 +32,108 @@ class cLuxInteractData_Grab;
 
 //----------------------------------------------
 
-class cGrabbedBodyProperties {
-  public:
-    iPhysicsBody *mpBody;
-    bool mbHasGravity;
-    bool mbCollideCharacter;
-    float mfMass;
+class cGrabbedBodyProperties
+{
+public:
+	iPhysicsBody *mpBody;
+	bool mbHasGravity;
+	bool mbCollideCharacter;
+	float mfMass;
 };
 
-class cGrabbedSubMeshProperties {
-  public:
-    cMaterial *mpCustomTransMaterial;
-};
-
-//------------------------------------
-
-class cLuxPlayerState_InteractGrab_SaveData : public iLuxPlayerState_Interact_SaveData {
-    kSerializableClassInit(cLuxPlayerState_InteractGrab_SaveData) public : cMatrixf m_mtxBodyRotation;
-    cVector3f mvLocalBodyOffset;
-    float mfDepth;
-    float mfMaxDistance;
+class cGrabbedSubMeshProperties
+{
+public:
+	cMaterial *mpCustomTransMaterial;
 };
 
 //------------------------------------
 
-class cLuxPlayerState_InteractGrab : public iLuxPlayerState_Interact {
-    typedef iLuxPlayerState_Interact super_class;
+class cLuxPlayerState_InteractGrab_SaveData : public iLuxPlayerState_Interact_SaveData
+{
+	kSerializableClassInit(cLuxPlayerState_InteractGrab_SaveData)
+public:
+	cMatrixf m_mtxBodyRotation;
+	cVector3f mvLocalBodyOffset;
+	float mfDepth;
+	float mfMaxDistance;
+};
 
-  public:
-    cLuxPlayerState_InteractGrab(cLuxPlayer *apPlayer);
-    virtual ~cLuxPlayerState_InteractGrab();
+//------------------------------------
 
-    void OnEnterState(eLuxPlayerState aPrevState);
-    void OnLeaveState(eLuxPlayerState aNewState);
 
-    void Update(float afTimeStep);
-    void PostUpdate(float afTimeStep);
+class cLuxPlayerState_InteractGrab : public iLuxPlayerState_Interact
+{
+typedef iLuxPlayerState_Interact super_class;
+public:	
+	cLuxPlayerState_InteractGrab(cLuxPlayer *apPlayer);
+	virtual ~cLuxPlayerState_InteractGrab();
 
-    bool OnDoAction(eLuxPlayerAction aAction, bool abPressed);
+	void OnEnterState(eLuxPlayerState aPrevState);
+	void OnLeaveState(eLuxPlayerState aNewState);
 
-    void OnScroll(float afAmount);
+	void Update(float afTimeStep);
+	void PostUpdate(float afTimeStep);
 
-    bool OnAddYaw(float afAmount);
-    bool OnAddPitch(float afAmount);
+	bool OnDoAction(eLuxPlayerAction aAction,bool abPressed);
 
-    cGuiGfxElement *GetCrosshair();
+	void OnScroll(float afAmount);
 
-    void OnSaveBody(iPhysicsBody *apBody, float &afMass, bool &abCollideCharacter);
-    bool AllowBuoyancy(iPhysicsBody *apBody);
+	bool OnAddYaw(float afAmount);
+	bool OnAddPitch(float afAmount);
 
-    float DrawDebug(cGuiSet *apSet, iFontData *apFont, float afStartY);
+	cGuiGfxElement* GetCrosshair();
 
-    void RenderSolid(cRendererCallbackFunctions *apFunctions);
+	void OnSaveBody(iPhysicsBody *apBody, float &afMass, bool &abCollideCharacter);
+	bool AllowBuoyancy(iPhysicsBody *apBody);
 
-    /////////////////////////////////
-    // Save data stuff
-    virtual bool IsSaved() { return true; }
-    iLuxPlayerState_SaveData *CreateSaveData();
+	float DrawDebug(cGuiSet *apSet,iFontData *apFont, float afStartY);
+	
+	void RenderSolid(cRendererCallbackFunctions* apFunctions);
 
-    void SaveToSaveData(iLuxPlayerState_SaveData *apSaveData);
-    void LoadFromSaveDataBeforeEnter(cLuxMap *apMap, iLuxPlayerState_SaveData *apSaveData);
-    void LoadFromSaveDataAfterEnter(cLuxMap *apMap, iLuxPlayerState_SaveData *apSaveData);
+	/////////////////////////////////
+	//Save data stuff
+	virtual bool IsSaved(){ return true; }
+	iLuxPlayerState_SaveData* CreateSaveData();
 
-  protected:
-    void SaveBodyProperties(iPhysicsBody *apBody);
-    bool BodyIsAdded(iPhysicsBody *apBody);
+	void SaveToSaveData(iLuxPlayerState_SaveData* apSaveData);
+	void LoadFromSaveDataBeforeEnter(cLuxMap *apMap,iLuxPlayerState_SaveData* apSaveData);
+	void LoadFromSaveDataAfterEnter(cLuxMap *apMap, iLuxPlayerState_SaveData* apSaveData);
 
-    cLuxInteractData_Grab *mpGrabData;
+protected:
+	void SaveBodyProperties(iPhysicsBody *apBody);
+	bool BodyIsAdded(iPhysicsBody *apBody);
 
-    float mfMaxForce;
-    float mfMaxTorque;
-    float mfMaxAngularSpeed;
+	cLuxInteractData_Grab *mpGrabData;
 
-    float mfMinSlowPlayerMass;
-    float mfMaxSlowPlayerMass;
-    float mfMinSlowPlayerMul;
+	float mfMaxForce;
+	float mfMaxTorque;
+	float mfMaxAngularSpeed;
 
-    float mfMaxLeaveAngularSpeed;
-    float mfMaxLeaveLinearSpeed;
+	float mfMinSlowPlayerMass;
+	float mfMaxSlowPlayerMass;
+	float mfMinSlowPlayerMul;
 
-    std::vector<cGrabbedBodyProperties> mvBodyProperties;
-    std::vector<cGrabbedSubMeshProperties> mvSubMeshProperties;
+	float mfMaxLeaveAngularSpeed;
+	float mfMaxLeaveLinearSpeed;
+	
+	std::vector<cGrabbedBodyProperties> mvBodyProperties;
+	std::vector<cGrabbedSubMeshProperties> mvSubMeshProperties;
 
-    bool mbCustomMaterialsSetup;
+	bool mbCustomMaterialsSetup;
 
-    cVector3f mvLocalBodyOffset;
-    cMatrixf m_mtxBodyRotation;
+	cVector3f mvLocalBodyOffset;
+	cMatrixf m_mtxBodyRotation;
 
-    cPidController<cVector3f> mForcePid;
-    cPidController<cVector3f> mSpeedTorquePid;
+	cPidController<cVector3f> mForcePid;
+	cPidController<cVector3f> mSpeedTorquePid;
 
-    float mfDepth;
-    float mfMaxDistance;
-    float mfMassSum;
+	float mfDepth;
+	float mfMaxDistance;
+	float mfMassSum;
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_PLAYER_STATE_INTERACT_GRAB_H

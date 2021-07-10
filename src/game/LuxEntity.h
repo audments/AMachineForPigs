@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -32,245 +32,251 @@ class iLuxEntity;
 
 class cLuxEntityConnection;
 
-class cLuxEntityConnection_SaveData : public iSerializable {
-    kSerializableClassInit(cLuxEntityConnection_SaveData) public
-        : void FromConnection(cLuxEntityConnection *apConnection);
-    void ToConnection(cLuxEntityConnection *apConnection, cLuxMap *apMap);
+class cLuxEntityConnection_SaveData : public iSerializable
+{
+	kSerializableClassInit(cLuxEntityConnection_SaveData)
+public:
+	void FromConnection(cLuxEntityConnection *apConnection);
+	void ToConnection(cLuxEntityConnection *apConnection, cLuxMap *apMap);
 
-    tString msName;
-    int mlEntityId;
-    bool mbInvertStateSent;
-    int mlStatesUsed;
-    tString msCallbackFunc;
+	tString msName;
+	int mlEntityId;
+	bool mbInvertStateSent;
+	int mlStatesUsed;
+	tString msCallbackFunc;
 };
 
 //----------------------------------------------
 
-class iLuxEntity_SaveData : public iSerializable {
-    kSerializableClassInit(iLuxEntity_SaveData) public : virtual ~iLuxEntity_SaveData() {}
+class iLuxEntity_SaveData : public iSerializable
+{
+	kSerializableClassInit(iLuxEntity_SaveData)
+public:
+	virtual ~iLuxEntity_SaveData(){}
 
-    tString msName;
-    bool mbActive;
-    bool mbStartsActive;
-    bool mbFullGameSave;
-    int mlEntityType;
-    int mlID;
+	tString msName;
+	bool mbActive;
+	bool mbStartsActive;
+	bool mbFullGameSave;
+	int mlEntityType;
+	int mlID;
 
-    float mfMaxFocusDistance;
+	float mfMaxFocusDistance;
 
-    bool mbInteractionDisabled;
+	bool mbInteractionDisabled;
 
     bool mbIsCriticalEntity;
     tString msCriticalRootName;
     float mfCriticalEntityRadius;
 
-    tString msCallbackFunc;
-    tString msConnectionStateChangeCallback;
+	tString msCallbackFunc;
+	tString msConnectionStateChangeCallback;
 
-    tString msInteractCallback;
-    bool mbInteractCallbackRemove;
+	tString msInteractCallback;
+	bool mbInteractCallbackRemove;
 
-    tString msLookAtCallback;
-    bool mbLookAtCallbackRemove;
-    bool mbIsLookedAt;
+	tString msLookAtCallback;
+	bool mbLookAtCallbackRemove;
+	bool mbIsLookedAt;
 
-    cContainerVec<cLuxEntityConnection_SaveData> mvConnections;
-    cContainerList<cLuxCollideCallback_SaveData> mlstCollideCallbacks;
+	cContainerVec<cLuxEntityConnection_SaveData> mvConnections;
+	cContainerList<cLuxCollideCallback_SaveData> mlstCollideCallbacks;
 
-    virtual iLuxEntity *CreateEntity(cLuxMap *apMap) = 0;
-    virtual iLuxEntity *CreateAndAddEntity(cLuxMap *apMap) { return NULL; }
+	virtual iLuxEntity* CreateEntity(cLuxMap *apMap)=0;
+    virtual iLuxEntity* CreateAndAddEntity(cLuxMap *apMap) { return NULL; }
+
 };
 
 //----------------------------------------------
 
-class cLuxEntityConnection {
-    friend class cLuxEntityConnection_SaveData;
+class cLuxEntityConnection
+{
+friend class cLuxEntityConnection_SaveData;
+public:
+	cLuxEntityConnection(){}
+	cLuxEntityConnection(const tString& asName, iLuxEntity *apEntity, bool abInvertStateSent, int alStatesUsed, const tString& asCallbackFunc) 
+		: msName(asName), mpEntity(apEntity), mbInvertStateSent(abInvertStateSent), mlStatesUsed(alStatesUsed), msCallbackFunc(asCallbackFunc) {}
 
-  public:
-    cLuxEntityConnection() {}
-    cLuxEntityConnection(const tString &asName, iLuxEntity *apEntity, bool abInvertStateSent, int alStatesUsed,
-                         const tString &asCallbackFunc)
-        : msName(asName), mpEntity(apEntity), mbInvertStateSent(abInvertStateSent), mlStatesUsed(alStatesUsed),
-          msCallbackFunc(asCallbackFunc) {}
+	const tString& GetName(){ return msName; }
 
-    const tString &GetName() { return msName; }
+	iLuxEntity* GetEntity(){ return mpEntity; }
 
-    iLuxEntity *GetEntity() { return mpEntity; }
+	bool GetInvertStateSent(){ return mbInvertStateSent;}
+	int GetStateUsed(){ return mlStatesUsed;}
 
-    bool GetInvertStateSent() { return mbInvertStateSent; }
-    int GetStateUsed() { return mlStatesUsed; }
+	const tString& GetCallbackFunc(){ return msCallbackFunc; }
 
-    const tString &GetCallbackFunc() { return msCallbackFunc; }
-
-  private:
-    tString msName;
-    iLuxEntity *mpEntity;
-    bool mbInvertStateSent;
-    int mlStatesUsed;
-    tString msCallbackFunc;
+private:
+	tString msName;
+	iLuxEntity *mpEntity;
+	bool mbInvertStateSent;
+	int mlStatesUsed;
+	tString msCallbackFunc;
 };
 
 //----------------------------------------------
 
 class cLuxMap;
 
-class iLuxEntity : public iLuxCollideCallbackContainer {
-    friend class cLuxMap;
-    friend class cLuxSavedGameEntity;
-    friend class cLuxSavedGameMap;
+class iLuxEntity : public iLuxCollideCallbackContainer
+{
+friend class cLuxMap;
+friend class cLuxSavedGameEntity;
+friend class cLuxSavedGameMap;
+public:	
+	iLuxEntity(const tString &asName, int alID, cLuxMap *apMap,eLuxEntityType aEntityType);
+	virtual ~iLuxEntity();
 
-  public:
-    iLuxEntity(const tString &asName, int alID, cLuxMap *apMap, eLuxEntityType aEntityType);
-    virtual ~iLuxEntity();
+	//////////////////
+	// General
+	void UpdateLogic(float afTimeStep);
 
-    //////////////////
-    // General
-    void UpdateLogic(float afTimeStep);
+	virtual void OnRenderSolid(cRendererCallbackFunctions* apFunctions){}
 
-    virtual void OnRenderSolid(cRendererCallbackFunctions *apFunctions) {}
+	virtual bool CanInteract(iPhysicsBody *apBody)=0;
+	virtual bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos)=0;
+	
+	virtual void AfterWorldLoad(){}
+	virtual void OnMapEnter(){}
 
-    virtual bool CanInteract(iPhysicsBody *apBody) = 0;
-    virtual bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos) = 0;
+	virtual void InFocusDraw(cGuiSet *apGuiSet,float afFrameTime){}
 
-    virtual void AfterWorldLoad() {}
-    virtual void OnMapEnter() {}
+	//////////////////
+	// Action
+	cSoundEntity* PlaySound(const tString& asName, const tString& asFile, bool abRemoveWhenDone, bool abAttach);
 
-    virtual void InFocusDraw(cGuiSet *apGuiSet, float afFrameTime) {}
+	void RunCallbackFunc(const tString& asType);
+	void RunInteractCallbackFunc();
 
-    //////////////////
-    // Action
-    cSoundEntity *PlaySound(const tString &asName, const tString &asFile, bool abRemoveWhenDone, bool abAttach);
+	virtual void GiveDamage(float afAmount, int alStrength)=0;
 
-    void RunCallbackFunc(const tString &asType);
-    void RunInteractCallbackFunc();
+	//////////////////
+	// Properties
+	eLuxEntityType GetEntityType()const{ return mEntityType;}
+	
+	const tString& GetName()const{ return msName;}
+	int GetID(){ return mlID;}
 
-    virtual void GiveDamage(float afAmount, int alStrength) = 0;
+	void SetActive(bool abX);
+	bool IsActive(){ return mbActive;}
 
-    //////////////////
-    // Properties
-    eLuxEntityType GetEntityType() const { return mEntityType; }
+	void SetStartsActive(bool abX);
+	bool StartsActive(){ return mbStartsActive;}
 
-    const tString &GetName() const { return msName; }
-    int GetID() { return mlID; }
+	cLuxMap *GetMap(){ return mpMap;}
 
-    void SetActive(bool abX);
-    bool IsActive() { return mbActive; }
+	void SetFullGameSave(bool abX){ mbFullGameSave=abX;}
+	bool GetFullGameSave(){ return mbFullGameSave;}
 
-    void SetStartsActive(bool abX);
-    bool StartsActive() { return mbStartsActive; }
+	void SetIsSaved(bool abX){ mbIsSaved = abX;}
+	bool IsSaved(){ return mbIsSaved;}
+	bool GetDestroyMe(){ return mbDestroyMe;}
 
-    cLuxMap *GetMap() { return mpMap; }
+	void SetInteractionDisabled(bool abX){ mbInteractionDisabled = abX; }
+	bool GetInteractionDisabled(){ return mbInteractionDisabled; }
 
-    void SetFullGameSave(bool abX) { mbFullGameSave = abX; }
-    bool GetFullGameSave() { return mbFullGameSave; }
+	float GetMaxFocusDistance(){ return mfMaxFocusDistance;}
+	virtual eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos)=0;
 
-    void SetIsSaved(bool abX) { mbIsSaved = abX; }
-    bool IsSaved() { return mbIsSaved; }
-    bool GetDestroyMe() { return mbDestroyMe; }
+	void SetCustomFocusCrossHair(eLuxFocusCrosshair aX){ mCustomFocusCrossHair = aX;}
 
-    void SetInteractionDisabled(bool abX) { mbInteractionDisabled = abX; }
-    bool GetInteractionDisabled() { return mbInteractionDisabled; }
+	virtual tWString GetFocusText(){ return _W("");}
 
-    float GetMaxFocusDistance() { return mfMaxFocusDistance; }
-    virtual eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos) = 0;
+	virtual iEntity3D* GetAttachEntity()=0;
 
-    void SetCustomFocusCrossHair(eLuxFocusCrosshair aX) { mCustomFocusCrossHair = aX; }
+	virtual cMeshEntity* GetMeshEntity(){ return NULL; }
 
-    virtual tWString GetFocusText() { return _W(""); }
+	void SetCallbackFunc(const tString& asFunc){ msCallbackFunc = asFunc;}
+	void SetConnectionStateChangeCallback(const tString& asFunc){ msConnectionStateChangeCallback = asFunc;}
 
-    virtual iEntity3D *GetAttachEntity() = 0;
+	void SetPlayerInteractCallback(const tString &asCallbackFunc, bool abRemoveWhenInteracted);
+	void SetPlayerLookAtCallback(const tString &asCallbackFunc, bool abRemoveWhenLookedAt);
+	bool IsLookedAtByPlayer(){ return mbIsLookedAt; }
 
-    virtual cMeshEntity *GetMeshEntity() { return NULL; }
+	void AddCollideCallbackParent(iLuxCollideCallbackContainer* apCallback);
+	void RemoveCollideCallbackParent(iLuxCollideCallbackContainer* apCallback);
+	
+	//////////////////
+	// Connection
+	int GetConnectionNum(){ return (int)mvConnections.size();}
+	cLuxEntityConnection *GetConnection(int lIdx){ return mvConnections[lIdx];}
+	void AddConnection(const tString& asName, iLuxEntity *apEntity, bool abInvertStateSent, int alStatesUsed, const tString &asCallbackFunc);
 
-    void SetCallbackFunc(const tString &asFunc) { msCallbackFunc = asFunc; }
-    void SetConnectionStateChangeCallback(const tString &asFunc) { msConnectionStateChangeCallback = asFunc; }
+	////////////////
+	// Debug
+	virtual float DrawDebug(cGuiSet *apSet,iFontData *apFont,float afStartY){ return afStartY;}
 
-    void SetPlayerInteractCallback(const tString &asCallbackFunc, bool abRemoveWhenInteracted);
-    void SetPlayerLookAtCallback(const tString &asCallbackFunc, bool abRemoveWhenLookedAt);
-    bool IsLookedAtByPlayer() { return mbIsLookedAt; }
+		
+	//////////////////////
+	//Save data stuff
+	void SetSaveData(iLuxEntity_SaveData *apData){ mpSaveData = apData;}
+	iLuxEntity_SaveData *GetSaveData(){ return mpSaveData;}
 
-    void AddCollideCallbackParent(iLuxCollideCallbackContainer *apCallback);
-    void RemoveCollideCallbackParent(iLuxCollideCallbackContainer *apCallback);
+	virtual iLuxEntity_SaveData* CreateSaveData()=0;
+	virtual void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
+	virtual void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
+	virtual void SetupSaveData(iLuxEntity_SaveData *apSaveData);
 
-    //////////////////
-    // Connection
-    int GetConnectionNum() { return (int)mvConnections.size(); }
-    cLuxEntityConnection *GetConnection(int lIdx) { return mvConnections[lIdx]; }
-    void AddConnection(const tString &asName, iLuxEntity *apEntity, bool abInvertStateSent, int alStatesUsed,
-                       const tString &asCallbackFunc);
+protected:
+	void UpdateCheckCollideCallback(float afTimeStep);
+	void UpdatePlayerLookAt(float afTimeStep);
+	void ConnectionStateChange(int alState);
 
-    ////////////////
-    // Debug
-    virtual float DrawDebug(cGuiSet *apSet, iFontData *apFont, float afStartY) { return afStartY; }
+	/////////////////
+	//Virtual methods
+	virtual void OnConnectionStateChange(iLuxEntity *apEntity, int alState)=0;
+	virtual void OnUpdate(float afTimeStep)=0;
+	virtual void BeforeEntityDestruction(){}
+	virtual void OnSetActive(bool abX){}
 
-    //////////////////////
-    // Save data stuff
-    void SetSaveData(iLuxEntity_SaveData *apData) { mpSaveData = apData; }
-    iLuxEntity_SaveData *GetSaveData() { return mpSaveData; }
+	/////////////////
+	//Helper methods
+	void PreloadEntityModel(const tString &asFile);
+	bool CollidesWithPlayer();
 
-    virtual iLuxEntity_SaveData *CreateSaveData() = 0;
-    virtual void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
-    virtual void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
-    virtual void SetupSaveData(iLuxEntity_SaveData *apSaveData);
+	tString msName;
+	bool mbFullGameSave;
+	bool mbActive;
+	bool mbStartsActive;
+	bool mbIsSaved;
+	int mlID;
 
-  protected:
-    void UpdateCheckCollideCallback(float afTimeStep);
-    void UpdatePlayerLookAt(float afTimeStep);
-    void ConnectionStateChange(int alState);
+	bool mbInteractionDisabled;
 
-    /////////////////
-    // Virtual methods
-    virtual void OnConnectionStateChange(iLuxEntity *apEntity, int alState) = 0;
-    virtual void OnUpdate(float afTimeStep) = 0;
-    virtual void BeforeEntityDestruction() {}
-    virtual void OnSetActive(bool abX) {}
+	tLuxCollideCallbackContainerList mlstCollideCallbackParents;
 
-    /////////////////
-    // Helper methods
-    void PreloadEntityModel(const tString &asFile);
-    bool CollidesWithPlayer();
+	tString msCallbackFunc;
+	tString msConnectionStateChangeCallback;
 
-    tString msName;
-    bool mbFullGameSave;
-    bool mbActive;
-    bool mbStartsActive;
-    bool mbIsSaved;
-    int mlID;
+	tString msInteractCallback;
+	bool mbInteractCallbackRemove;
 
-    bool mbInteractionDisabled;
+	tString msLookAtCallback;
+	bool mbLookAtCallbackRemove;
+	float mfLookAtCount;
+	bool mbIsLookedAt;
 
-    tLuxCollideCallbackContainerList mlstCollideCallbackParents;
+	float mfMaxFocusDistance;
 
-    tString msCallbackFunc;
-    tString msConnectionStateChangeCallback;
+	eLuxFocusCrosshair mCustomFocusCrossHair;
 
-    tString msInteractCallback;
-    bool mbInteractCallbackRemove;
+	cLuxMap *mpMap;
 
-    tString msLookAtCallback;
-    bool mbLookAtCallbackRemove;
-    float mfLookAtCount;
-    bool mbIsLookedAt;
+	bool mbDestroyMe;
 
-    float mfMaxFocusDistance;
+	
+	iLuxEntity_SaveData *mpSaveData;
 
-    eLuxFocusCrosshair mCustomFocusCrossHair;
+	std::vector<cMesh*> mvPreloadedMeshes;
+	std::vector<cLuxEntityConnection*> mvConnections;
 
-    cLuxMap *mpMap;
+private:
+	eLuxEntityType mEntityType;
 
-    bool mbDestroyMe;
-
-    iLuxEntity_SaveData *mpSaveData;
-
-    std::vector<cMesh *> mvPreloadedMeshes;
-    std::vector<cLuxEntityConnection *> mvConnections;
-
-  private:
-    eLuxEntityType mEntityType;
-
-    void DestroyMe() { mbDestroyMe = true; }
+	void DestroyMe(){ mbDestroyMe = true;}
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_ENTITY_H

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -31,120 +31,124 @@ class cLuxArea_Ladder;
 
 //------------------------------------
 
-class cLuxPlayerState_Ladder_SaveData : public iLuxPlayerState_SaveData {
-    kSerializableClassInit(cLuxPlayerState_Ladder_SaveData) public : int mlState;
-    cVector3f mvStartPosition;
+class cLuxPlayerState_Ladder_SaveData : public iLuxPlayerState_SaveData
+{
+	kSerializableClassInit(cLuxPlayerState_Ladder_SaveData)
+public:
+	int mlState;
+	cVector3f mvStartPosition;
 
-    int mlLadderID;
+	int mlLadderID;
 
-    float mfTimeCount;
+	float mfTimeCount;
 
-    cVector3f mvCharPosition;
+	cVector3f mvCharPosition;
 
-    cVector3f mvGoalPos;
-    cVector3f mvGoalRot;
+	cVector3f mvGoalPos;
+	cVector3f mvGoalRot;
 
-    cVector3f mvPosAdd;
-    cVector3f mvRotAdd;
+	cVector3f mvPosAdd;
+	cVector3f mvRotAdd;
 
-    float mfMoveMul;
+	float mfMoveMul;
 
-    float mfUpSpeed;
-    float mfDownSpeed;
+	float mfUpSpeed;
+	float mfDownSpeed;
 
-    float mfStepLength;
-    float mfStepCount;
-    bool mbPlayedSound;
+	float mfStepLength;
+	float mfStepCount;
+	bool mbPlayedSound;
 
-    float mfPitchMaxLimit;
-    float mfPitchMinLimit;
+	float mfPitchMaxLimit;
+	float mfPitchMinLimit;
 
-    float mfLeaveAtTopCount;
+	float mfLeaveAtTopCount;
 
-    bool mbLanternDrawn;
+	bool mbLanternDrawn;
 };
 
 //----------------------------------------------
 
-class cLuxPlayerState_Ladder : public iLuxPlayerState {
-    typedef iLuxPlayerState super_class;
+class cLuxPlayerState_Ladder : public iLuxPlayerState
+{
+typedef iLuxPlayerState super_class;
+public:	
+	cLuxPlayerState_Ladder(cLuxPlayer *apPlayer);
+	virtual ~cLuxPlayerState_Ladder();
 
-  public:
-    cLuxPlayerState_Ladder(cLuxPlayer *apPlayer);
-    virtual ~cLuxPlayerState_Ladder();
+	void OnEnterState(eLuxPlayerState aPrevState);
+	void OnLeaveState(eLuxPlayerState aNewState);
 
-    void OnEnterState(eLuxPlayerState aPrevState);
-    void OnLeaveState(eLuxPlayerState aNewState);
+	void Update(float afTimeStep);
+	void PostUpdate(float afTimeStep);
+	virtual void OnDraw(cGuiSet *apGuiSet ,float afFrameTime);
 
-    void Update(float afTimeStep);
-    void PostUpdate(float afTimeStep);
-    virtual void OnDraw(cGuiSet *apGuiSet, float afFrameTime);
+	virtual cGuiGfxElement* GetCrosshair();
 
-    virtual cGuiGfxElement *GetCrosshair();
+	bool OnMove(eCharDir aDir, float afMul);
 
-    bool OnMove(eCharDir aDir, float afMul);
+	bool OnAddYaw(float afAmount);
+	bool OnAddPitch(float afAmount);
 
-    bool OnAddYaw(float afAmount);
-    bool OnAddPitch(float afAmount);
+	bool OnRun(bool abPressed);
+	bool OnJump(bool abPressed);
+	bool OnCrouch(bool abPressed);
 
-    bool OnRun(bool abPressed);
-    bool OnJump(bool abPressed);
-    bool OnCrouch(bool abPressed);
+	bool OnDoAction(eLuxPlayerAction aAction,bool abPressed);
+	
+	void OnSaveBody(iPhysicsBody *apBody, float &afMass, bool &abCollideCharacter){}
 
-    bool OnDoAction(eLuxPlayerAction aAction, bool abPressed);
+	float DrawDebug(cGuiSet *apSet,iFontData *apFont, float afStartY);
 
-    void OnSaveBody(iPhysicsBody *apBody, float &afMass, bool &abCollideCharacter) {}
+	bool AllowPlayerMenus(){ return false;}
 
-    float DrawDebug(cGuiSet *apSet, iFontData *apFont, float afStartY);
+	bool AllowLantern(){ return false;}
+	
+	/////////////////////////////////
+	//Save data stuff
+	virtual bool IsSaved(){ return true; }
+	iLuxPlayerState_SaveData* CreateSaveData();
 
-    bool AllowPlayerMenus() { return false; }
+	void SaveToSaveData(iLuxPlayerState_SaveData* apSaveData);
+	void LoadFromSaveDataBeforeEnter(cLuxMap *apMap,iLuxPlayerState_SaveData* apSaveData);
+	void LoadFromSaveDataAfterEnter(cLuxMap *apMap, iLuxPlayerState_SaveData* apSaveData);
 
-    bool AllowLantern() { return false; }
+private:
+	void SetupHeadTurnLimits();
+	void PlaySound(const tString &asType);
 
-    /////////////////////////////////
-    // Save data stuff
-    virtual bool IsSaved() { return true; }
-    iLuxPlayerState_SaveData *CreateSaveData();
+	int mlState;
+	cLuxArea_Ladder* mpLadder;
+	cVector3f mvStartPosition;
 
-    void SaveToSaveData(iLuxPlayerState_SaveData *apSaveData);
-    void LoadFromSaveDataBeforeEnter(cLuxMap *apMap, iLuxPlayerState_SaveData *apSaveData);
-    void LoadFromSaveDataAfterEnter(cLuxMap *apMap, iLuxPlayerState_SaveData *apSaveData);
+	float mfTimeCount;
 
-  private:
-    void SetupHeadTurnLimits();
-    void PlaySound(const tString &asType);
+	cVector3f mvCharPosition;
 
-    int mlState;
-    cLuxArea_Ladder *mpLadder;
-    cVector3f mvStartPosition;
+	cVector3f mvGoalPos;
+	cVector3f mvGoalRot;
 
-    float mfTimeCount;
+	cVector3f mvPosAdd;
+	cVector3f mvRotAdd;
 
-    cVector3f mvCharPosition;
+	float mfMoveMul;
 
-    cVector3f mvGoalPos;
-    cVector3f mvGoalRot;
+	float mfUpSpeed;
+	float mfDownSpeed;
 
-    cVector3f mvPosAdd;
-    cVector3f mvRotAdd;
+	float mfStepLength;
+	float mfStepCount;
+	bool mbPlayedSound;
 
-    float mfMoveMul;
+	float mfPitchMaxLimit;
+	float mfPitchMinLimit;
+	
+	float mfLeaveAtTopCount;
 
-    float mfUpSpeed;
-    float mfDownSpeed;
-
-    float mfStepLength;
-    float mfStepCount;
-    bool mbPlayedSound;
-
-    float mfPitchMaxLimit;
-    float mfPitchMinLimit;
-
-    float mfLeaveAtTopCount;
-
-    bool mbLanternDrawn;
+	bool mbLanternDrawn;
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_PLAYER_STATE_Ladder_H

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,75 +26,82 @@
 
 //----------------------------------------------
 
-class cLuxProp_Button_SaveData : public iLuxProp_SaveData {
-    kSerializableClassInit(cLuxProp_Button_SaveData) public : bool mbSwitchedOn;
-    bool mbCanBeSwitchedOn;
-    bool mbCanBeSwitchedOff;
+class cLuxProp_Button_SaveData : public iLuxProp_SaveData
+{
+	kSerializableClassInit(cLuxProp_Button_SaveData)
+public:
+	bool mbSwitchedOn;
+	bool mbCanBeSwitchedOn;
+	bool mbCanBeSwitchedOff;
 };
+
 
 //----------------------------------------------
 
-class cLuxProp_Button : public iLuxProp {
-    typedef iLuxProp super_class;
-    friend class cLuxPropLoader_Button;
+class cLuxProp_Button : public iLuxProp
+{
+typedef iLuxProp super_class;
+friend class cLuxPropLoader_Button;
+public:	
+	cLuxProp_Button(const tString &asName, int alID, cLuxMap *apMap);
+	virtual ~cLuxProp_Button();
 
-  public:
-    cLuxProp_Button(const tString &asName, int alID, cLuxMap *apMap);
-    virtual ~cLuxProp_Button();
+	//////////////////////
+	//General
+	bool CanInteract(iPhysicsBody *apBody);
+	bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
+	
+	void OnSetupAfterLoad(cWorld *apWorld);
 
-    //////////////////////
-    // General
-    bool CanInteract(iPhysicsBody *apBody);
-    bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
+	void OnResetProperties();
 
-    void OnSetupAfterLoad(cWorld *apWorld);
+	void UpdatePropSpecific(float afTimeStep);
+	
+	void BeforePropDestruction();
 
-    void OnResetProperties();
+	eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
 
-    void UpdatePropSpecific(float afTimeStep);
-
-    void BeforePropDestruction();
-
-    eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
-
-    //////////////////////
-    // Properties
-    void SetSwitchedOn(bool abX, bool abUseEffects);
+	//////////////////////
+	//Properties
+	void SetSwitchedOn(bool abX, bool abUseEffects);
     void SetCanBeSwitchedOn(bool abX);
     void SetCanBeSwitchedOff(bool abX);
 
-    //////////////////////
-    // Connection callbacks
-    void OnConnectionStateChange(iLuxEntity *apEntity, int alState);
+	//////////////////////
+	//Connection callbacks
+	void OnConnectionStateChange(iLuxEntity *apEntity, int alState);
 
-    //////////////////////
-    // Save data stuff
-    iLuxEntity_SaveData *CreateSaveData();
-    void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
-    void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
-    void SetupSaveData(iLuxEntity_SaveData *apSaveData);
+	//////////////////////
+	//Save data stuff
+	iLuxEntity_SaveData* CreateSaveData();
+	void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
+	void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
+	void SetupSaveData(iLuxEntity_SaveData *apSaveData);
 
-  private:
-    // Vars
-    bool mbSwitchedOn;
-    bool mbCanBeSwitchedOn;
-    bool mbCanBeSwitchedOff;
+
+private:
+	//Vars
+	bool mbSwitchedOn;
+	bool mbCanBeSwitchedOn;
+	bool mbCanBeSwitchedOff;
 };
 
 //----------------------------------------------
 
-class cLuxPropLoader_Button : public iLuxPropLoader {
-  public:
-    cLuxPropLoader_Button(const tString &asName);
-    virtual ~cLuxPropLoader_Button() {}
+class cLuxPropLoader_Button : public iLuxPropLoader
+{
+public:
+	cLuxPropLoader_Button(const tString& asName);
+	virtual ~cLuxPropLoader_Button(){}
 
-    iLuxProp *CreateProp(const tString &asName, int alID, cLuxMap *apMap);
-    void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem);
-    void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars);
+	iLuxProp *CreateProp(const tString& asName, int alID, cLuxMap *apMap);
+	void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem);
+	void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars);
 
-  private:
+private:
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_PROP_BUTTON_H

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -30,87 +30,91 @@ class cLuxInteractData_Push;
 
 //------------------------------------
 
-class cLuxPlayerState_InteractPush_SaveData : public iLuxPlayerState_Interact_SaveData {
-    kSerializableClassInit(cLuxPlayerState_InteractPush_SaveData) public:
+class cLuxPlayerState_InteractPush_SaveData : public iLuxPlayerState_Interact_SaveData
+{
+	kSerializableClassInit(cLuxPlayerState_InteractPush_SaveData)
+public:
+
 };
 
 //----------------------------------------------
 
-class cLuxPlayerState_InteractPush : public iLuxPlayerState_Interact {
-    typedef iLuxPlayerState_Interact super_class;
+class cLuxPlayerState_InteractPush : public iLuxPlayerState_Interact
+{
+typedef iLuxPlayerState_Interact super_class;
+public:	
+	cLuxPlayerState_InteractPush(cLuxPlayer *apPlayer);
+	virtual ~cLuxPlayerState_InteractPush();
 
-  public:
-    cLuxPlayerState_InteractPush(cLuxPlayer *apPlayer);
-    virtual ~cLuxPlayerState_InteractPush();
+	void OnEnterState(eLuxPlayerState aPrevState);
+	void OnLeaveState(eLuxPlayerState aNewState);
 
-    void OnEnterState(eLuxPlayerState aPrevState);
-    void OnLeaveState(eLuxPlayerState aNewState);
+	void Update(float afTimeStep);
+	void PostUpdate(float afTimeStep);
 
-    void Update(float afTimeStep);
-    void PostUpdate(float afTimeStep);
+	bool OnDoAction(eLuxPlayerAction aAction,bool abPressed);
 
-    bool OnDoAction(eLuxPlayerAction aAction, bool abPressed);
+	void OnScroll(float afAmount);
 
-    void OnScroll(float afAmount);
+	bool OnMove(eCharDir aDir, float afMul);
 
-    bool OnMove(eCharDir aDir, float afMul);
+	bool OnAddYaw(float afAmount);
+	bool OnAddPitch(float afAmount);
 
-    bool OnAddYaw(float afAmount);
-    bool OnAddPitch(float afAmount);
+	bool OnRun(bool abPressed){ return true;}
+	bool OnJump(bool abPressed){ return false;}
 
-    bool OnRun(bool abPressed) { return true; }
-    bool OnJump(bool abPressed) { return false; }
+	cGuiGfxElement* GetCrosshair();
 
-    cGuiGfxElement *GetCrosshair();
+	void OnSaveBody(iPhysicsBody *apBody, float &afMass, bool &abCollideCharacter){}
 
-    void OnSaveBody(iPhysicsBody *apBody, float &afMass, bool &abCollideCharacter) {}
+	float DrawDebug(cGuiSet *apSet,iFontData *apFont, float afStartY);
 
-    float DrawDebug(cGuiSet *apSet, iFontData *apFont, float afStartY);
+	/////////////////////////////////
+	//Save data stuff
+	virtual bool IsSaved(){ return false; }
+	iLuxPlayerState_SaveData* CreateSaveData();
 
-    /////////////////////////////////
-    // Save data stuff
-    virtual bool IsSaved() { return false; }
-    iLuxPlayerState_SaveData *CreateSaveData();
+	void SaveToSaveData(iLuxPlayerState_SaveData* apSaveData);
+	void LoadFromSaveDataBeforeEnter(cLuxMap *apMap,iLuxPlayerState_SaveData* apSaveData);
+	void LoadFromSaveDataAfterEnter(cLuxMap *apMap, iLuxPlayerState_SaveData* apSaveData);
 
-    void SaveToSaveData(iLuxPlayerState_SaveData *apSaveData);
-    void LoadFromSaveDataBeforeEnter(cLuxMap *apMap, iLuxPlayerState_SaveData *apSaveData);
-    void LoadFromSaveDataAfterEnter(cLuxMap *apMap, iLuxPlayerState_SaveData *apSaveData);
+protected:
+	void ClearMoveVars();
 
-  protected:
-    void ClearMoveVars();
+	cLuxInteractData_Push *mpPushData;
 
-    cLuxInteractData_Push *mpPushData;
+	float mfTotalMoveMul[2];
+	bool mbMoving[2];
 
-    float mfTotalMoveMul[2];
-    bool mbMoving[2];
+	float mfMaxSpeedInDir[2];
 
-    float mfMaxSpeedInDir[2];
+	cPidController<cVector3f> mVelocityPid;
+	cPidController<cVector3f> mStopVelocityPid;
+	
+	cVector3f mvLocalAttachPos;
 
-    cPidController<cVector3f> mVelocityPid;
-    cPidController<cVector3f> mStopVelocityPid;
+	cVector3f mvPushDir;
+	float mfMaxAttachPointDist;
 
-    cVector3f mvLocalAttachPos;
+	float mfWalkMaxSpeed;
+	float mfWalkForce;
+	float mfRunMaxSpeed;
+	float mfRunForce;
+	float mfCrouchMaxSpeed;
+	float mfCrouchForce;
 
-    cVector3f mvPushDir;
-    float mfMaxAttachPointDist;
+	float mfPitchMinRange;
+	float mfPitchMaxRange;
+	float mfYawRange;
 
-    float mfWalkMaxSpeed;
-    float mfWalkForce;
-    float mfRunMaxSpeed;
-    float mfRunForce;
-    float mfCrouchMaxSpeed;
-    float mfCrouchForce;
+	float mfPrevMinPitchLimit;
+	float mfPrevMaxPitchLimit;
 
-    float mfPitchMinRange;
-    float mfPitchMaxRange;
-    float mfYawRange;
-
-    float mfPrevMinPitchLimit;
-    float mfPrevMaxPitchLimit;
-
-    float mfMaxForce;
+	float mfMaxForce;
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_PLAYER_STATE_INTERACT_GRAB_H

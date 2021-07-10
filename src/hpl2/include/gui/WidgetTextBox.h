@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -24,178 +24,179 @@
 
 namespace hpl {
 
-class cGuiSkinFont;
+	class cGuiSkinFont;
+	
+	class cWidgetButton;
+	class cGuiPopUpUIKeyboard;
 
-class cWidgetButton;
-class cGuiPopUpUIKeyboard;
+	class cWidgetTextBox : public iWidget
+	{
+		friend class cGuiPopUpUIKeyboard;
+	public:
+		cWidgetTextBox(cGuiSet *apSet, cGuiSkin *apSkin, eWidgetTextBoxInputType aType);
+		virtual ~cWidgetTextBox();
 
-class cWidgetTextBox : public iWidget {
-    friend class cGuiPopUpUIKeyboard;
+		void SetDefaultFontSize(const cVector2f& avSize);
 
-  public:
-    cWidgetTextBox(cGuiSet *apSet, cGuiSkin *apSkin, eWidgetTextBoxInputType aType);
-    virtual ~cWidgetTextBox();
+		void SetCallbackOnLostFocus(bool abX) { mbCallbackOnLostFocus = abX; }
+		bool GetCallbackOnLostFocus() { return mbCallbackOnLostFocus; }
 
-    void SetDefaultFontSize(const cVector2f &avSize);
+		void SetForceCallBackOnEnter(bool abX) { mbForceCallBackOnEnter=abX; }
+		bool GetForceCallBackOnEnter() { return mbForceCallBackOnEnter; }
+		
+		void SetMaxTextLength(int alLength);
+		int GetMaxTextLength(){return mlMaxCharacters;}
 
-    void SetCallbackOnLostFocus(bool abX) { mbCallbackOnLostFocus = abX; }
-    bool GetCallbackOnLostFocus() { return mbCallbackOnLostFocus; }
+		void SetSelectedText(int alStart=0, int alCount=-1);
 
-    void SetForceCallBackOnEnter(bool abX) { mbForceCallBackOnEnter = abX; }
-    bool GetForceCallBackOnEnter() { return mbForceCallBackOnEnter; }
+		cVector2f GetBackgroundSize();
 
-    void SetMaxTextLength(int alLength);
-    int GetMaxTextLength() { return mlMaxCharacters; }
+		void SetMaxTextSizeNeg(float afX);
 
-    void SetSelectedText(int alStart = 0, int alCount = -1);
+		void SetCanEdit(bool abX);
+		bool GetCanEdit(){return mbCanEdit;}
 
-    cVector2f GetBackgroundSize();
+		void SetShowButtons(bool abX) { mbShowButtons = abX; }
 
-    void SetMaxTextSizeNeg(float afX);
+		void SetNumericAdd(float afX) { mfNumericAdd = afX; }
+		float GetNumericAdd() { return mfNumericAdd; }
 
-    void SetCanEdit(bool abX);
-    bool GetCanEdit() { return mbCanEdit; }
+		void SetNumericValue(float afX);
+		float GetNumericValue();
 
-    void SetShowButtons(bool abX) { mbShowButtons = abX; }
+		void SetLowerBound(bool abX, float afValue=0);
+		float GetLowerBound() { return mfLowerBound; }
+		void SetUpperBound(bool abX, float afValue=0);
+		float GetUpperBound() { return mfUpperBound; }
 
-    void SetNumericAdd(float afX) { mfNumericAdd = afX; }
-    float GetNumericAdd() { return mfNumericAdd; }
+		void SetDecimals(int alX) { mlDecimals = alX; }
+		int GetDecimals();
 
-    void SetNumericValue(float afX);
-    float GetNumericValue();
+		static void SetDefaultDecimals(int alX) { mlDefaultDecimals = alX; }
 
-    void SetLowerBound(bool abX, float afValue = 0);
-    float GetLowerBound() { return mfLowerBound; }
-    void SetUpperBound(bool abX, float afValue = 0);
-    float GetUpperBound() { return mfUpperBound; }
+		void SetIllegalChars(const tWString &asIllegalChars);
+		const tWString& GetIllegalChars();
 
-    void SetDecimals(int alX) { mlDecimals = alX; }
-    int GetDecimals();
+		void SetLegalCharCodeLimitEnabled(bool abX);
+		
+		/**
+		* A character that is lower (NOT equal) to this is considered illegal
+		*/
+		void SetLegalCharCodeMinLimit(wchar_t alX);
+		/**
+		* A character that is higher (NOT equal) to this is considered illegal
+		*/
+		void SetLegalCharCodeMaxLimit(wchar_t alX);
 
-    static void SetDefaultDecimals(int alX) { mlDefaultDecimals = alX; }
+		bool GetLegalCharCodeLimitEnabled(){ return mbLegalCharCodeLimitEnabled;}
+		wchar_t GetLegalCharCodeMinLimit(){ return mlLegalCharCodeMinLimit;}
+		wchar_t GetLegalCharCodeMaxLimit(){ return mlLegalCharCodeMaxLimit;}
+		
+	protected:
+		/////////////////////////
+		// Own functions
+		bool Widget_OnValueUp(iWidget* apWidget, const cGuiMessageData& aData);
+		kGuiCallbackDeclarationEnd(Widget_OnValueUp);
+		bool Widget_OnValueDown(iWidget* apWidget, const cGuiMessageData& aData);
+		kGuiCallbackDeclarationEnd(Widget_OnValueDown);
+		bool ButtonPressed(iWidget* apWidget, const cGuiMessageData& aData);
+		kGuiCallbackDeclarationEnd(ButtonPressed);
 
-    void SetIllegalChars(const tWString &asIllegalChars);
-    const tWString &GetIllegalChars();
+		int WorldToCharPos(const cVector2f &avWorldPos);
+		float CharToLocalPos(int alChar);
+		void SetMarkerPos(int alPos);
+		int GetLastCharInSize(int alStartPos, float afMaxSize, float afLengthAdd);
+		int GetFirstCharInSize(int alStartPos, float afMaxSize, float afLengthAdd);
+		bool WidgetConsiderSomeCharsIllegal();
+		bool IsIllegalChar(wchar_t alChar);
+		void SetTextUpdated();
 
-    void SetLegalCharCodeLimitEnabled(bool abX);
+		/////////////////////////
+		// Implemented functions
+		void OnInit();
+		void OnLoadGraphics();
+		void OnChangeSize();
+		void OnChangeText();
+		
+		void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
 
-    /**
-     * A character that is lower (NOT equal) to this is considered illegal
-     */
-    void SetLegalCharCodeMinLimit(wchar_t alX);
-    /**
-     * A character that is higher (NOT equal) to this is considered illegal
-     */
-    void SetLegalCharCodeMaxLimit(wchar_t alX);
+		bool OnMouseMove(const cGuiMessageData& aData);
+		bool OnMouseDown(const cGuiMessageData& aData);
+		bool OnMouseDoubleClick(const cGuiMessageData& aData);
+		bool OnMouseUp(const cGuiMessageData& aData);
+		bool OnMouseEnter(const cGuiMessageData& aData);
+		bool OnMouseLeave(const cGuiMessageData& aData);
 
-    bool GetLegalCharCodeLimitEnabled() { return mbLegalCharCodeLimitEnabled; }
-    wchar_t GetLegalCharCodeMinLimit() { return mlLegalCharCodeMinLimit; }
-    wchar_t GetLegalCharCodeMaxLimit() { return mlLegalCharCodeMaxLimit; }
+		bool OnGotFocus(const cGuiMessageData& aData);
+		bool OnGotTabFocus(const cGuiMessageData& aData);
+		bool OnLostFocus(const cGuiMessageData& aData);
 
-  protected:
-    /////////////////////////
-    // Own functions
-    bool Widget_OnValueUp(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(Widget_OnValueUp);
-    bool Widget_OnValueDown(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(Widget_OnValueDown);
-    bool ButtonPressed(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(ButtonPressed);
+		bool OnKeyPress(const cGuiMessageData& aData);
 
-    int WorldToCharPos(const cVector2f &avWorldPos);
-    float CharToLocalPos(int alChar);
-    void SetMarkerPos(int alPos);
-    int GetLastCharInSize(int alStartPos, float afMaxSize, float afLengthAdd);
-    int GetFirstCharInSize(int alStartPos, float afMaxSize, float afLengthAdd);
-    bool WidgetConsiderSomeCharsIllegal();
-    bool IsIllegalChar(wchar_t alChar);
-    void SetTextUpdated();
+		bool OnUIButtonPress(const cGuiMessageData& aData);
 
-    /////////////////////////
-    // Implemented functions
-    void OnInit();
-    void OnLoadGraphics();
-    void OnChangeSize();
-    void OnChangeText();
+		bool OnEnter(const cGuiMessageData& aData);
 
-    void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
 
-    bool OnMouseMove(const cGuiMessageData &aData);
-    bool OnMouseDown(const cGuiMessageData &aData);
-    bool OnMouseDoubleClick(const cGuiMessageData &aData);
-    bool OnMouseUp(const cGuiMessageData &aData);
-    bool OnMouseEnter(const cGuiMessageData &aData);
-    bool OnMouseLeave(const cGuiMessageData &aData);
+		////////////////////////////
+		// Interface for UI keyboard
+		void OnUIKeyboardOpen();
+		void OnUIKeyboardClose();
 
-    bool OnGotFocus(const cGuiMessageData &aData);
-    bool OnGotTabFocus(const cGuiMessageData &aData);
-    bool OnLostFocus(const cGuiMessageData &aData);
+		/////////////////////////
+		// Data
+		iWidget* mpPrevAttention;
+		bool mbPressed;
+		int mlMarkerCharPos;
+		int mlSelectedTextEnd;
+		int mlFirstVisibleChar;
+		int mlVisibleCharSize;
+		float mfTextMaxSize;
 
-    bool OnKeyPress(const cGuiMessageData &aData);
+		int mlMaxCharacters;
 
-    bool OnUIButtonPress(const cGuiMessageData &aData);
+		float mfMaxTextSizeNeg;
 
-    bool OnEnter(const cGuiMessageData &aData);
+		bool mbCanEdit;
 
-    ////////////////////////////
-    // Interface for UI keyboard
-    void OnUIKeyboardOpen();
-    void OnUIKeyboardClose();
+		eWidgetTextBoxInputType mInputType;
+		bool mbShowButtons;
+		float mfNumericAdd;
+		float mfNumericValue;
+		bool mbNumericValueUpdated;
 
-    /////////////////////////
-    // Data
-    iWidget *mpPrevAttention;
-    bool mbPressed;
-    int mlMarkerCharPos;
-    int mlSelectedTextEnd;
-    int mlFirstVisibleChar;
-    int mlVisibleCharSize;
-    float mfTextMaxSize;
+		bool mbHasLowerBound;
+		float mfLowerBound;
 
-    int mlMaxCharacters;
+		bool mbHasUpperBound;
+		float mfUpperBound;
 
-    float mfMaxTextSizeNeg;
+		int mlDecimals;
+		static int mlDefaultDecimals;
 
-    bool mbCanEdit;
+		tWString msIllegalChars;
+		bool mbLegalCharCodeLimitEnabled;
+		wchar_t mlLegalCharCodeMaxLimit;
+		wchar_t mlLegalCharCodeMinLimit;
 
-    eWidgetTextBoxInputType mInputType;
-    bool mbShowButtons;
-    float mfNumericAdd;
-    float mfNumericValue;
-    bool mbNumericValueUpdated;
+		bool mbChangedSinceLastEnter;
+		bool mbForceCallBackOnEnter;
+		bool mbCallbackOnLostFocus;
 
-    bool mbHasLowerBound;
-    float mfLowerBound;
+		cWidgetButton *mvButtons[2];
+		
+		cGuiGfxElement *mpGfxMarker;
+		cGuiGfxElement *mpGfxSelectedTextBack;
 
-    bool mbHasUpperBound;
-    float mfUpperBound;
+		cGuiGfxElement *mpGfxBackground;
+		
+		cGuiGfxElement *mvGfxBorders[4];
+		cGuiGfxElement *mvGfxCorners[4];
 
-    int mlDecimals;
-    static int mlDefaultDecimals;
+		bool mbGotFocusRecently;
 
-    tWString msIllegalChars;
-    bool mbLegalCharCodeLimitEnabled;
-    wchar_t mlLegalCharCodeMaxLimit;
-    wchar_t mlLegalCharCodeMinLimit;
+		bool mbUIKeyboardOpen;
+	};
 
-    bool mbChangedSinceLastEnter;
-    bool mbForceCallBackOnEnter;
-    bool mbCallbackOnLostFocus;
-
-    cWidgetButton *mvButtons[2];
-
-    cGuiGfxElement *mpGfxMarker;
-    cGuiGfxElement *mpGfxSelectedTextBack;
-
-    cGuiGfxElement *mpGfxBackground;
-
-    cGuiGfxElement *mvGfxBorders[4];
-    cGuiGfxElement *mvGfxCorners[4];
-
-    bool mbGotFocusRecently;
-
-    bool mbUIKeyboardOpen;
 };
-
-};     // namespace hpl
 #endif // HPL_WIDGET_TEXT_BOX_H

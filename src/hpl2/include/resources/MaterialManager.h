@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,73 +20,74 @@
 #ifndef HPL_MATERIAL_MANAGER_H
 #define HPL_MATERIAL_MANAGER_H
 
-#include "graphics/Material.h"
-#include "graphics/Texture.h"
 #include "resources/ResourceManager.h"
+#include "graphics/Texture.h"
+#include "graphics/Material.h"
 
 namespace hpl {
 
-class cGraphics;
-class cResources;
-class cMaterial;
-class iMaterialType;
+	class cGraphics;
+	class cResources;
+	class cMaterial;
+	class iMaterialType;
 
-class cMaterialManager : public iResourceManager {
-  public:
-    cMaterialManager(cGraphics *apGraphics, cResources *apResources);
-    ~cMaterialManager();
+	class cMaterialManager : public iResourceManager
+	{
+	public:
+		cMaterialManager(cGraphics* apGraphics,cResources *apResources);
+		~cMaterialManager();
 
-    cMaterial *CreateMaterial(const tString &asName);
+		cMaterial* CreateMaterial(const tString& asName);
 
-    void Update(float afTimeStep);
+		void Update(float afTimeStep);
+		
+		void Destroy(iResourceBase* apResource);
+		void Unload(iResourceBase* apResource);
 
-    void Destroy(iResourceBase *apResource);
-    void Unload(iResourceBase *apResource);
+		void SetTextureSizeDownScaleLevel(unsigned int alLevel){ mlTextureSizeDownScaleLevel = alLevel;}
+		int GetTextureSizeDownScaleLevel(){ return mlTextureSizeDownScaleLevel;}
 
-    void SetTextureSizeDownScaleLevel(unsigned int alLevel) { mlTextureSizeDownScaleLevel = alLevel; }
-    int GetTextureSizeDownScaleLevel() { return mlTextureSizeDownScaleLevel; }
+		void SetTextureFilter(eTextureFilter aFilter);
+		eTextureFilter GetTextureFilter(){ return mTextureFilter;}
 
-    void SetTextureFilter(eTextureFilter aFilter);
-    eTextureFilter GetTextureFilter() { return mTextureFilter; }
+		void SetTextureAnisotropy(float afX);
+		float GetTextureAnisotropy(){ return mfTextureAnisotropy;}
 
-    void SetTextureAnisotropy(float afX);
-    float GetTextureAnisotropy() { return mfTextureAnisotropy; }
+		tString GetPhysicsMaterialName(const tString& asName);
 
-    tString GetPhysicsMaterialName(const tString &asName);
+		cMaterial* CreateCustomMaterial(const tString& asName, iMaterialType *apMaterialType);
 
-    cMaterial *CreateCustomMaterial(const tString &asName, iMaterialType *apMaterialType);
+		tString GetTextureString(eMaterialTexture aType);
 
-    tString GetTextureString(eMaterialTexture aType);
+		void SetDisableRenderDataLoading(bool abX){ mbDisableRenderDataLoading = abX;}
 
-    void SetDisableRenderDataLoading(bool abX) { mbDisableRenderDataLoading = abX; }
+		// Useful stuff if public
+		eTextureType GetType(const tString& asType);
+		eTextureWrap GetWrap(const tString& asType);
+		eTextureAnimMode GetAnimMode(const tString& asType);
+		eMaterialBlendMode GetBlendMode(const tString& asType);
 
-    // Useful stuff if public
-    eTextureType GetType(const tString &asType);
-    eTextureWrap GetWrap(const tString &asType);
-    eTextureAnimMode GetAnimMode(const tString &asType);
-    eMaterialBlendMode GetBlendMode(const tString &asType);
+		eMaterialUvAnimation GetUvAnimType(const char* apString);
+		eMaterialAnimationAxis GetAnimAxis(const char* apString);
 
-    eMaterialUvAnimation GetUvAnimType(const char *apString);
-    eMaterialAnimationAxis GetAnimAxis(const char *apString);
+	private:
+		cMaterial* LoadFromFile(const tString& asName,const tWString& asPath);
 
-  private:
-    cMaterial *LoadFromFile(const tString &asName, const tWString &asPath);
+		unsigned int mlTextureSizeDownScaleLevel;
+		eTextureFilter mTextureFilter;
+		float mfTextureAnisotropy;
 
-    unsigned int mlTextureSizeDownScaleLevel;
-    eTextureFilter mTextureFilter;
-    float mfTextureAnisotropy;
+		tStringList mlstFileFormats;
 
-    tStringList mlstFileFormats;
+		tStringVec mvCubeSideSuffixes;
 
-    tStringVec mvCubeSideSuffixes;
+		cGraphics* mpGraphics;
+		cResources* mpResources;
 
-    cGraphics *mpGraphics;
-    cResources *mpResources;
+		bool mbDisableRenderDataLoading;
 
-    bool mbDisableRenderDataLoading;
+		int mlIdCounter;
+	};
 
-    int mlIdCounter;
 };
-
-};     // namespace hpl
 #endif // HPL_MATERIAL_MANAGER_H

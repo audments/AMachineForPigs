@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -30,150 +30,158 @@
 
 namespace hpl {
 
-//////////////////////////////////////////////////////////////////////////
-// CONSTRUCTORS
-//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	// CONSTRUCTORS
+	//////////////////////////////////////////////////////////////////////////
 
-//-----------------------------------------------------------------------
+	//-----------------------------------------------------------------------
 
-cMouseSDL::cMouseSDL(cLowLevelInputSDL *apLowLevelInputSDL) : iMouse("SDL Portable Mouse") {
-    mvMButtonArray.resize(eMouseButton_LastEnum);
-    mvMButtonArray.assign(mvMButtonArray.size(), false);
+	cMouseSDL::cMouseSDL(cLowLevelInputSDL *apLowLevelInputSDL) : iMouse("SDL Portable Mouse")
+	{
+		mvMButtonArray.resize(eMouseButton_LastEnum);
+		mvMButtonArray.assign(mvMButtonArray.size(),false);
 
-    mpLowLevelInputSDL = apLowLevelInputSDL;
+		mpLowLevelInputSDL = apLowLevelInputSDL;
 
-    mvMouseRelPos = cVector2l(0, 0);
-    mvMouseAbsPos = cVector2l(0, 0);
+		mvMouseRelPos = cVector2l(0,0);
+		mvMouseAbsPos = cVector2l(0,0);
 
-    mbWheelUpMoved = false;
-    mbWheelDownMoved = false;
+		mbWheelUpMoved = false;
+		mbWheelDownMoved = false;
 
-    mbFirstTime = true;
-}
+		mbFirstTime = true;
+	}
 
-//-----------------------------------------------------------------------
+	//-----------------------------------------------------------------------
 
-//////////////////////////////////////////////////////////////////////////
-// PUBLIC METHODS
-//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	// PUBLIC METHODS
+	//////////////////////////////////////////////////////////////////////////
+	
+	//-----------------------------------------------------------------------
 
-//-----------------------------------------------------------------------
+	void cMouseSDL::Update()
+	{
+		///////////////////////////////////////
+		//On first update make sure to clear all previous events.
+		if(mbFirstTime)
+		{
+			//Clear all relative movement
+			for(int i=0; i<10; ++i)
+			{
+				SDL_PumpEvents();
+				int lX,lY;
+				SDL_GetRelativeMouseState(&lX, &lY);
+			}
+			mbFirstTime = false;
+		}
+		
+		iLowLevelGraphics *pLowLevelGfx = mpLowLevelInputSDL->GetLowLevelGraphics();
+		//mvMouseRelPos = cVector2f(0,0);
+		mbWheelUpMoved = false;
+		mbWheelDownMoved = false;
 
-void cMouseSDL::Update() {
-    ///////////////////////////////////////
-    // On first update make sure to clear all previous events.
-    if (mbFirstTime) {
-        // Clear all relative movement
-        for (int i = 0; i < 10; ++i) {
-            SDL_PumpEvents();
-            int lX, lY;
-            SDL_GetRelativeMouseState(&lX, &lY);
-        }
-        mbFirstTime = false;
-    }
+		std::list<SDL_Event>::iterator it = mpLowLevelInputSDL->mlstEvents.begin();
+		for(; it != mpLowLevelInputSDL->mlstEvents.end(); ++it)
+		{
+			SDL_Event *pEvent = &(*it);
 
-    iLowLevelGraphics *pLowLevelGfx = mpLowLevelInputSDL->GetLowLevelGraphics();
-    // mvMouseRelPos = cVector2f(0,0);
-    mbWheelUpMoved = false;
-    mbWheelDownMoved = false;
+			if(	pEvent->type != SDL_MOUSEMOTION && 
+				pEvent->type != SDL_MOUSEBUTTONDOWN &&
+                pEvent->type != SDL_MOUSEWHEEL &&
+				pEvent->type != SDL_MOUSEBUTTONUP)
+			{
+				continue;
+			}
 
-    std::list<SDL_Event>::iterator it = mpLowLevelInputSDL->mlstEvents.begin();
-    for (; it != mpLowLevelInputSDL->mlstEvents.end(); ++it) {
-        SDL_Event *pEvent = &(*it);
+			if(pEvent->type == SDL_MOUSEMOTION)
+			{
+				/*if(pLowLevelGfx->GetFullscreenModeActive() == false)
+				{
+					/////////////
+					// Only use abs position if not in fullscreen mode
+					mvMouseAbsPos = cVector2l(pEvent->motion.x,pEvent->motion.y);
+				}*/
+				mvMouseAbsPos = cVector2l(pEvent->motion.x,pEvent->motion.y);
+				
+				Uint8 buttonState = pEvent->motion.state;
 
-        if (pEvent->type != SDL_MOUSEMOTION && pEvent->type != SDL_MOUSEBUTTONDOWN && pEvent->type != SDL_MOUSEWHEEL &&
-            pEvent->type != SDL_MOUSEBUTTONUP) {
-            continue;
-        }
-
-        if (pEvent->type == SDL_MOUSEMOTION) {
-            /*if(pLowLevelGfx->GetFullscreenModeActive() == false)
+				//Set button here as well just to be sure
+				/*if(buttonState & SDL_BUTTON(1)) mvMButtonArray[eMouseButton_Left] = true;
+				if(buttonState & SDL_BUTTON(2)) mvMButtonArray[eMouseButton_Middle] = true;
+				if(buttonState & SDL_BUTTON(3)) mvMButtonArray[eMouseButton_Right] = true;*/
+			}
+            else if(pEvent->type == SDL_MOUSEWHEEL)
             {
-                /////////////
-                // Only use abs position if not in fullscreen mode
-                mvMouseAbsPos = cVector2l(pEvent->motion.x,pEvent->motion.y);
-            }*/
-            mvMouseAbsPos = cVector2l(pEvent->motion.x, pEvent->motion.y);
-
-            Uint8 buttonState = pEvent->motion.state;
-
-            // Set button here as well just to be sure
-            /*if(buttonState & SDL_BUTTON(1)) mvMButtonArray[eMouseButton_Left] = true;
-            if(buttonState & SDL_BUTTON(2)) mvMButtonArray[eMouseButton_Middle] = true;
-            if(buttonState & SDL_BUTTON(3)) mvMButtonArray[eMouseButton_Right] = true;*/
-        } else if (pEvent->type == SDL_MOUSEWHEEL) {
-            if (pEvent->wheel.y > 0) {
-                mvMButtonArray[eMouseButton_WheelUp] = true;
-                mbWheelUpMoved = true;
-            } else {
-                mvMButtonArray[eMouseButton_WheelDown] = true;
-                mbWheelDownMoved = true;
-            }
-            break;
-        } else {
-            bool bButtonIsDown = pEvent->type == SDL_MOUSEBUTTONDOWN;
-
-            // if(pEvent->button.button == SDL_BUTTON_WHEELUP)Log(" Wheel %d!\n",bButtonIsDown);
-
-            switch (pEvent->button.button) {
-            case SDL_BUTTON_LEFT:
-                mvMButtonArray[eMouseButton_Left] = bButtonIsDown;
-                break;
-            case SDL_BUTTON_MIDDLE:
-                mvMButtonArray[eMouseButton_Middle] = bButtonIsDown;
-                break;
-            case SDL_BUTTON_RIGHT:
-                mvMButtonArray[eMouseButton_Right] = bButtonIsDown;
-                break;
-            case SDL_BUTTON_X1:
-                mvMButtonArray[eMouseButton_Button6] = bButtonIsDown;
-                break;
-            case SDL_BUTTON_X2:
-                mvMButtonArray[eMouseButton_Button7] = bButtonIsDown;
+                if (pEvent->wheel.y > 0) {
+                    mvMButtonArray[eMouseButton_WheelUp] = true;
+                    mbWheelUpMoved = true;
+                } else {
+                    mvMButtonArray[eMouseButton_WheelDown] = true;
+                    mbWheelDownMoved = true;
+                }
                 break;
             }
-        }
-    }
+			else
+			{
+				bool bButtonIsDown = pEvent->type==SDL_MOUSEBUTTONDOWN;
 
-    if (mbWheelDownMoved)
-        mvMButtonArray[eMouseButton_WheelDown] = true;
-    else
-        mvMButtonArray[eMouseButton_WheelDown] = false;
-    if (mbWheelUpMoved)
-        mvMButtonArray[eMouseButton_WheelUp] = true;
-    else
-        mvMButtonArray[eMouseButton_WheelUp] = false;
+				//if(pEvent->button.button == SDL_BUTTON_WHEELUP)Log(" Wheel %d!\n",bButtonIsDown);
 
-    int lX, lY;
-    SDL_GetRelativeMouseState(&lX, &lY);
-    mvMouseRelPos = cVector2l(lX, lY);
+				switch(pEvent->button.button)
+				{
+					case SDL_BUTTON_LEFT: mvMButtonArray[eMouseButton_Left] = bButtonIsDown;break;
+					case SDL_BUTTON_MIDDLE: mvMButtonArray[eMouseButton_Middle] = bButtonIsDown;break;
+					case SDL_BUTTON_RIGHT: mvMButtonArray[eMouseButton_Right] = bButtonIsDown;break;
+					case SDL_BUTTON_X1: mvMButtonArray[eMouseButton_Button6] = bButtonIsDown;break;
+					case SDL_BUTTON_X2: mvMButtonArray[eMouseButton_Button7] = bButtonIsDown;break;
+				}
+			}
+		}
+
+		if(mbWheelDownMoved)	mvMButtonArray[eMouseButton_WheelDown] = true;
+		else					mvMButtonArray[eMouseButton_WheelDown] = false;
+		if(mbWheelUpMoved)		mvMButtonArray[eMouseButton_WheelUp] = true;
+		else					mvMButtonArray[eMouseButton_WheelUp] = false;
+		
+		int lX,lY; 
+		SDL_GetRelativeMouseState(&lX, &lY);
+		mvMouseRelPos = cVector2l(lX,lY);
+				
+	}
+	
+	//-----------------------------------------------------------------------
+	
+	bool cMouseSDL::ButtonIsDown(eMouseButton mButton)
+	{
+		return mvMButtonArray[mButton];
+	}
+
+	//-----------------------------------------------------------------------
+
+	cVector2l cMouseSDL::GetAbsPosition()
+	{
+		return mvMouseAbsPos;
+	}
+	
+	//-----------------------------------------------------------------------
+
+	cVector2l cMouseSDL::GetRelPosition()
+	{
+		cVector2l vPos = mvMouseRelPos;
+		mvMouseRelPos = cVector2l(0,0);
+		
+		return vPos;
+	}
+
+	//-----------------------------------------------------------------------
+	
+	/////////////////////////////////////////////////////////////////////////
+	// PRIVATE METHODS
+	/////////////////////////////////////////////////////////////////////////
+
+	//-----------------------------------------------------------------------
+	
+	//-----------------------------------------------------------------------
+
 }
-
-//-----------------------------------------------------------------------
-
-bool cMouseSDL::ButtonIsDown(eMouseButton mButton) { return mvMButtonArray[mButton]; }
-
-//-----------------------------------------------------------------------
-
-cVector2l cMouseSDL::GetAbsPosition() { return mvMouseAbsPos; }
-
-//-----------------------------------------------------------------------
-
-cVector2l cMouseSDL::GetRelPosition() {
-    cVector2l vPos = mvMouseRelPos;
-    mvMouseRelPos = cVector2l(0, 0);
-
-    return vPos;
-}
-
-//-----------------------------------------------------------------------
-
-/////////////////////////////////////////////////////////////////////////
-// PRIVATE METHODS
-/////////////////////////////////////////////////////////////////////////
-
-//-----------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-
-} // namespace hpl

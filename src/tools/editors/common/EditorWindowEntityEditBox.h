@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -38,95 +38,95 @@ class cEditorEditModeSelect;
 
 //------------------------------------------------------------------------------
 
-class cEditorWindowEntityEditBox : public iEditModeWindow {
-  public:
-    cEditorWindowEntityEditBox(cEditorEditModeSelect *apEditMode, iEntityWrapper *apEntity);
-    virtual ~cEditorWindowEntityEditBox();
+class cEditorWindowEntityEditBox : public iEditModeWindow
+{
+public:
+	cEditorWindowEntityEditBox(cEditorEditModeSelect* apEditMode,iEntityWrapper* apEntity);
+	virtual ~cEditorWindowEntityEditBox();
 
-    virtual void Create() = 0;
+	virtual void Create()=0;
 
-    void AddAttachedChild(iEntityWrapper *apChild);
-    void RemoveAttachedChild(iEntityWrapper *apChild);
+	void AddAttachedChild(iEntityWrapper* apChild);
+	void RemoveAttachedChild(iEntityWrapper* apChild);
 
-  protected:
-    void OnInitLayout();
-    void OnSetActive(bool abX);
+protected:
+	void OnInitLayout();
+	void OnSetActive(bool abX);
 
-    virtual void OnUpdate(float afTimeStep);
+	virtual void OnUpdate(float afTimeStep);
 
-    virtual void SetUpGeneralTab();
+	virtual void SetUpGeneralTab();
 
-    void AddPropertyName(cWidgetTab *apParentTab);
-    void AddPropertyPosition(cWidgetTab *apParentTab);
-    void AddPropertyScale(cWidgetTab *apParentTab);
-    void AddPropertyRotation(cWidgetTab *apParentTab);
-    void AddPropertyActive(cWidgetTab *apParentTab);
+	void AddPropertyName(cWidgetTab* apParentTab);
+	void AddPropertyPosition(cWidgetTab* apParentTab);
+	void AddPropertyScale(cWidgetTab* apParentTab);
+	void AddPropertyRotation(cWidgetTab* apParentTab);
+	void AddPropertyActive(cWidgetTab* apParentTab);
 
-    void AddPropertySetAttachments(cWidgetTab *apParentTab);
+	void AddPropertySetAttachments(cWidgetTab* apParentTab);
 
-    bool InputCallback(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(InputCallback);
+	bool InputCallback(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(InputCallback);
 
-    bool FilterButton_OnPressed(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(FilterButton_OnPressed);
+	bool FilterButton_OnPressed(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(FilterButton_OnPressed);
 
-    bool Child_OnPick(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(Child_OnPick);
+	bool Child_OnPick(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(Child_OnPick);
 
-    bool WindowSpecificInputCallback(iEditorInput *apInput);
+	bool WindowSpecificInputCallback(iEditorInput* apInput);
 
-    ///////////////////////////////////////
-    // Data
-    cEditorEditModeSelect *mpEditMode;
-    iEntityWrapper *mpEntity;
+	///////////////////////////////////////
+	// Data
+	cEditorEditModeSelect* mpEditMode;
+	iEntityWrapper* mpEntity;
 
-    cWidgetTabFrame *mpTabs;
+	cWidgetTabFrame* mpTabs;
 
-    cEditorInputText *mpInpName;
-    cEditorInputText *mpInpTag;
-    cEditorInputBool *mpInpActive;
+	cEditorInputText* mpInpName;
+	cEditorInputText* mpInpTag;
+	cEditorInputBool* mpInpActive;
 
-    cEditorInputVec3 *mpInpPosition;
-    cEditorInputVec3 *mpInpScale;
-    cEditorInputVec3 *mpInpRotation;
+	cEditorInputVec3* mpInpPosition;
+	cEditorInputVec3* mpInpScale;
+	cEditorInputVec3* mpInpRotation;
 
-    // Attachments
-    std::vector<cWidgetButton *> mvBAttachFilters;
-    cWidgetButton *mpBEditAttachments;
-    cWidgetButton *mpBClearAttachments;
-    cEntitySelectorHighlighter *mpChildHighlighter;
-    tEntityWrapperList mlstAttachedChildren;
+	//Attachments
+	std::vector<cWidgetButton*> mvBAttachFilters;
+	cWidgetButton* mpBEditAttachments;
+	cWidgetButton* mpBClearAttachments;
+	cEntitySelectorHighlighter* mpChildHighlighter;
+	tEntityWrapperList mlstAttachedChildren;
 
-    ////////////////////////////////////////////
-    // Last opened tab
-    static int mLastEditedType;
-    static int mCurrentEditedType;
-    static int mlLastTabOpened;
+	////////////////////////////////////////////
+	// Last opened tab
+	static int mLastEditedType;
+	static int mCurrentEditedType;
+	static int mlLastTabOpened;
 };
 
 //------------------------------------------------------------------------------
 
-class cEditorWindowEntityEditBoxUserDefinedEntity : public cEditorWindowEntityEditBox {
-  public:
-    cEditorWindowEntityEditBoxUserDefinedEntity(cEditorEditModeSelect *apEditMode,
-                                                iEntityWrapperUserDefinedEntity *apVarEntity);
-    ~cEditorWindowEntityEditBoxUserDefinedEntity();
+class cEditorWindowEntityEditBoxUserDefinedEntity : public cEditorWindowEntityEditBox
+{
+public:
+	cEditorWindowEntityEditBoxUserDefinedEntity(cEditorEditModeSelect* apEditMode,iEntityWrapperUserDefinedEntity* apVarEntity);
+	~cEditorWindowEntityEditBoxUserDefinedEntity();
 
-    bool VarInputCallback(iEditorVarInput *apInput);
-    static bool VarInputCallbackStaticHelper(void *apWin, iEditorVarInput *apInput);
+	bool VarInputCallback(iEditorVarInput* apInput);
+	static bool VarInputCallbackStaticHelper(void* apWin, iEditorVarInput* apInput);
 
-    void SetRefreshInputs() { mbRefreshInputs = true; }
+	void SetRefreshInputs() { mbRefreshInputs = true; }
+protected:
+	void AddInputs(cWidgetTab* apParentTab, const cVector3f& avStartPos);
 
-  protected:
-    void AddInputs(cWidgetTab *apParentTab, const cVector3f &avStartPos);
+	void OnUpdate(float afTimeStep);
 
-    void OnUpdate(float afTimeStep);
+	iEntityWrapperUserDefinedEntity* mpEntity;
+	cWidgetFrame* mpFVars;
+	cEditorVarInputPanel* mpInputPanel;
 
-    iEntityWrapperUserDefinedEntity *mpEntity;
-    cWidgetFrame *mpFVars;
-    cEditorVarInputPanel *mpInputPanel;
-
-    bool mbRefreshInputs;
+	bool mbRefreshInputs;
 };
 
 //------------------------------------------------------------------------------

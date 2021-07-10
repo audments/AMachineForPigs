@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,99 +26,104 @@
 
 //----------------------------------------------
 
-class cLuxGameProfile {
-  public:
-    tWString msName;
-    cDate mCreationDate;
+class cLuxGameProfile
+{
+public:
+	tWString msName;
+	cDate mCreationDate;
 };
 
 //----------------------------------------------
 
-class cLuxMainMenu_Profile : public iLuxMainMenuWindow {
-  public:
-    cLuxMainMenu_Profile(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin);
-    ~cLuxMainMenu_Profile();
+class cLuxMainMenu_Profile : public iLuxMainMenuWindow
+{
+public:	
+	cLuxMainMenu_Profile(cGuiSet *apGuiSet, cGuiSkin *apGuiSkin);
+	~cLuxMainMenu_Profile();
+	
+	void CreateGui();
 
-    void CreateGui();
+	void ExitPressed();
+	
+private:
+	void OnSetActive(bool abX);
 
-    void ExitPressed();
+	void CreateMainGui();
+	void CreateEnterNameGui();
 
-  private:
-    void OnSetActive(bool abX);
+	void AddProfilesInListBox();
 
-    void CreateMainGui();
-    void CreateEnterNameGui();
+	void SelectProfile(int alNum);
+	
+	////////////////////////
+	// Properties
+	tWString msDefaultProfileName;
 
-    void AddProfilesInListBox();
+	cVector2f mvWindowSize;
+	float mfInformationWidth;
+	cVector2f mvListFontSize;
 
-    void SelectProfile(int alNum);
+	cVector2f mvEnterNameWindowSize;
+	float mfEnterNameButtonLength;
 
-    ////////////////////////
-    // Properties
-    tWString msDefaultProfileName;
 
-    cVector2f mvWindowSize;
-    float mfInformationWidth;
-    cVector2f mvListFontSize;
+	///////////////////////
+	// Data and varaibles
+	int mlLastPickedProfile;
+	cWidgetListBox *mpListProfiles;
 
-    cVector2f mvEnterNameWindowSize;
-    float mfEnterNameButtonLength;
+	cWidgetWindow *mpWindowEnterName;
+	cWidgetTextBox *mpTextEnterName;
 
-    ///////////////////////
-    // Data and varaibles
-    int mlLastPickedProfile;
-    cWidgetListBox *mpListProfiles;
+	cWidgetButton* mpSelectButton;
+	cWidgetButton* mpCreateButton;
 
-    cWidgetWindow *mpWindowEnterName;
-    cWidgetTextBox *mpTextEnterName;
+	std::vector<cLuxGameProfile*> mvProfiles;
 
-    cWidgetButton *mpSelectButton;
-    cWidgetButton *mpCreateButton;
+	///////////////////////
+	// Widget callbacks
+	bool WindowCloses(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(WindowCloses);
 
-    std::vector<cLuxGameProfile *> mvProfiles;
+	bool WindowUIPress(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(WindowUIPress); 
 
-    ///////////////////////
-    // Widget callbacks
-    bool WindowCloses(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(WindowCloses);
+	bool ClickedExitPopup(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(ClickedExitPopup);
 
-    bool WindowUIPress(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(WindowUIPress);
+	bool SelectedProfileChange(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(SelectedProfileChange);
 
-    bool ClickedExitPopup(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(ClickedExitPopup);
+	bool DoubleClickSelection(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(DoubleClickSelection);
 
-    bool SelectedProfileChange(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(SelectedProfileChange);
+	bool PressSelectProfile(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(PressSelectProfile);
 
-    bool DoubleClickSelection(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(DoubleClickSelection);
+	bool PressCreateProfile(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(PressCreateProfile);
 
-    bool PressSelectProfile(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(PressSelectProfile);
+	bool PressDeleteProfile(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(PressDeleteProfile);
 
-    bool PressCreateProfile(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(PressCreateProfile);
+	bool PressDeleteProfilePopupClose(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(PressDeleteProfilePopupClose);
 
-    bool PressDeleteProfile(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(PressDeleteProfile);
+	
+	bool PressEnterNameCreate(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(PressEnterNameCreate);
 
-    bool PressDeleteProfilePopupClose(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(PressDeleteProfilePopupClose);
+	bool PressEnterNameCancel(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(PressEnterNameCancel);
 
-    bool PressEnterNameCreate(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(PressEnterNameCreate);
+	bool UIPressEnterNameCancel(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(UIPressEnterNameCancel);
 
-    bool PressEnterNameCancel(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(PressEnterNameCancel);
-
-    bool UIPressEnterNameCancel(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(UIPressEnterNameCancel);
-
-    bool ProfileSelectionClickChange(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(ProfileSelectionClickChange);
+	bool ProfileSelectionClickChange(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(ProfileSelectionClickChange);
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_MAIN_MENU_PROFILE_H

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,123 +26,129 @@
 
 //----------------------------------------------
 
-class cLuxProp_Lever_SaveData : public iLuxProp_SaveData {
-    kSerializableClassInit(cLuxProp_Lever_SaveData) public : int mlCurrentState;
-    int mlStuckState;
+class cLuxProp_Lever_SaveData : public iLuxProp_SaveData
+{
+	kSerializableClassInit(cLuxProp_Lever_SaveData)
+public:
+	int mlCurrentState;
+	int mlStuckState;
 
-    float mfMiddleAngleAmount;
-    bool mbAutoMoveToAngle;
-    int mlAutoMoveGoal;
+	float mfMiddleAngleAmount;
+	bool mbAutoMoveToAngle;
+	int mlAutoMoveGoal;
 
-    bool mbInteractionDisablesStuck;
+	bool mbInteractionDisablesStuck;
 };
 
 //----------------------------------------------
 
-class cLuxProp_Lever : public iLuxProp {
-    typedef iLuxProp super_class;
-    friend class cLuxPropLoader_Lever;
 
-  public:
-    cLuxProp_Lever(const tString &asName, int alID, cLuxMap *apMap);
-    virtual ~cLuxProp_Lever();
+class cLuxProp_Lever : public iLuxProp
+{
+typedef iLuxProp super_class;
+friend class cLuxPropLoader_Lever;
+public:	
+	cLuxProp_Lever(const tString &asName, int alID, cLuxMap *apMap);
+	virtual ~cLuxProp_Lever();
 
-    //////////////////////
-    // General
-    bool CanInteract(iPhysicsBody *apBody);
-    bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
+	//////////////////////
+	//General
+	bool CanInteract(iPhysicsBody *apBody);
+	bool OnInteract(iPhysicsBody *apBody, const cVector3f &avPos);
+	
+	void OnSetupAfterLoad(cWorld *apWorld);
 
-    void OnSetupAfterLoad(cWorld *apWorld);
+	void OnResetProperties();
 
-    void OnResetProperties();
+	void UpdatePropSpecific(float afTimeStep);
+	
+	void BeforePropDestruction();
 
-    void UpdatePropSpecific(float afTimeStep);
+	eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
 
-    void BeforePropDestruction();
+	//////////////////////
+	//Properties
+	iLuxInteractData_RotateBase* GetMoveBaseData(){ return &mLeverData;}
+	
+	int GetLeverState(){ return mlCurrentState; }
 
-    eLuxFocusCrosshair GetFocusCrosshair(iPhysicsBody *apBody, const cVector3f &avPos);
+	void SetStuckState(int alState, bool abEffects);
+	int  GetStuckState(){ return mlStuckState; }
 
-    //////////////////////
-    // Properties
-    iLuxInteractData_RotateBase *GetMoveBaseData() { return &mLeverData; }
+	void SetInteractionDisablesStuck(bool abX){ mbInteractionDisablesStuck = abX;}
+	bool GetInteractionDisablesStuck(bool abX){ return mbInteractionDisablesStuck;}
 
-    int GetLeverState() { return mlCurrentState; }
+	//////////////////////
+	//Connection callbacks
+	void OnConnectionStateChange(iLuxEntity *apEntity, int alState);
+	
+	//////////////////////
+	//Save data stuff
+	iLuxEntity_SaveData* CreateSaveData();
+	void SaveToSaveData(iLuxEntity_SaveData* apSaveData);
+	void LoadFromSaveData(iLuxEntity_SaveData* apSaveData);
+	void SetupSaveData(iLuxEntity_SaveData *apSaveData);
 
-    void SetStuckState(int alState, bool abEffects);
-    int GetStuckState() { return mlStuckState; }
+private:
+	void CalculateMiddleAngle();
 
-    void SetInteractionDisablesStuck(bool abX) { mbInteractionDisablesStuck = abX; }
-    bool GetInteractionDisablesStuck(bool abX) { return mbInteractionDisablesStuck; }
+	void UpdateCheckStuckSound(float afTimeStep);
+	void UpdateCheckLimit(float afAngle, float afTimeStep);
+	void UpdateAutoMove(float afAngle, float afTimeStep);
 
-    //////////////////////
-    // Connection callbacks
-    void OnConnectionStateChange(iLuxEntity *apEntity, int alState);
+	void ChangeState(int alState, bool abEffects);
 
-    //////////////////////
-    // Save data stuff
-    iLuxEntity_SaveData *CreateSaveData();
-    void SaveToSaveData(iLuxEntity_SaveData *apSaveData);
-    void LoadFromSaveData(iLuxEntity_SaveData *apSaveData);
-    void SetupSaveData(iLuxEntity_SaveData *apSaveData);
+	cLuxInteractData_Lever mLeverData;
 
-  private:
-    void CalculateMiddleAngle();
+	float mfStuckSoundTimer;
 
-    void UpdateCheckStuckSound(float afTimeStep);
-    void UpdateCheckLimit(float afAngle, float afTimeStep);
-    void UpdateAutoMove(float afAngle, float afTimeStep);
+	float mfDefaultMinAngle;
+	float mfDefaultMaxAngle;
+	iPhysicsJointHinge *mpHingeJoint;
+	iPhysicsBody *mpLeverBody;
+	
+	bool mbCanInteractWithStaticBody;
+	float mfMinLimitRange;
+	float mfMaxLimitRange;
+	bool mbMinLimitStuck;
+	bool mbMaxLimitStuck;
 
-    void ChangeState(int alState, bool abEffects);
+	float mfMiddleAngle;
+	float mfMiddleAngleAmount;
+	bool mbAutoMoveToAngle;
+	int mlAutoMoveGoal;
+	float mfAutoMoveSpeedFactor;
+	float mfAutoMoveMaxSpeed;
 
-    cLuxInteractData_Lever mLeverData;
+	tString msMinLimitSound;
+	tString msMaxLimitSound;
 
-    float mfStuckSoundTimer;
+	cPidController<cVector3f> mRotatePid;
 
-    float mfDefaultMinAngle;
-    float mfDefaultMaxAngle;
-    iPhysicsJointHinge *mpHingeJoint;
-    iPhysicsBody *mpLeverBody;
+	int mlCurrentState;
+	int mlStuckState;
 
-    bool mbCanInteractWithStaticBody;
-    float mfMinLimitRange;
-    float mfMaxLimitRange;
-    bool mbMinLimitStuck;
-    bool mbMaxLimitStuck;
+	tString msStuckSound;
 
-    float mfMiddleAngle;
-    float mfMiddleAngleAmount;
-    bool mbAutoMoveToAngle;
-    int mlAutoMoveGoal;
-    float mfAutoMoveSpeedFactor;
-    float mfAutoMoveMaxSpeed;
-
-    tString msMinLimitSound;
-    tString msMaxLimitSound;
-
-    cPidController<cVector3f> mRotatePid;
-
-    int mlCurrentState;
-    int mlStuckState;
-
-    tString msStuckSound;
-
-    bool mbInteractionDisablesStuck;
+	bool mbInteractionDisablesStuck;
 };
 
 //----------------------------------------------
 
-class cLuxPropLoader_Lever : public iLuxPropLoader {
-  public:
-    cLuxPropLoader_Lever(const tString &asName);
-    virtual ~cLuxPropLoader_Lever() {}
+class cLuxPropLoader_Lever : public iLuxPropLoader
+{
+public:
+	cLuxPropLoader_Lever(const tString& asName);
+	virtual ~cLuxPropLoader_Lever(){}
 
-    iLuxProp *CreateProp(const tString &asName, int alID, cLuxMap *apMap);
-    void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem);
-    void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars);
+	iLuxProp *CreateProp(const tString& asName, int alID, cLuxMap *apMap);
+	void LoadVariables(iLuxProp *apProp, cXmlElement *apRootElem);
+	void LoadInstanceVariables(iLuxProp *apProp, cResourceVarsObject *apInstanceVars);
 
-  private:
+private:
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_PROP_LEVER_H

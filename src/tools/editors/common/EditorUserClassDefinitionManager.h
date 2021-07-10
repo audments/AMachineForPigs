@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -26,12 +26,13 @@
 
 //------------------------------------------------------------------
 
-enum eEditorVarCategory {
-    eEditorVarCategory_EditorSetup = 0x00000001,
-    eEditorVarCategory_Type = 0x00000002,
-    eEditorVarCategory_Instance = 0x00000004,
-
-    eEditorVarCategory_LastEnum = 3,
+enum eEditorVarCategory
+{
+	eEditorVarCategory_EditorSetup	= 0x00000001,
+	eEditorVarCategory_Type			= 0x00000002,
+	eEditorVarCategory_Instance		= 0x00000004,
+	
+	eEditorVarCategory_LastEnum		= 3,
 };
 
 //------------------------------------------------------------------
@@ -48,194 +49,202 @@ typedef std::map<tString, tEditorVarVec> tVarGroupMap;
 
 //------------------------------------------------------------------
 
-class cEditorVarGroup {
-  public:
-    cEditorVarGroup(const tString &asName);
+class cEditorVarGroup
+{
+public:
+	cEditorVarGroup(const tString& asName);
 
-    const tString &GetName() { return msName; }
-
-  private:
-    tString msName;
+	const tString& GetName() { return msName; }
+private:
+	tString msName;
 };
 
-typedef std::vector<cEditorVarGroup *> tVarGroupVec;
+typedef std::vector<cEditorVarGroup*> tVarGroupVec;
 
 //------------------------------------------------------------------
 
-class cEditorUserClass : public iEditorClass {
-  public:
-    cEditorUserClass(cEditorUserClassDefinition *apDefinition);
-    virtual ~cEditorUserClass();
+class cEditorUserClass : public iEditorClass
+{
+public:
+	cEditorUserClass(cEditorUserClassDefinition* apDefinition);
+	virtual ~cEditorUserClass();
 
-    cEditorUserClassDefinition *GetDefinition() { return mpDefinition; }
+	cEditorUserClassDefinition* GetDefinition() { return mpDefinition; }
 
-    bool Create(void *apData);
+	bool Create(void* apData);
 
-    iEditorVar *CreateClassSpecificVariableFromElement(cXmlElement *apElement);
+	iEditorVar* CreateClassSpecificVariableFromElement(cXmlElement* apElement);
 
-    virtual iEditorVar *GetVariable(eEditorVarCategory, const tWString &);
+	virtual iEditorVar* GetVariable(eEditorVarCategory, const tWString&);
 
-    void SetIndex(int alX) { mlIndex = alX; }
-    int GetIndex() { return mlIndex; }
+	void SetIndex(int alX) { mlIndex = alX; }
+	int GetIndex() { return mlIndex; }
 
-    virtual void AddVariablesToInstance(eEditorVarCategory aCat, cEditorUserClassInstance *apInstance);
+	virtual void AddVariablesToInstance(eEditorVarCategory aCat, cEditorUserClassInstance* apInstance);
 
-    virtual tEditorVarVec GetEditorSetupVars();
-    virtual void DumpEditorSetupVars(tEditorVarVec &);
+	virtual tEditorVarVec GetEditorSetupVars();
+	virtual void DumpEditorSetupVars(tEditorVarVec&);
 
-  protected:
-    int mlIndex;
-    cEditorUserClassDefinition *mpDefinition;
-    std::vector<tEditorVarVec> mvVariables;
-};
-
-//------------------------------------------------------------------
-
-class cEditorUserClassBase : public cEditorUserClass {
-  public:
-    cEditorUserClassBase(cEditorUserClassDefinition *apDefinition);
-
-  protected:
+protected:
+	int mlIndex;
+	cEditorUserClassDefinition* mpDefinition;
+	std::vector<tEditorVarVec> mvVariables;
 };
 
 //------------------------------------------------------------------
 
-//------------------------------------------------------------------
+class cEditorUserClassBase : public cEditorUserClass
+{
+public:
+	cEditorUserClassBase(cEditorUserClassDefinition* apDefinition);
 
-class cEditorUserClassType : public cEditorUserClass {
-  public:
-    cEditorUserClassType(cEditorUserClassDefinition *apDefinition);
-    ~cEditorUserClassType();
-
-    bool Create(void *apData);
-
-    void AddVariablesToInstance(eEditorVarCategory aCat, cEditorUserClassInstance *apInstance);
-    void DumpEditorSetupVars(tEditorVarVec &);
-
-    iEditorVar *GetVariable(eEditorVarCategory, const tWString &);
-
-    int GetSubTypeNum();
-    cEditorUserClassSubType *GetSubType(int alX);
-    cEditorUserClassSubType *GetSubType(const tString &asName);
-
-    int GetDefaultSubTypeIndex() { return mlDefaultSubType; }
-
-  protected:
-    iEditorClass *mpBaseClass;
-    tEditorClassVec mvSubTypes;
-    int mlDefaultSubType;
+protected:
 };
 
 //------------------------------------------------------------------
 
-class cEditorUserClassSubType : public cEditorUserClass {
-  public:
-    cEditorUserClassSubType(cEditorUserClassType *apParent);
-    cEditorUserClassType *GetParent() { return mpParent; }
 
-    cEditorClassInstance *CreateInstance(eEditorVarCategory aCat);
-    void DumpEditorSetupVars(tEditorVarVec &);
 
-    iEditorVar *GetVariable(eEditorVarCategory, const tWString &);
+//------------------------------------------------------------------
 
-    bool IsDefaultSubType();
+class cEditorUserClassType : public cEditorUserClass
+{
+public:
+	cEditorUserClassType(cEditorUserClassDefinition* apDefinition);
+	~cEditorUserClassType();
 
-  protected:
-    cEditorUserClassType *mpParent;
+	bool Create(void* apData);
+
+	void AddVariablesToInstance(eEditorVarCategory aCat, cEditorUserClassInstance* apInstance);
+	void DumpEditorSetupVars(tEditorVarVec&);
+
+	iEditorVar* GetVariable(eEditorVarCategory, const tWString&);
+
+	int GetSubTypeNum();
+	cEditorUserClassSubType* GetSubType(int alX);
+	cEditorUserClassSubType* GetSubType(const tString& asName);
+
+	int GetDefaultSubTypeIndex() { return mlDefaultSubType; }
+protected:
+
+	iEditorClass* mpBaseClass;
+	tEditorClassVec mvSubTypes;
+	int mlDefaultSubType;
 };
 
 //------------------------------------------------------------------
 
-class cEditorUserClassInstance : public cEditorClassInstance {
-  public:
-    cEditorUserClassInstance(cEditorUserClassSubType *apClass, eEditorVarCategory aCat);
-    eEditorVarCategory GetCategory() { return mCat; }
+class cEditorUserClassSubType : public cEditorUserClass
+{
+public:
+	cEditorUserClassSubType(cEditorUserClassType* apParent);
+	cEditorUserClassType* GetParent() { return mpParent; }
 
-    cEditorClassInstance *CreateSpecificCopy();
+	cEditorClassInstance* CreateInstance(eEditorVarCategory aCat);
+	void DumpEditorSetupVars(tEditorVarVec&);
 
-    cEditorVarInputPanel *CreateInputPanel(iEditorWindow *apWindow, iWidget *apParent, bool abX);
+	iEditorVar* GetVariable(eEditorVarCategory, const tWString&);
 
-  protected:
-    eEditorVarCategory mCat;
+	bool IsDefaultSubType();
+
+protected:
+
+	cEditorUserClassType* mpParent;
 };
 
 //------------------------------------------------------------------
 
-class cEditorUserClassInputPanel : public cEditorVarInputPanel {
-  public:
-    cEditorUserClassInputPanel(cEditorUserClassInstance *apInstance);
+class cEditorUserClassInstance : public cEditorClassInstance
+{
+public:
+	cEditorUserClassInstance(cEditorUserClassSubType* apClass, eEditorVarCategory aCat);
+	eEditorVarCategory GetCategory() { return mCat; }
 
-    void Create(iEditorWindow *apWindow, iWidget *apWidget);
+	cEditorClassInstance* CreateSpecificCopy();
 
-  protected:
+	cEditorVarInputPanel* CreateInputPanel(iEditorWindow* apWindow, iWidget* apParent, bool abX);
+protected:
+	eEditorVarCategory mCat;
 };
 
 //------------------------------------------------------------------
 
-class cEditorUserClassDefinition {
-  public:
-    cEditorUserClassDefinition(cEditorUserClassDefinitionManager *apManager);
-    ~cEditorUserClassDefinition();
+class cEditorUserClassInputPanel : public cEditorVarInputPanel
+{
+public:
+	cEditorUserClassInputPanel(cEditorUserClassInstance* apInstance);
 
-    cEditorUserClassDefinitionManager *GetManager() { return mpManager; }
-
-    bool Create(const tString &asFilename, int alLoadFlags);
-    int GetLoadFlags() { return mlLoadFlags; }
-
-    bool IsLoadableCategory(eEditorVarCategory aCat);
-
-    cEditorUserClassBase *GetBaseClass(const tString &asName);
-
-    int GetTypeNum();
-    cEditorUserClassType *GetType(int);
-    cEditorUserClassType *GetType(const tString &asName);
-
-    int GetGroupNum();
-    cEditorVarGroup *GetGroup(int alIdx);
-    cEditorVarGroup *GetGroup(const tString &asName);
-
-  protected:
-    int mlLoadFlags;
-
-    cEditorUserClassDefinitionManager *mpManager;
-    tEditorClassVec mvBaseClasses;
-    tEditorClassVec mvTypes;
-
-    std::vector<cEditorVarGroup *> mvGroups;
+	void Create(iEditorWindow* apWindow, iWidget* apWidget);
+protected:
 };
 
 //------------------------------------------------------------------
 
-typedef std::vector<cEditorUserClassDefinition *> tUserClassDefVec;
+class cEditorUserClassDefinition
+{
+public:
+	cEditorUserClassDefinition(cEditorUserClassDefinitionManager* apManager);
+	~cEditorUserClassDefinition();
+
+	cEditorUserClassDefinitionManager* GetManager() { return mpManager; }
+
+	bool Create(const tString& asFilename, int alLoadFlags);
+	int GetLoadFlags() { return mlLoadFlags; }
+
+	bool IsLoadableCategory(eEditorVarCategory aCat);
+
+	cEditorUserClassBase* GetBaseClass(const tString& asName);
+
+	int GetTypeNum();
+	cEditorUserClassType* GetType(int);
+	cEditorUserClassType* GetType(const tString& asName);
+
+	int GetGroupNum();
+	cEditorVarGroup* GetGroup(int alIdx);
+	cEditorVarGroup* GetGroup(const tString& asName);
+protected:
+	int mlLoadFlags;
+
+	cEditorUserClassDefinitionManager* mpManager;
+	tEditorClassVec mvBaseClasses;
+	tEditorClassVec mvTypes;
+
+	std::vector<cEditorVarGroup*> mvGroups;
+};
 
 //------------------------------------------------------------------
 
-class cEditorUserClassDefinitionManager {
-  public:
-    cEditorUserClassDefinitionManager(iEditorBase *apEditor);
-    ~cEditorUserClassDefinitionManager();
+typedef std::vector<cEditorUserClassDefinition*> tUserClassDefVec;
 
-    iEditorBase *GetEditor() { return mpEditor; }
+//------------------------------------------------------------------
 
-    void RegisterDefFilename(int alIndex, const tString &asName, int alLoadFlags);
+class cEditorUserClassDefinitionManager
+{
+public:
+	cEditorUserClassDefinitionManager(iEditorBase* apEditor);
+	~cEditorUserClassDefinitionManager();
 
-    void Init();
+	iEditorBase* GetEditor() { return mpEditor; }
 
-    cEditorUserClassDefinition *GetDefinition(int alX);
+	void RegisterDefFilename(int alIndex, const tString& asName, int alLoadFlags);
 
-    const tString &GetVarCategoryName(eEditorVarCategory aCat);
+	void Init();
 
-  protected:
-    iEditorBase *mpEditor;
+	cEditorUserClassDefinition* GetDefinition(int alX);
 
-    tStringVec mvVarCategoryNames;
+	const tString& GetVarCategoryName(eEditorVarCategory aCat);
 
-    tIntVec mvDefIndices;
-    tStringVec mvDefFilenames;
-    tIntVec mvLoadFlags;
+protected:
+	iEditorBase* mpEditor;
 
-    std::map<int, int> mmapIndices;
-    tUserClassDefVec mvDefinitions;
+	tStringVec mvVarCategoryNames;
+
+	tIntVec		mvDefIndices;
+	tStringVec	mvDefFilenames;
+	tIntVec		mvLoadFlags;
+
+	std::map<int, int> mmapIndices;
+	tUserClassDefVec mvDefinitions;
 };
 
 //------------------------------------------------------------------

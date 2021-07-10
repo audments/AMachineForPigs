@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,104 +20,103 @@
 #ifndef HPL_VIEWPORT_H
 #define HPL_VIEWPORT_H
 
+#include "math/MathTypes.h"
 #include "graphics/GraphicsTypes.h"
 #include "gui/GuiTypes.h"
-#include "math/MathTypes.h"
 #include "scene/SceneTypes.h"
 
 namespace hpl {
 
-//------------------------------------------
+	//------------------------------------------
+	
+	class cScene;
+	class cCamera;
+	class iRenderer;
+	class iFrameBuffer;
+	class cRenderSettings;
+	class cPostEffectComposite;
+	class cWorld;
+	class iViewportCallback;
+	class iRendererCallback;
+	class cGuiSet;
+	
+	//------------------------------------------
+	
+	class cViewport
+	{
+	public:
+		cViewport(cScene *apScene);
+		~cViewport();
 
-class cScene;
-class cCamera;
-class iRenderer;
-class iFrameBuffer;
-class cRenderSettings;
-class cPostEffectComposite;
-class cWorld;
-class iViewportCallback;
-class iRendererCallback;
-class cGuiSet;
+		void SetActive(bool abX){ mbActive = abX;}
+		void SetVisible(bool abX) { mbVisible = abX;}
+		bool IsActive(){ return mbActive;}
+		bool IsVisible(){ return mbVisible;}
 
-//------------------------------------------
+		void SetIsListener(bool abX){ mbIsListener = abX;}
+		bool IsListener(){ return mbIsListener;}
 
-class cViewport {
-  public:
-    cViewport(cScene *apScene);
-    ~cViewport();
+		void SetCamera(cCamera *apCamera){ mpCamera = apCamera;}
+		cCamera* GetCamera(){ return mpCamera;}
 
-    void SetActive(bool abX) { mbActive = abX; }
-    void SetVisible(bool abX) { mbVisible = abX; }
-    bool IsActive() { return mbActive; }
-    bool IsVisible() { return mbVisible; }
+		void SetWorld(cWorld *apWorld);
+		cWorld* GetWorld(){ return mpWorld;}
+		
+		void SetRenderer(iRenderer *apRenderer){ mpRenderer = apRenderer;}
+		iRenderer* GetRenderer(){ return mpRenderer;}
 
-    void SetIsListener(bool abX) { mbIsListener = abX; }
-    bool IsListener() { return mbIsListener; }
+		cRenderSettings* GetRenderSettings(){ return mpRenderSettings;}
 
-    void SetCamera(cCamera *apCamera) { mpCamera = apCamera; }
-    cCamera *GetCamera() { return mpCamera; }
+		void SetFrameBuffer(iFrameBuffer *apFrameBuffer){ mRenderTarget.mpFrameBuffer = apFrameBuffer;}
+		iFrameBuffer* GetFrameBuffer(){ return mRenderTarget.mpFrameBuffer;}
 
-    void SetWorld(cWorld *apWorld);
-    cWorld *GetWorld() { return mpWorld; }
+		void SetPostEffectComposite(cPostEffectComposite *apPostEffectComposite){ mpPostEffectComposite = apPostEffectComposite;}
+		cPostEffectComposite* GetPostEffectComposite(){ return mpPostEffectComposite;}
 
-    void SetRenderer(iRenderer *apRenderer) { mpRenderer = apRenderer; }
-    iRenderer *GetRenderer() { return mpRenderer; }
+		void AddGuiSet(cGuiSet *apSet);
+		void RemoveGuiSet(cGuiSet *apSet);
+		cGuiSetListIterator GetGuiSetIterator();
 
-    cRenderSettings *GetRenderSettings() { return mpRenderSettings; }
+		void SetPosition(const cVector2l& avPos){ mRenderTarget.mvPos = avPos;}
+		void SetSize(const cVector2l& avSize){ mRenderTarget.mvSize = avSize;}
+		
+		const cVector2l& GetPosition(){ return  mRenderTarget.mvPos;}
+		const cVector2l& GetSize(){ return mRenderTarget.mvSize;}
 
-    void SetFrameBuffer(iFrameBuffer *apFrameBuffer) { mRenderTarget.mpFrameBuffer = apFrameBuffer; }
-    iFrameBuffer *GetFrameBuffer() { return mRenderTarget.mpFrameBuffer; }
+		cRenderTarget* GetRenderTarget(){ return &mRenderTarget; }
+		
+		void AddViewportCallback(iViewportCallback *apCallback);
+		void RemoveViewportCallback(iViewportCallback *apCallback);
+		void RunViewportCallbackMessage(eViewportMessage aMessage);
 
-    void SetPostEffectComposite(cPostEffectComposite *apPostEffectComposite) {
-        mpPostEffectComposite = apPostEffectComposite;
-    }
-    cPostEffectComposite *GetPostEffectComposite() { return mpPostEffectComposite; }
+		void AddRendererCallback(iRendererCallback *apCallback);
+		void RemoveRendererCallback(iRendererCallback *apCallback);
+		tRendererCallbackList* GetRendererCallbackList(){ return &mlstRendererCallbacks;}
+			
+	private:
+		cScene *mpScene;
 
-    void AddGuiSet(cGuiSet *apSet);
-    void RemoveGuiSet(cGuiSet *apSet);
-    cGuiSetListIterator GetGuiSetIterator();
+		cCamera *mpCamera;
+		cWorld *mpWorld;
 
-    void SetPosition(const cVector2l &avPos) { mRenderTarget.mvPos = avPos; }
-    void SetSize(const cVector2l &avSize) { mRenderTarget.mvSize = avSize; }
+        bool mbActive;
+		bool mbVisible;
 
-    const cVector2l &GetPosition() { return mRenderTarget.mvPos; }
-    const cVector2l &GetSize() { return mRenderTarget.mvSize; }
+		bool mbIsListener;
 
-    cRenderTarget *GetRenderTarget() { return &mRenderTarget; }
+		iRenderer *mpRenderer;
+		cPostEffectComposite *mpPostEffectComposite;
 
-    void AddViewportCallback(iViewportCallback *apCallback);
-    void RemoveViewportCallback(iViewportCallback *apCallback);
-    void RunViewportCallbackMessage(eViewportMessage aMessage);
+		cRenderTarget mRenderTarget;
+		
+		tViewportCallbackList mlstCallbacks;
+		tRendererCallbackList mlstRendererCallbacks;
+		tGuiSetList mlstGuiSets;
+		
+		cRenderSettings *mpRenderSettings;
+	};
 
-    void AddRendererCallback(iRendererCallback *apCallback);
-    void RemoveRendererCallback(iRendererCallback *apCallback);
-    tRendererCallbackList *GetRendererCallbackList() { return &mlstRendererCallbacks; }
+	//------------------------------------------
 
-  private:
-    cScene *mpScene;
-
-    cCamera *mpCamera;
-    cWorld *mpWorld;
-
-    bool mbActive;
-    bool mbVisible;
-
-    bool mbIsListener;
-
-    iRenderer *mpRenderer;
-    cPostEffectComposite *mpPostEffectComposite;
-
-    cRenderTarget mRenderTarget;
-
-    tViewportCallbackList mlstCallbacks;
-    tRendererCallbackList mlstRendererCallbacks;
-    tGuiSetList mlstGuiSets;
-
-    cRenderSettings *mpRenderSettings;
 };
-
-//------------------------------------------
-
-};     // namespace hpl
 #endif // HPL_VIEWPORT_H

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -25,118 +25,135 @@
 
 namespace hpl {
 
-//------------------------------------
+	//------------------------------------
+	
+	class cAllocatedPointer
+	{
+	public:
+		cAllocatedPointer(void *apData, const std::string& asFile, int alLine, size_t alMemory);
 
-class cAllocatedPointer {
-  public:
-    cAllocatedPointer(void *apData, const std::string &asFile, int alLine, size_t alMemory);
+		std::string msFile;
+		int mlLine;
+		size_t mlMemory;
+		void *mpData;
+	};
 
-    std::string msFile;
-    int mlLine;
-    size_t mlMemory;
-    void *mpData;
-};
+	//------------------------------------
 
-//------------------------------------
+	typedef std::map<void*, cAllocatedPointer> tAllocatedPointerMap;
+	typedef tAllocatedPointerMap::iterator tAllocatedPointerMapIt;
+	
+	//------------------------------------
 
-typedef std::map<void *, cAllocatedPointer> tAllocatedPointerMap;
-typedef tAllocatedPointerMap::iterator tAllocatedPointerMapIt;
+	class cMemoryManager
+	{
+	public:
 
-//------------------------------------
+		static void* AddPointer(const cAllocatedPointer& aAllocatedPointer);
+		static void* UpdatePointer(void *apOldData, const cAllocatedPointer& aNewAllocatedPointer);
 
-class cMemoryManager {
-  public:
-    static void *AddPointer(const cAllocatedPointer &aAllocatedPointer);
-    static void *UpdatePointer(void *apOldData, const cAllocatedPointer &aNewAllocatedPointer);
+		static bool RemovePointer(void *apData,const char* apFileString, int alLine);
 
-    static bool RemovePointer(void *apData, const char *apFileString, int alLine);
+		/**
+		 * Checks if data is valid, and can even be used on sub data (like pData + x )
+		 */
+		static bool IsValid(void *apData);
 
-    /**
-     * Checks if data is valid, and can even be used on sub data (like pData + x )
-     */
-    static bool IsValid(void *apData);
+		static void LogResults();
+		
+		static 	tAllocatedPointerMap m_mapPointers;
+		static size_t mlTotalMemoryUsage;
 
-    static void LogResults();
+		static bool mbLogDeletion;
 
-    static tAllocatedPointerMap m_mapPointers;
-    static size_t mlTotalMemoryUsage;
+		template<class T>
+		static T* DeleteAndReturn(T* apData)
+		{ 
+			delete apData;
+			return apData;
+		}
 
-    static bool mbLogDeletion;
+		template<class T>
+		static T* DeleteArrayAndReturn(T* apData)
+		{ 
+			delete [] apData;
+			return apData;
+		}
 
-    template <class T> static T *DeleteAndReturn(T *apData) {
-        delete apData;
-        return apData;
-    }
+		template<class T>
+		static T* FreeAndReturn(T* apData)
+		{ 
+			free(apData);
+			return apData;
+		}
 
-    template <class T> static T *DeleteArrayAndReturn(T *apData) {
-        delete[] apData;
-        return apData;
-    }
+		static void SetLogCreation(bool abX);
+		static bool GetLogCreation(){ return mbLogCreation;}
 
-    template <class T> static T *FreeAndReturn(T *apData) {
-        free(apData);
-        return apData;
-    }
+		static int GetCreationCount(){ return mlCreationCount;}
 
-    static void SetLogCreation(bool abX);
-    static bool GetLogCreation() { return mbLogCreation; }
+	private:
+		static bool mbLogCreation;
+		static int mlCreationCount;
+	};
 
-    static int GetCreationCount() { return mlCreationCount; }
-
-  private:
-    static bool mbLogCreation;
-    static int mlCreationCount;
-};
-
-//------------------------------------
+	//------------------------------------
 
 #ifdef MEMORY_MANAGER_ACTIVE
+    
+	#define hplNew(classType, constructor) \
+			( classType *)hpl::cMemoryManager::AddPointer(hpl::cAllocatedPointer(new classType constructor ,__FILE__,__LINE__,sizeof(classType)))
 
-#define hplNew(classType, constructor)                                                                                 \
-    (classType *)hpl::cMemoryManager::AddPointer(                                                                      \
-        hpl::cAllocatedPointer(new classType constructor, __FILE__, __LINE__, sizeof(classType)))
+	#define hplNewArray(classType, amount) \
+			( classType *) hpl::cMemoryManager::AddPointer(hpl::cAllocatedPointer(new classType [ amount ] ,__FILE__,__LINE__,amount * sizeof(classType)))
 
-#define hplNewArray(classType, amount)                                                                                 \
-    (classType *)hpl::cMemoryManager::AddPointer(                                                                      \
-        hpl::cAllocatedPointer(new classType[amount], __FILE__, __LINE__, amount * sizeof(classType)))
+	#define hplMalloc(amount) \
+			hpl::cMemoryManager::AddPointer(hpl::cAllocatedPointer(malloc( amount ) ,__FILE__,__LINE__,amount))
 
-#define hplMalloc(amount)                                                                                              \
-    hpl::cMemoryManager::AddPointer(hpl::cAllocatedPointer(malloc(amount), __FILE__, __LINE__, amount))
+	#define hplRealloc(data, amount) \
+		hpl::cMemoryManager::UpdatePointer(data, hpl::cAllocatedPointer(realloc( data, amount ) ,__FILE__,__LINE__,amount))
 
-#define hplRealloc(data, amount)                                                                                       \
-    hpl::cMemoryManager::UpdatePointer(data, hpl::cAllocatedPointer(realloc(data, amount), __FILE__, __LINE__, amount))
 
-#define hplDelete(data)                                                                                                \
-    {                                                                                                                  \
-        hpl::cMemoryManager::RemovePointer(hpl::cMemoryManager::DeleteAndReturn(data), __FILE__, __LINE__);            \
-    } // delete data;
+	#define hplDelete(data){ \
+			hpl::cMemoryManager::RemovePointer(hpl::cMemoryManager::DeleteAndReturn(data),__FILE__,__LINE__); \
+			}//delete data;
+				
+		
+	#define hplDeleteArray(data){ \
+			hpl::cMemoryManager::RemovePointer(hpl::cMemoryManager::DeleteArrayAndReturn(data),__FILE__,__LINE__); \
+			}//delete [] data;
 
-#define hplDeleteArray(data)                                                                                           \
-    {                                                                                                                  \
-        hpl::cMemoryManager::RemovePointer(hpl::cMemoryManager::DeleteArrayAndReturn(data), __FILE__, __LINE__);       \
-    } // delete [] data;
+	#define hplFree(data){ \
+			hpl::cMemoryManager::RemovePointer(hpl::cMemoryManager::FreeAndReturn(data),__FILE__,__LINE__); \
+			}//free(data);
 
-#define hplFree(data)                                                                                                  \
-    { hpl::cMemoryManager::RemovePointer(hpl::cMemoryManager::FreeAndReturn(data), __FILE__, __LINE__); } // free(data);
-
+		
 #else
-#define hplNew(classType, constructor) new classType constructor
+	#define hplNew(classType, constructor) \
+			new classType constructor 
+	
+	#define hplNewArray(classType, amount) \
+			new classType [ amount ] 
+	
+	#define hplMalloc(amount) \
+			malloc( amount )
 
-#define hplNewArray(classType, amount) new classType[amount]
+	#define hplRealloc(data, amount) \
+			realloc( data, amount )
+	
+	#define hplDelete(data) \
+		delete data;
 
-#define hplMalloc(amount) malloc(amount)
+	#define hplDeleteArray(data) \
+		delete [] data;
 
-#define hplRealloc(data, amount) realloc(data, amount)
-
-#define hplDelete(data) delete data;
-
-#define hplDeleteArray(data) delete[] data;
-
-#define hplFree(data) free(data);
+	#define hplFree(data) \
+		free(data);
 
 #endif
 
-//------------------------------------
+	//------------------------------------
 
-};     // namespace hpl
+
+};
 #endif // HPL_MEMORY_MANAGER_H

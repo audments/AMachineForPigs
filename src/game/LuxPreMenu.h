@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -24,162 +24,167 @@
 
 #include "LuxBase.h"
 
-enum eLuxPreMenuState {
-    eLuxPreMenuState_Initial,
-    eLuxPreMenuState_FadeIn,
-    eLuxPreMenuState_FadeOut,
-    eLuxPreMenuState_FastFadeOut,
-    eLuxPreMenuState_ShowPremenuSection,
-    eLuxPreMenuState_Final,
+enum eLuxPreMenuState
+{
+	eLuxPreMenuState_Initial,
+	eLuxPreMenuState_FadeIn,
+	eLuxPreMenuState_FadeOut,
+	eLuxPreMenuState_FastFadeOut,
+	eLuxPreMenuState_ShowPremenuSection,
+	eLuxPreMenuState_Final,
 
-    eLuxPreMenuState_LastEnum,
+	eLuxPreMenuState_LastEnum,
 };
 
 //----------------------------------------------
 
-class cLuxPreMenuTextElement {
-  public:
-    bool Load(cXmlElement *apElement, const cVector2f &avGuiSetSize);
+class cLuxPreMenuTextElement
+{
+public:
+	bool Load(cXmlElement* apElement, const cVector2f& avGuiSetSize);
 
-    cWidgetLabel *CreateLabel(cGuiSet *apSet);
+	cWidgetLabel* CreateLabel(cGuiSet* apSet);
 
-  private:
-    tWString msText;
-    cVector3f mvPos;
-    cVector2f mvFrameSize;
-    cVector2f mvFontSize;
-    cColor mColor;
-    tString msFontFile;
-    eFontAlign mAlign;
-
-    float mfTime;
+private:
+	tWString	msText;
+	cVector3f	mvPos;
+	cVector2f	mvFrameSize;
+	cVector2f	mvFontSize;
+	cColor		mColor;
+	tString		msFontFile;
+	eFontAlign	mAlign;
+	
+	float		mfTime;
 };
 
 //----------------------------------------------
 
-typedef std::list<cLuxPreMenuTextElement *> tPreMenuTextList;
-typedef tPreMenuTextList::iterator tPreMenuTextListIt;
+typedef std::list<cLuxPreMenuTextElement*>	tPreMenuTextList;
+typedef tPreMenuTextList::iterator			tPreMenuTextListIt;
 
 //----------------------------------------------
 
-class cLuxPreMenuSection {
-  public:
-    cLuxPreMenuSection();
-    ~cLuxPreMenuSection();
+class cLuxPreMenuSection
+{
+public:
+	cLuxPreMenuSection();
+	~cLuxPreMenuSection();
 
-    bool Load(cXmlElement *apElement, const cVector2f &avGuiSetSize);
+	bool Load(cXmlElement* apElement, const cVector2f& avGuiSetSize);
 
-    void AddTextElement(cLuxPreMenuTextElement *apText);
-    bool HasTextElements();
+	void AddTextElement(cLuxPreMenuTextElement* apText);
+	bool HasTextElements();
 
-    const tPreMenuTextList &GetTextElements() { return mlstTextElements; }
+	const tPreMenuTextList& GetTextElements() { return mlstTextElements; }
 
-    cGuiGfxElement *CreateBackground(cGui *apGui, cTextureManager *apTexMgr);
-    float GetTime() { return mfTime; }
+	cGuiGfxElement* CreateBackground(cGui* apGui, cTextureManager* apTexMgr);
+	float GetTime() { return mfTime; }
 
-    bool ShowFirstStartOnly() { return mbShowFirstStartOnly; }
+	bool ShowFirstStartOnly(){ return mbShowFirstStartOnly;}
 
-    bool HasGammaSettings() { return mbHasGammaSettings; }
+	bool HasGammaSettings() { return mbHasGammaSettings; }
 
-  public:
-    cColor mBackgroundColor;
-    tString msBackgroundFile;
-    tPreMenuTextList mlstTextElements;
-    float mfTime;
-    bool mbShowFirstStartOnly;
-    bool mbHasGammaSettings;
-    tString msMusic;
-    float mfMusicVolume;
-    float mfMusicFadeTime;
-    bool mbAllowSkipping;
+public:
+	cColor mBackgroundColor;
+	tString msBackgroundFile;
+	tPreMenuTextList mlstTextElements;
+	float mfTime;
+	bool mbShowFirstStartOnly;
+	bool mbHasGammaSettings;
+	tString msMusic;
+	float mfMusicVolume;
+	float mfMusicFadeTime;
+	bool mbAllowSkipping;
 };
 
 //----------------------------------------------
 
-class cLuxPreMenu : public iLuxUpdateable {
-  public:
-    cLuxPreMenu();
-    ~cLuxPreMenu();
+class cLuxPreMenu : public iLuxUpdateable
+{
+public:	
+	cLuxPreMenu();
+	~cLuxPreMenu();
 
-    void Update(float afTimeStep);
+	void Update(float afTimeStep);
 
-    void OnEnterContainer(const tString &asOldContainer);
-    void OnLeaveContainer(const tString &asNewContainer);
+	void OnEnterContainer(const tString& asOldContainer);
+	void OnLeaveContainer(const tString& asNewContainer);
 
-    void OnDraw(float afFrameTime);
+	void OnDraw(float afFrameTime);
 
-    void ButtonPressed();
+	void ButtonPressed();
 
-    void AppLostInputFocus();
-    void AppGotInputFocus();
-    cGuiSet *GetSet() { return mpGuiSet; }
-    eLuxPreMenuState GetState() { return mCurrentState; }
-    bool IsContinueButtonVisible() { return mpBContinue->IsVisible(); }
+	void AppLostInputFocus();
+	void AppGotInputFocus();
+	cGuiSet* GetSet() { return mpGuiSet; }
+	eLuxPreMenuState GetState() { return mCurrentState; }
+	bool IsContinueButtonVisible() { return mpBContinue->IsVisible(); }
 
-  private:
-    void UpdateActions(float afTimeStep);
-    void UpdateState();
+private:
+	void UpdateActions(float afTimeStep);
+	void UpdateState();
 
-    void LoadPreMenuSections();
+	void LoadPreMenuSections();
 
-    void SetGammaValueToInput(float afGamma, bool abGenCallback = false);
+	void SetGammaValueToInput(float afGamma, bool abGenCallback=false);
 
-    bool Gamma_ChangeValue(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(Gamma_ChangeValue);
+	bool Gamma_ChangeValue(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(Gamma_ChangeValue);
+	
+	bool Continue_Pressed(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(Continue_Pressed);
 
-    bool Continue_Pressed(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(Continue_Pressed);
+	bool Continue_UIPressed(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(Continue_UIPressed);
 
-    bool Continue_UIPressed(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(Continue_UIPressed);
+	bool Gamma_UIArrowPressed(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(Gamma_UIArrowPressed);
+	///////////////////////
+	// Settings
+	
+	///////////////////////
+	// Variables
+	cGraphics *mpGraphics;
+	
+	cGui* mpGui;
+	cGuiSet* mpGuiSet;
 
-    bool Gamma_UIArrowPressed(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(Gamma_UIArrowPressed);
-    ///////////////////////
-    // Settings
+	cViewport *mpViewport;
 
-    ///////////////////////
-    // Variables
-    cGraphics *mpGraphics;
+	cVector2f mvScreenSize;
+	cVector2f mvGuiSetSize;
+	cVector2f mvGuiSetCenterSize;
+	cVector2f mvGuiSetOffset;
+	cVector3f mvGuiSetStartPos;
+	
+	eLuxPreMenuState mCurrentState;
+	int mlCurrentSectionIdx;
+	float mfTimer;
+	float mfAlphaFade;
 
-    cGui *mpGui;
-    cGuiSet *mpGuiSet;
+	bool mbExitPreMenu;
+	
+	cGuiGfxElement* mpBlackFade;
 
-    cViewport *mpViewport;
+	std::vector<cLuxPreMenuSection*> mvSections;
 
-    cVector2f mvScreenSize;
-    cVector2f mvGuiSetSize;
-    cVector2f mvGuiSetCenterSize;
-    cVector2f mvGuiSetOffset;
-    cVector3f mvGuiSetStartPos;
+	cLuxPreMenuSection* mpCurrentSection;
+	cGuiGfxElement* mpCurrentBackground;
+	std::vector<cWidgetLabel*> mvCurrentLabels;
+	
+	cWidgetButton* mpBContinue;
 
-    eLuxPreMenuState mCurrentState;
-    int mlCurrentSectionIdx;
-    float mfTimer;
-    float mfAlphaFade;
-
-    bool mbExitPreMenu;
-
-    cGuiGfxElement *mpBlackFade;
-
-    std::vector<cLuxPreMenuSection *> mvSections;
-
-    cLuxPreMenuSection *mpCurrentSection;
-    cGuiGfxElement *mpCurrentBackground;
-    std::vector<cWidgetLabel *> mvCurrentLabels;
-
-    cWidgetButton *mpBContinue;
-
-    cWidgetDummy *mpGGamma;
-    cWidgetImage *mpIGammaPreview;
-    cWidgetLabel *mpLGamma;
-    cWidgetLabel *mpLHelpGamma;
-    cWidgetSlider *mpSGamma;
-    float mfGammaMinValue;
-    float mfGammaMaxValue;
-    float mfGammaStep;
+	cWidgetDummy* mpGGamma;
+	cWidgetImage* mpIGammaPreview;
+	cWidgetLabel* mpLGamma;
+	cWidgetLabel* mpLHelpGamma;
+	cWidgetSlider* mpSGamma;
+	float mfGammaMinValue;
+	float mfGammaMaxValue;
+	float mfGammaStep;
 };
 
 //----------------------------------------------
+
 
 #endif // LUX_MAIN_MENU_H

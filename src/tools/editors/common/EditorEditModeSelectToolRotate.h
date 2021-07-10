@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,59 +20,63 @@
 #ifndef HPLEDITOR_EDITOR_EDIT_MODE_SELECT_TOOL_ROTATE_H
 #define HPLEDITOR_EDITOR_EDIT_MODE_SELECT_TOOL_ROTATE_H
 
+
 #include "EditorEditModeSelectTool.h"
 
-class cEditorEditModeSelectToolRotate : public cEditorEditModeSelectTool {
-  public:
-    cEditorEditModeSelectToolRotate(cEditorEditModeSelect *apParent, cEditorSelection *apSelection);
 
-    bool IsActive();
+class cEditorEditModeSelectToolRotate : public cEditorEditModeSelectTool
+{
+public:
+	cEditorEditModeSelectToolRotate(cEditorEditModeSelect* apParent, cEditorSelection* apSelection);
 
-    bool CheckRayIntersectsAxis(eSelectToolAxis aeAxis, const cVector3f &avRayStart, const cVector3f &avRayEnd) {
-        return false;
-    }
-    bool PointIntersectsAxis(eSelectToolAxis aeAxis, const cVector2f &avPoint);
+	bool IsActive();
 
-    void CheckMouseOverAxis();
+	bool CheckRayIntersectsAxis(eSelectToolAxis aeAxis, const cVector3f& avRayStart, const cVector3f& avRayEnd){return false;}
+	bool PointIntersectsAxis(eSelectToolAxis aeAxis, const cVector2f& avPoint);
 
-    cMatrixf &GetTransformMatrix();
+	void CheckMouseOverAxis();
 
-    void DrawAxes(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions, float afAxisLength);
+	cMatrixf& GetTransformMatrix();
 
-    void UpdateTransformation();
+	void DrawAxes(cEditorWindowViewport* apViewport, cRendererCallbackFunctions *apFunctions, float afAxisLength);
+	
+	void UpdateTransformation();
 
-    void UpdateToolBoundingVolume();
 
-    iEditorAction *CreateAction();
+	void UpdateToolBoundingVolume();
 
-    void Reset();
+	iEditorAction* CreateAction();
 
-    cPlanef mClipPlane;
+	void Reset();
+	
+	
+	cPlanef mClipPlane;
 
-    std::vector<cRect2f> mRectAxisAreaSphCoords[3];
-    cRect2f mrectXAxisSphCoords1;
-    cRect2f mrectXAxisSphCoords2;
+	std::vector<cRect2f> mRectAxisAreaSphCoords[3];
+	cRect2f mrectXAxisSphCoords1;
+	cRect2f mrectXAxisSphCoords2;
 
-    cRect2f mrectYAxisSphCoords1;
-    cRect2f mrectYAxisSphCoords2;
+	cRect2f mrectYAxisSphCoords1;
+	cRect2f mrectYAxisSphCoords2;
 
-    cRect2f mrectZAxisSphCoords1;
-    cRect2f mrectZAxisSphCoords2;
-    cRect2f mrectZAxisSphCoords3;
+	cRect2f mrectZAxisSphCoords1;
+	cRect2f mrectZAxisSphCoords2;
+	cRect2f mrectZAxisSphCoords3;
 
-    cVector3f mvMouseDownCoords;
-    cVector3f mvMouseUpCoords;
+	cVector3f mvMouseDownCoords;
+	cVector3f mvMouseUpCoords;
 
-    cVector2f mvOldMousePos;
-    cVector2f mvMousePos;
+	cVector2f mvOldMousePos;
+	cVector2f mvMousePos;
 
-    cVector3f mvDisplacement;
+	cVector3f mvDisplacement;
 
-    cVector3f mvReferenceRotation;
+	cVector3f mvReferenceRotation;
 
-    cVector3f mvTangentVector;
+	cVector3f mvTangentVector;
 
-    cVector3f mvScreenSpaceTangentVector;
+	cVector3f mvScreenSpaceTangentVector;
+
 };
 
 #endif // HPLEDITOR_EDITOR_EDIT_MODE_SELECT_TOOL_ROTATE_H

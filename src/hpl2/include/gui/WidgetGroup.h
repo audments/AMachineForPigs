@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -22,46 +22,48 @@
 
 #include "gui/Widget.h"
 
+
 namespace hpl {
 
-class cWidgetLabel;
-class cGuiGfxElement;
+	class cWidgetLabel;
+	class cGuiGfxElement;
 
-class cWidgetGroup : public iWidget {
-  public:
-    cWidgetGroup(cGuiSet *apSet, cGuiSkin *apSkin);
-    ~cWidgetGroup();
+	class cWidgetGroup : public iWidget
+	{
+	public:
+		cWidgetGroup(cGuiSet* apSet, cGuiSkin* apSkin);
+		~cWidgetGroup();
 
-    void SetHeaderText(const tWString &asText);
-    const tWString &GetHeaderText();
+		void SetHeaderText(const tWString& asText);
+		const tWString& GetHeaderText();
 
-    void SetDefaultFontSize(const cVector2f &avSize);
+		void SetDefaultFontSize(const cVector2f& avSize);
+	protected:
+		/////////////////////////////
+		// Implemented functions
+		void OnInit();
+		void OnLoadGraphics();
 
-  protected:
-    /////////////////////////////
-    // Implemented functions
-    void OnInit();
-    void OnLoadGraphics();
+		void OnChangeText();
 
-    void OnChangeText();
+		void OnDraw(float afTimeStep, cGuiClipRegion* apClipRegion);
+		void OnDrawAfterClip(float afTimeStep, cGuiClipRegion *apClipRegion);
 
-    void OnDraw(float afTimeStep, cGuiClipRegion *apClipRegion);
-    void OnDrawAfterClip(float afTimeStep, cGuiClipRegion *apClipRegion);
+		/////////////////////////////
+		// Data
 
-    /////////////////////////////
-    // Data
+		cWidgetLabel *mpHeader;
+		cVector2f mvHeaderSize;
 
-    cWidgetLabel *mpHeader;
-    cVector2f mvHeaderSize;
+		cGuiGfxElement *mpGfxBackground;
+		
+		cGuiGfxElement *mvGfxBorders[4];
+		cGuiGfxElement *mvGfxCorners[4];
 
-    cGuiGfxElement *mpGfxBackground;
-
-    cGuiGfxElement *mvGfxBorders[4];
-    cGuiGfxElement *mvGfxCorners[4];
-
-    float mfHeaderOffset;
-    bool mbHeaderBreaksUpperBorder;
+		float mfHeaderOffset;
+		bool mbHeaderBreaksUpperBorder;
+	};
 };
-}; // namespace hpl
+
 
 #endif // HPL_WIDGET_GROUP_H

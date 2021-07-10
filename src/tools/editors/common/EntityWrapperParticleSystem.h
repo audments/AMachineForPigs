@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,139 +20,144 @@
 #ifndef HPLEDITOR_ENTITY_WRAPPER_PARTICLE_SYSTEM_H
 #define HPLEDITOR_ENTITY_WRAPPER_PARTICLE_SYSTEM_H
 
-#include "EngineEntity.h"
 #include "EntityWrapper.h"
+#include "EngineEntity.h"
 
 class cEditorWindowViewport;
 
 //---------------------------------------------------------------
 
-class cIconEntityPS : public iIconEntity {
-  public:
-    cIconEntityPS(iEntityWrapper *apParent);
-    ~cIconEntityPS();
+class cIconEntityPS : public iIconEntity
+{
+public:
+	cIconEntityPS(iEntityWrapper* apParent);
+	~cIconEntityPS();
 
-    void Update();
+	void Update();
 
-  private:
-    bool ReCreatePS(const tString &asFile);
-    void DestroyPS();
+private:
+	bool ReCreatePS(const tString& asFile);
+	void DestroyPS();
 };
 
 //---------------------------------------------------------------
 
 #define ParticleSystemSPropIdStart 100
 
-enum eParticleSystemStr {
-    eParticleSystemStr_File = ParticleSystemSPropIdStart,
+enum eParticleSystemStr
+{
+	eParticleSystemStr_File = ParticleSystemSPropIdStart,
 
-    eParticleSystemStr_LastEnum,
+	eParticleSystemStr_LastEnum,
 };
 
-enum eParticleSystemCol {
-    eParticleSystemCol_Color = ParticleSystemSPropIdStart,
+enum eParticleSystemCol
+{
+	eParticleSystemCol_Color = ParticleSystemSPropIdStart,
 
-    eParticleSystemCol_LastEnum,
+	eParticleSystemCol_LastEnum,
 };
 
-enum eParticleSystemBool {
-    eParticleSystemBool_FadeAtDistance = ParticleSystemSPropIdStart,
+enum eParticleSystemBool
+{
+	eParticleSystemBool_FadeAtDistance = ParticleSystemSPropIdStart,
 
-    eParticleSystemBool_LastEnum,
+	eParticleSystemBool_LastEnum,
 };
 
-enum eParticleSystemFloat {
-    eParticleSystemFloat_MinFadeDistanceStart = ParticleSystemSPropIdStart,
-    eParticleSystemFloat_MaxFadeDistanceStart,
-    eParticleSystemFloat_MinFadeDistanceEnd,
-    eParticleSystemFloat_MaxFadeDistanceEnd,
+enum eParticleSystemFloat
+{
+	eParticleSystemFloat_MinFadeDistanceStart = ParticleSystemSPropIdStart,
+	eParticleSystemFloat_MaxFadeDistanceStart,
+	eParticleSystemFloat_MinFadeDistanceEnd,
+	eParticleSystemFloat_MaxFadeDistanceEnd,
 
-    eParticleSystemFloat_LastEnum,
+	eParticleSystemFloat_LastEnum,
 };
 
-class cEntityWrapperTypeParticleSystem : public iEntityWrapperType {
-  public:
-    cEntityWrapperTypeParticleSystem();
+class cEntityWrapperTypeParticleSystem : public iEntityWrapperType
+{
+public:
+	cEntityWrapperTypeParticleSystem();
 
-  protected:
-    iEntityWrapperData *CreateSpecificData();
+protected:
+	iEntityWrapperData* CreateSpecificData();
 };
 
-class cEntityWrapperDataParticleSystem : public iEntityWrapperData {
-  public:
-    cEntityWrapperDataParticleSystem(iEntityWrapperType *);
+class cEntityWrapperDataParticleSystem : public iEntityWrapperData
+{
+public:
+	cEntityWrapperDataParticleSystem(iEntityWrapperType*);
 
-    iEntityWrapper *CreateSpecificEntity();
+	iEntityWrapper* CreateSpecificEntity();
 };
 
 //---------------------------------------------------------------
 
-class cEntityWrapperParticleSystem : public iEntityWrapper {
-    friend class cIconEntityPS;
+class cEntityWrapperParticleSystem : public iEntityWrapper
+{
+	friend class cIconEntityPS;
+public:
+	cEntityWrapperParticleSystem(iEntityWrapperData*);
+	virtual ~cEntityWrapperParticleSystem();
 
-  public:
-    cEntityWrapperParticleSystem(iEntityWrapperData *);
-    virtual ~cEntityWrapperParticleSystem();
+	bool SetProperty(int, const bool&);
+	bool SetProperty(int, const float&);
+	bool SetProperty(int, const tString&);
+	bool SetProperty(int, const cColor&);
 
-    bool SetProperty(int, const bool &);
-    bool SetProperty(int, const float &);
-    bool SetProperty(int, const tString &);
-    bool SetProperty(int, const cColor &);
+	bool GetProperty(int, bool&);
+	bool GetProperty(int, float&);
+	bool GetProperty(int, tString&);
+	bool GetProperty(int, cColor&);
 
-    bool GetProperty(int, bool &);
-    bool GetProperty(int, float &);
-    bool GetProperty(int, tString &);
-    bool GetProperty(int, cColor &);
+	bool EntitySpecificCheckCulled(cEditorClipPlane* apPlane);
 
-    bool EntitySpecificCheckCulled(cEditorClipPlane *apPlane);
+	void OnSetCulled(bool abX);
 
-    void OnSetCulled(bool abX);
+	void SetVisible(bool abX);
 
-    void SetVisible(bool abX);
+	void Draw(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions,iEditorEditMode* apEditMode,
+						bool abIsSelected, const cColor& aHighlightCol=cColor(1,1), const cColor& aDisabledCol=cColor(0.5f,1));
 
-    void Draw(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions, iEditorEditMode *apEditMode,
-              bool abIsSelected, const cColor &aHighlightCol = cColor(1, 1),
-              const cColor &aDisabledCol = cColor(0.5f, 1));
+	//void SaveToElement(cXmlElement* apElement);
 
-    // void SaveToElement(cXmlElement* apElement);
+	cEditorWindowEntityEditBox* CreateEditBox(cEditorEditModeSelect* apEditMode);
 
-    cEditorWindowEntityEditBox *CreateEditBox(cEditorEditModeSelect *apEditMode);
+	void SetFile(const tString& asFile);
+	const tString& GetFile() { return msFile; }
 
-    void SetFile(const tString &asFile);
-    const tString &GetFile() { return msFile; }
+	void SetColor(const cColor& aCol);
+	void SetFadeAtDistance(bool abX);
+	void SetMinFadeDistanceStart(float afX);
+	void SetMinFadeDistanceEnd(float afX);
+	void SetMaxFadeDistanceStart(float afX);
+	void SetMaxFadeDistanceEnd(float afX);
 
-    void SetColor(const cColor &aCol);
-    void SetFadeAtDistance(bool abX);
-    void SetMinFadeDistanceStart(float afX);
-    void SetMinFadeDistanceEnd(float afX);
-    void SetMaxFadeDistanceStart(float afX);
-    void SetMaxFadeDistanceEnd(float afX);
+	const cColor& GetColor() { return mColor; }
+	bool GetFadeAtDistance() { return mbFadeAtDistance; }
+	float GetMinFadeDistanceStart() { return mfMinFadeDistanceStart; }
+	float GetMinFadeDistanceEnd() { return mfMinFadeDistanceEnd; }
+	float GetMaxFadeDistanceStart() { return mfMaxFadeDistanceStart; }
+	float GetMaxFadeDistanceEnd() { return mfMaxFadeDistanceEnd; }
 
-    const cColor &GetColor() { return mColor; }
-    bool GetFadeAtDistance() { return mbFadeAtDistance; }
-    float GetMinFadeDistanceStart() { return mfMinFadeDistanceStart; }
-    float GetMinFadeDistanceEnd() { return mfMinFadeDistanceEnd; }
-    float GetMaxFadeDistanceStart() { return mfMaxFadeDistanceStart; }
-    float GetMaxFadeDistanceEnd() { return mfMaxFadeDistanceEnd; }
+	void UpdatePS();
+protected:
+	iEngineEntity* CreateSpecificEngineEntity();
+	//////////////////////
+	// Data
+	bool mbTypeUpdated;
+	bool mbDataUpdated;
+	
+	tString msFile;
 
-    void UpdatePS();
+	cColor mColor; 
+	bool mbFadeAtDistance;
 
-  protected:
-    iEngineEntity *CreateSpecificEngineEntity();
-    //////////////////////
-    // Data
-    bool mbTypeUpdated;
-    bool mbDataUpdated;
-
-    tString msFile;
-
-    cColor mColor;
-    bool mbFadeAtDistance;
-
-    float mfMinFadeDistanceStart;
-    float mfMaxFadeDistanceStart;
-    float mfMinFadeDistanceEnd;
-    float mfMaxFadeDistanceEnd;
+	float mfMinFadeDistanceStart;
+	float mfMaxFadeDistanceStart;
+	float mfMinFadeDistanceEnd; 
+	float mfMaxFadeDistanceEnd;
 };
 
 //---------------------------------------------------------------------

@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -49,7 +49,7 @@ class cLuxGlobalDataHandler;
 class cLuxHintHandler;
 class cLuxConfigHandler;
 class cLuxPostEffectHandler;
-// class cLuxInsanityHandler;
+//class cLuxInsanityHandler;
 class cLuxInfectionHandler;
 class cLuxProgressLogHandler;
 class cLuxLoadScreenHandler;
@@ -66,23 +66,23 @@ class cLuxMainMenu;
 
 class cLuxPlayer;
 
+
 //----------------------------------------------
 
 extern eLuxAxis StringToAxis(const tString &asAxis);
 
 /**
- * Calculates an offset and size based on virtual size that keeps the ratio of the size. Note that the outsize is the
- * size of the ENTIRE screen!
- */
-extern void LuxCalcGuiSetOffset(const cVector2f &avVirtualSizeIn, const cVector2f &avScreenSize, cVector2f &avOutSize,
-                                cVector2f &avOutOffset);
+* Calculates an offset and size based on virtual size that keeps the ratio of the size. Note that the outsize is the size of the ENTIRE screen!
+*/
+extern void LuxCalcGuiSetOffset(const cVector2f &avVirtualSizeIn, const cVector2f& avScreenSize, cVector2f& avOutSize, cVector2f & avOutOffset);
 
 /**
- * Same as CalcGuiSetOffset, but assumes avScreenSize is fromm screen.
- */
-extern void LuxCalcGuiSetScreenOffset(const cVector2f &avVirtualSizeIn, cVector2f &avOutSize, cVector2f &avOutOffset);
+* Same as CalcGuiSetOffset, but assumes avScreenSize is fromm screen.
+*/
+extern void LuxCalcGuiSetScreenOffset(const cVector2f &avVirtualSizeIn, cVector2f& avOutSize, cVector2f & avOutOffset);
 
-extern void ProgLog(eLuxProgressLogLevel aLevel, const tString &asMessage);
+
+extern void ProgLog(eLuxProgressLogLevel aLevel, const tString& asMessage);
 
 //----------------------------------------------
 
@@ -90,224 +90,229 @@ extern void ProgLog(eLuxProgressLogLevel aLevel, const tString &asMessage);
  * LuxCustomStorySettings - class used to store custom made story data
  *
  */
-class cLuxCustomStorySettings {
-  public:
-    cLuxCustomStorySettings();
-    cLuxCustomStorySettings(cLuxCustomStorySettings *apStory);
-    ~cLuxCustomStorySettings();
+class cLuxCustomStorySettings
+{
+public:
+	cLuxCustomStorySettings();
+	cLuxCustomStorySettings(cLuxCustomStorySettings* apStory);
+	~cLuxCustomStorySettings();
 
-    bool CreateFromPath(const tWString &asPath);
+	bool CreateFromPath(const tWString& asPath);
 
-    /**
-     * Creates a copy of the current object and "feeds" it to cLuxBase
-     * (this because these objects are created and destroyed in the Custom Story List window)
-     */
-    void SetActive();
+	/**
+	 * Creates a copy of the current object and "feeds" it to cLuxBase
+	 * (this because these objects are created and destroyed in the Custom Story List window)
+	 */
+	void SetActive();
 
-    /**
-     * Starts a new game using the custom settings.
-     * NOTE: Should be called from a copied object, NEVER from one in the Custom Story List window!!
-     */
-    bool StartGame();
+	/**
+	 * Starts a new game using the custom settings. 
+	 * NOTE: Should be called from a copied object, NEVER from one in the Custom Story List window!!
+	 */
+	bool StartGame();
 
-    tWString msName;
-    tWString msAuthor;
-    tString msImgFile;
+	tWString msName;
+	tWString msAuthor;
+	tString msImgFile;
 
-    tWString msStoryRootFolder;
-    tString msStartMap;
-    tString msStartPos;
-    tString msMapsFolder;
+	tWString msStoryRootFolder;
+	tString msStartMap;
+	tString msStartPos;
+	tString msMapsFolder;
 
-    tString msExtraLangFilePrefix;
-    tString msDefaultExtraLanguage;
+	tString msExtraLangFilePrefix;
+	tString msDefaultExtraLanguage;
 };
 
-typedef std::vector<cLuxCustomStorySettings *> tCustomStorySettingsVec;
+typedef std::vector<cLuxCustomStorySettings*> tCustomStorySettingsVec;
 
 //----------------------------------------------
 
-class cLuxBase {
-  public:
-    cLuxBase();
-    ~cLuxBase();
+class cLuxBase
+{
+public:	
+	cLuxBase();
+	~cLuxBase();
 
     bool Init(const tString &asCommandline);
-    void Exit();
+	void Exit();
 
-    void Run();
+	void Run();
 
-    void Reset();
+	void Reset();
 
-    void RunModuleMessage(eLuxUpdateableMessage aMessage, void *apData = NULL);
+	void RunModuleMessage(eLuxUpdateableMessage aMessage, void * apData=NULL);
 
-    bool StartGame(const tString &asFile, const tString &asFolder, const tString &asStartPos);
-    bool StartCustomStory();
+	bool StartGame(const tString& asFile, const tString& asFolder, const tString& asStartPos);
+	bool StartCustomStory();
 
-    void SaveConfig();
+	void SaveConfig();
 
-    bool InitUserConfig();
+	bool InitUserConfig();
 
-    bool CreateProfile(const tWString &asName);
-    void SetProfile(const tWString &asName);
+	bool CreateProfile(const tWString& asName);
+	void SetProfile(const tWString& asName);
 
-    void PreloadSound(const tString &asFile);
-    void PreloadParticleSystem(const tString &asFile);
+	void PreloadSound(const tString &asFile);
+	void PreloadParticleSystem(const tString &asFile);
 
-    void SetCustomStory(cLuxCustomStorySettings *apCustomStory);
+	void SetCustomStory(cLuxCustomStorySettings* apCustomStory);
 
-    // private:
-    bool ParseCommandLine(const tString &asCommandline);
+//private:
+	bool ParseCommandLine(const tString &asCommandline);
 
-    bool InitApp();
-    bool CheckFeatureSupport();
+	bool InitApp();
+	bool CheckFeatureSupport();
 
-    bool InitMainConfig();
-    void ExitConfig();
+	bool InitMainConfig();
+	void ExitConfig();
 
-    void LoadCloudData();
+	void LoadCloudData();
 
-    cConfigFile *LoadConfigFile(const tWString &asDefaultPath, const tWString &asWantedPath,
-                                bool abForceLoadDefault = false, bool *abDidLoadDefault = NULL);
+	cConfigFile* LoadConfigFile(const tWString& asDefaultPath, const tWString& asWantedPath, bool abForceLoadDefault=false, bool *abDidLoadDefault = NULL);
+		
+	bool InitEngine();
+	void ExitEngine();
 
-    bool InitEngine();
-    void ExitEngine();
+	bool InitGame();
+	void ExitGame();
 
-    bool InitGame();
-    void ExitGame();
+	void InitOver();
 
-    void InitOver();
+	
+	bool LoadLanguage(const tString& asName, bool abForceReload=false);
 
-    bool LoadLanguage(const tString &asName, bool abForceReload = false);
+	iLuxUpdateable *AddModule(iLuxUpdateable *apModule, const tString& asContainer);
+	iLuxUpdateable *AddGlobalModule(iLuxUpdateable *apModule);
 
-    iLuxUpdateable *AddModule(iLuxUpdateable *apModule, const tString &asContainer);
-    iLuxUpdateable *AddGlobalModule(iLuxUpdateable *apModule);
 
-    void RaiseCrashFlag();
-    void LowerCrashFlag();
-    bool CheckCrashFlag();
+	void RaiseCrashFlag();
+	void LowerCrashFlag();
+	bool CheckCrashFlag();
 
-    void RaiseFirstStartFlag();
-    void LowerFirstStartFlag();
-    bool CheckFirstStartFlag();
+	void RaiseFirstStartFlag();
+	void LowerFirstStartFlag();
+	bool CheckFirstStartFlag();
+	
+	void InitAchievements();
 
-    void InitAchievements();
+	/////////////////////////
+	// Public variables
+public:
+	cEngine *mpEngine;
 
-    /////////////////////////
-    // Public variables
-  public:
-    cEngine *mpEngine;
+	cConfigFile* mpMainConfig;
+	cConfigFile* mpUserConfig;
+	cConfigFile* mpUserKeyConfig;
 
-    cConfigFile *mpMainConfig;
-    cConfigFile *mpUserConfig;
-    cConfigFile *mpUserKeyConfig;
+	cConfigFile* mpGameCfg;
+	cConfigFile* mpMenuCfg;
+	cConfigFile* mpDemoCfg;
+	cGuiSet *mpGameDebugSet;
+	cGuiSet *mpGameHudSet;
+	iFontData *mpDefaultFont;
+	cVector2f mvHudVirtualCenterSize;//This is size of what is inside a 4:3 ratio!
+	cVector2f mvHudVirtualSize;
+	cVector2f mvHudVirtualOffset;
+	cVector3f mvHudVirtualStartPos;
 
-    cConfigFile *mpGameCfg;
-    cConfigFile *mpMenuCfg;
-    cConfigFile *mpDemoCfg;
-    cGuiSet *mpGameDebugSet;
-    cGuiSet *mpGameHudSet;
-    iFontData *mpDefaultFont;
-    cVector2f mvHudVirtualCenterSize; // This is size of what is inside a 4:3 ratio!
-    cVector2f mvHudVirtualSize;
-    cVector2f mvHudVirtualOffset;
-    cVector3f mvHudVirtualStartPos;
+	cLuxCustomStorySettings* mpCustomStory;
 
-    cLuxCustomStorySettings *mpCustomStory;
+	cLuxConfigHandler *mpConfigHandler;
+	cLuxInputHandler *mpInputHandler;
+	cLuxEffectHandler *mpEffectHandler;
+	cLuxMapHandler *mpMapHandler;
+	cLuxMapHelper *mpMapHelper;
+	cLuxDebugHandler *mpDebugHandler;
+	cLuxSaveHandler *mpSaveHandler;
+	cLuxScriptHandler *mpScriptHandler;
+	cLuxHelpFuncs *mpHelpFuncs;
+	cLuxEffectRenderer *mpEffectRenderer;
+	cLuxInventory *mpInventory;
+	cLuxPreMenu *mpPreMenu;
+	cLuxMainMenu *mpMainMenu;
+	cLuxPlayer *mpPlayer;
+	cLuxMusicHandler *mpMusicHandler;
+	cLuxMessageHandler *mpMessageHandler;
+	cLuxJournal *mpJournal;
+	cLuxCompletionCountHandler *mpCompletionCountHandler;
+	cLuxGlobalDataHandler *mpGlobalDataHandler;
+	cLuxHintHandler *mpHintHandler;
+	cLuxPostEffectHandler *mpPostEffectHandler;
+	//cLuxInsanityHandler *mpInsanityHandler;
+	cLuxInfectionHandler *mpInfectionHandler;
+	cLuxProgressLogHandler *mpProgressLogHandler;
+	cLuxLoadScreenHandler *mpLoadScreenHandler;
+	cLuxCredits *mpCredits;
+	cLuxDemoEnd* mpDemoEnd;
+	iLuxAchievementHandler* mpAchievementHandler;
 
-    cLuxConfigHandler *mpConfigHandler;
-    cLuxInputHandler *mpInputHandler;
-    cLuxEffectHandler *mpEffectHandler;
-    cLuxMapHandler *mpMapHandler;
-    cLuxMapHelper *mpMapHelper;
-    cLuxDebugHandler *mpDebugHandler;
-    cLuxSaveHandler *mpSaveHandler;
-    cLuxScriptHandler *mpScriptHandler;
-    cLuxHelpFuncs *mpHelpFuncs;
-    cLuxEffectRenderer *mpEffectRenderer;
-    cLuxInventory *mpInventory;
-    cLuxPreMenu *mpPreMenu;
-    cLuxMainMenu *mpMainMenu;
-    cLuxPlayer *mpPlayer;
-    cLuxMusicHandler *mpMusicHandler;
-    cLuxMessageHandler *mpMessageHandler;
-    cLuxJournal *mpJournal;
-    cLuxCompletionCountHandler *mpCompletionCountHandler;
-    cLuxGlobalDataHandler *mpGlobalDataHandler;
-    cLuxHintHandler *mpHintHandler;
-    cLuxPostEffectHandler *mpPostEffectHandler;
-    // cLuxInsanityHandler *mpInsanityHandler;
-    cLuxInfectionHandler *mpInfectionHandler;
-    cLuxProgressLogHandler *mpProgressLogHandler;
-    cLuxLoadScreenHandler *mpLoadScreenHandler;
-    cLuxCredits *mpCredits;
-    cLuxDemoEnd *mpDemoEnd;
-    iLuxAchievementHandler *mpAchievementHandler;
+	tString msGameName;
+	tWString msErrorMessage;
 
-    tString msGameName;
-    tWString msErrorMessage;
+	bool mbShowPreMenu;
+	bool mbShowMenu;
 
-    bool mbShowPreMenu;
-    bool mbShowMenu;
+	tString msCommandLineMapFile;
+	tString msStartMapFile;
+	tString msStartMapFolder;
+	tString msStartMapPos;
 
-    tString msCommandLineMapFile;
-    tString msStartMapFile;
-    tString msStartMapFolder;
-    tString msStartMapPos;
+	tWString msDefaultProfileName;
 
-    tWString msDefaultProfileName;
-
-    tWString msBaseSavePath;
-    tWString msProfileSavePath;
-    tWString msMainProfileSavePath;
-    tWString msProfileName;
+	tWString msBaseSavePath;
+	tWString msProfileSavePath;
+	tWString msMainProfileSavePath;
+	tWString msProfileName;
 #ifdef USERDIR_RESOURCES
-    tWString msUserResourceDir;
+	tWString msUserResourceDir;
 #endif
 
-    bool mbExitMenuDirectly;
+	bool mbExitMenuDirectly;
 
-    bool mbPTestActivated;
+	bool mbPTestActivated;
 
-    cLuxMap *mpCurrentMapLoading;
+	cLuxMap *mpCurrentMapLoading;
 
-    /////////////////////////
-    // Kinda private variables
-    tWString msInitConfigFile;
+	/////////////////////////
+	// Kinda private variables
+	tWString msInitConfigFile;
 
-    tWString msDefaultMainConfigPath;
-    tWString msDefaultUserConfigPath;
-    tWString msDefaultUserKeyConfigPath;
-    tString msResourceConfigPath;
-    tString msMaterialConfigPath;
-    tString msDefaultBaseLanguage;
-    tString msDefaultGameLanguage;
+	tWString msDefaultMainConfigPath;
+	tWString msDefaultUserConfigPath;
+	tWString msDefaultUserKeyConfigPath;
+	tString msResourceConfigPath;
+	tString msMaterialConfigPath;
+	tString msDefaultBaseLanguage;
+	tString msDefaultGameLanguage;
+	
+	tString msBaseLanguageFolder;
+	tString msGameLanguageFolder;
 
-    tString msBaseLanguageFolder;
-    tString msGameLanguageFolder;
+	tString msCustomStoryPath;
 
-    tString msCustomStoryPath;
+	tString msCurrentLanguage;
 
-    tString msCurrentLanguage;
+	tWString msMainSaveFolder;
+	tWString msGameConfigPath;
+	tWString msMenuConfigPath;
+	tWString msPreMenuConfigPath;
+	tWString msDemoConfigPath;
 
-    tWString msMainSaveFolder;
-    tWString msGameConfigPath;
-    tWString msMenuConfigPath;
-    tWString msPreMenuConfigPath;
-    tWString msDemoConfigPath;
-
-    tWString msCrashFlagPath;
-    tWString msFirstStartFlagPath;
+	tWString msCrashFlagPath;
+	tWString msFirstStartFlagPath;
 
     bool mbSaveConfigAtExit;
 
-    std::vector<iLuxUpdateable *> mvModules;
+	std::vector<iLuxUpdateable*> mvModules;
+
 };
 
 //----------------------------------------------
 
-extern cLuxBase *gpBase;
+extern cLuxBase* gpBase;
 
 //----------------------------------------------
+
 
 #endif // LUX_BASE_H

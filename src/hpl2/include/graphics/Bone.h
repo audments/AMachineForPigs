@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -22,84 +22,84 @@
 
 #include <map>
 
-#include "graphics/GraphicsTypes.h"
 #include "math/MathTypes.h"
+#include "graphics/GraphicsTypes.h"
 #include "system/SystemTypes.h"
 
 namespace hpl {
+	
+	class cSkeleton;
+	class cBone;
 
-class cSkeleton;
-class cBone;
+	typedef std::list<cBone*> tBoneList;
+	typedef tBoneList::iterator tBoneListIt;
 
-typedef std::list<cBone *> tBoneList;
-typedef tBoneList::iterator tBoneListIt;
+	typedef cSTLIterator<cBone*,tBoneList,tBoneListIt> cBoneIterator;
+    
+	class cBone
+	{
+	friend class cSkeleton;
+	public:
+		cBone(const tString &asName,const tString &asSid, cSkeleton* apSkeleton);
+		~cBone();
 
-typedef cSTLIterator<cBone *, tBoneList, tBoneListIt> cBoneIterator;
+		cBone* CreateChildBone(const tString &asName,const tString &asId);
 
-class cBone {
-    friend class cSkeleton;
+		void SetTransform(const cMatrixf &a_mtxTransform);
+		const cMatrixf& GetLocalTransform();
+		const cMatrixf& GetWorldTransform();
+		const cMatrixf& GetInvWorldTransform();
 
-  public:
-    cBone(const tString &asName, const tString &asSid, cSkeleton *apSkeleton);
-    ~cBone();
+		//// -- <UNSCALED> -- ///
+		void SetTransformUnscaled(const cMatrixf &a_mtxTransform);
+		const cMatrixf& GetWorldTransformUnscaled();
+		const cMatrixf& GetLocalTransformUnscaled();
+		void NeedsUpdateUnscaled();
+		//// -- </UNSCALED> -- ///
 
-    cBone *CreateChildBone(const tString &asName, const tString &asId);
+		const tString& GetName(){ return msName;}
+		const tString& GetSid(){ return msSid;}
 
-    void SetTransform(const cMatrixf &a_mtxTransform);
-    const cMatrixf &GetLocalTransform();
-    const cMatrixf &GetWorldTransform();
-    const cMatrixf &GetInvWorldTransform();
+		cBoneIterator GetChildIterator();
+		tBoneList* GetChildList(){ return &mlstChildren; }
 
-    //// -- <UNSCALED> -- ///
-    void SetTransformUnscaled(const cMatrixf &a_mtxTransform);
-    const cMatrixf &GetWorldTransformUnscaled();
-    const cMatrixf &GetLocalTransformUnscaled();
-    void NeedsUpdateUnscaled();
-    //// -- </UNSCALED> -- ///
+		void Detach();
 
-    const tString &GetName() { return msName; }
-    const tString &GetSid() { return msSid; }
+		cBone* GetParent(){ return mpParent;}
+		
+		//Needed for some loading stuff..
+		int GetValue(){ return mlValue;}
+		void SetValue(int alVal){ mlValue = alVal;}
+		
+	private:
+		void NeedsUpdate();
 
-    cBoneIterator GetChildIterator();
-    tBoneList *GetChildList() { return &mlstChildren; }
+		void UpdateMatrix();
+	
+		tString msName;
+		tString msSid;
 
-    void Detach();
+		cMatrixf m_mtxTransform;
 
-    cBone *GetParent() { return mpParent; }
+		cMatrixf m_mtxWorldTransform;
+		cMatrixf m_mtxInvWorldTransform;
+		
+		//// -- <UNSCALED> -- ///
+		cMatrixf m_mtxTransformUnscaled;
+		cMatrixf m_mtxWorldTransformUnscaled;
+		bool mbNeedsUnscaledUpdate;
+		void UpdateUnscaledMatrix();
+		//// -- </UNSCALED> -- ///
 
-    // Needed for some loading stuff..
-    int GetValue() { return mlValue; }
-    void SetValue(int alVal) { mlValue = alVal; }
+		cBone* mpParent;
+		tBoneList mlstChildren;
 
-  private:
-    void NeedsUpdate();
+		cSkeleton* mpSkeleton;
 
-    void UpdateMatrix();
+		bool mbNeedsUpdate;
 
-    tString msName;
-    tString msSid;
+		int mlValue;
+	};
 
-    cMatrixf m_mtxTransform;
-
-    cMatrixf m_mtxWorldTransform;
-    cMatrixf m_mtxInvWorldTransform;
-
-    //// -- <UNSCALED> -- ///
-    cMatrixf m_mtxTransformUnscaled;
-    cMatrixf m_mtxWorldTransformUnscaled;
-    bool mbNeedsUnscaledUpdate;
-    void UpdateUnscaledMatrix();
-    //// -- </UNSCALED> -- ///
-
-    cBone *mpParent;
-    tBoneList mlstChildren;
-
-    cSkeleton *mpSkeleton;
-
-    bool mbNeedsUpdate;
-
-    int mlValue;
 };
-
-};     // namespace hpl
 #endif // HPL_BONE_H

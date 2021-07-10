@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -47,89 +47,92 @@ class cEditorWindowOptions;
 
 class cParticleEditorWindowEmitters;
 
+
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 
-class cParticleEditor : public iEditorBase {
-  public:
-    cParticleEditor();
-    ~cParticleEditor();
+class cParticleEditor : public iEditorBase
+{
+public:
+	cParticleEditor();
+	~cParticleEditor();
 
-    void ViewportMouseDown(cEditorWindowViewport *apViewport, int alButtons) {}
-    void ViewportMouseUp(cEditorWindowViewport *apViewport, int alButtons) {}
+	void ViewportMouseDown(cEditorWindowViewport* apViewport, int alButtons){}
+	void ViewportMouseUp(cEditorWindowViewport* apViewport, int alButtons){}
 
-  protected:
-    ///////////////////////////
-    // Own functions
-    bool MainMenu_ItemClick(iWidget *apWidget, const cGuiMessageData &aData);
-    kGuiCallbackDeclarationEnd(MainMenu_ItemClick);
+protected:
+	///////////////////////////
+	// Own functions
+	bool MainMenu_ItemClick(iWidget* apWidget, const cGuiMessageData& aData);
+	kGuiCallbackDeclarationEnd(MainMenu_ItemClick);
 
-    void OnNew();
-    void OnPostWorldLoad();
-    void AppSpecificReset();
-    void AppSpecificLoad(iXmlDocument *apDoc);
-    void AppSpecificSave(iXmlDocument *apDoc);
+	void OnNew();
+	void OnPostWorldLoad();
+	void AppSpecificReset();
+	void AppSpecificLoad(iXmlDocument* apDoc);
+	void AppSpecificSave(iXmlDocument* apDoc);
 
-    void UpdateMenu();
-    void UpdateEditMenu();
+	void UpdateMenu();
+	void UpdateEditMenu();
 
-    ///////////////////////////
-    // Implemented functions
-    iEditorWorld *CreateSpecificWorld();
-    iEditorWindowLowerToolbar *CreateSpecificLowerToolbar() { return NULL; }
-    iEditorWindowEditModeSidebar *CreateEditModeSidebar() { return NULL; }
+	///////////////////////////
+	// Implemented functions
+	iEditorWorld* CreateSpecificWorld();
+	iEditorWindowLowerToolbar* CreateSpecificLowerToolbar() { return NULL; }
+	iEditorWindowEditModeSidebar* CreateEditModeSidebar() { return NULL; }
 
-    cWidgetMainMenu *CreateMainMenu();
-    void SetUpWindowAreas();
-    void CreateViewports();
+	cWidgetMainMenu* CreateMainMenu();
+	void SetUpWindowAreas();
+	void CreateViewports();
 
-    void OnSetUpDirectories();
+	void OnSetUpDirectories();
 
-    void OnUpdate(float afTimeStep);
-    void OnSetSelectedViewport() {}
+	void OnUpdate(float afTimeStep);
+	void OnSetSelectedViewport(){}
 
-    void OnPostUpdateLayout();
+	void OnPostUpdateLayout();
 
-    void OnInit();
-    void OnInitInput();
-    void OnInitLayout();
+	void OnInit();
+	void OnInitInput();
+	void OnInitLayout();
 
-    void OnLoadConfig();
-    void OnSaveConfig();
+	void OnLoadConfig();
+	void OnSaveConfig();
 
-    void SetUpClassDefinitions(cEditorUserClassDefinitionManager *apManager) {}
+	void SetUpClassDefinitions(cEditorUserClassDefinitionManager* apManager) {}
 
-    ///////////////////////////
-    // Data
+	///////////////////////////
+	// Data
+	
+	// File menu
+	cWidgetMenuItem* mpMainMenuNew;
+	cWidgetMenuItem* mpMainMenuSave;
+	cWidgetMenuItem* mpMainMenuSaveAs;
+	cWidgetMenuItem* mpMainMenuLoad;
+	cWidgetMenuItem* mpMainMenuRecent;
+	cWidgetMenuItem* mpMainMenuExit;
 
-    // File menu
-    cWidgetMenuItem *mpMainMenuNew;
-    cWidgetMenuItem *mpMainMenuSave;
-    cWidgetMenuItem *mpMainMenuSaveAs;
-    cWidgetMenuItem *mpMainMenuLoad;
-    cWidgetMenuItem *mpMainMenuRecent;
-    cWidgetMenuItem *mpMainMenuExit;
+	// Edit menu
+	cWidgetMenuItem* mpMainMenuUndo;
+	cWidgetMenuItem* mpMainMenuRedo;
+	cWidgetMenuItem* mpMainMenuOptions;
 
-    // Edit menu
-    cWidgetMenuItem *mpMainMenuUndo;
-    cWidgetMenuItem *mpMainMenuRedo;
-    cWidgetMenuItem *mpMainMenuOptions;
+	// View menu
+	cWidgetMenuItem* mpMIShowFloor;
+	cWidgetMenuItem* mpMIShowWalls;
+	cWidgetMenuItem* mpMISetColor[3];
 
-    // View menu
-    cWidgetMenuItem *mpMIShowFloor;
-    cWidgetMenuItem *mpMIShowWalls;
-    cWidgetMenuItem *mpMISetColor[3];
+	////////////////////////////////
+	// Some windows
+	cEditorWindowOptions* mpWindowOptions;
+	cParticleEditorWindowEmitters* mpWEmitters;
 
-    ////////////////////////////////
-    // Some windows
-    cEditorWindowOptions *mpWindowOptions;
-    cParticleEditorWindowEmitters *mpWEmitters;
-
-    ///////////////////////
-    // Config stuff
-    cConfigFile *mpLocalConfig;
+	///////////////////////
+	// Config stuff
+	cConfigFile* mpLocalConfig;
 };
 
 //----------------------------------------------------------
 
-#endif // LEVEL_EDITOR_H
+#endif //LEVEL_EDITOR_H
+

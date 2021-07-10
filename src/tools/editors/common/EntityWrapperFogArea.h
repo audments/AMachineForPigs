@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -20,114 +20,120 @@
 #ifndef HPLEDITOR_ENTITY_WRAPPER_FOG_AREA_H
 #define HPLEDITOR_ENTITY_WRAPPER_FOG_AREA_H
 
-#include "EngineEntity.h"
 #include "EntityWrapper.h"
+#include "EngineEntity.h"
 
 //---------------------------------------------------------------
 
-class cIconEntityFogArea : public iIconEntity {
-  public:
-    cIconEntityFogArea(iEntityWrapper *apParent);
-    ~cIconEntityFogArea();
+class cIconEntityFogArea : public iIconEntity
+{
+public:
+	cIconEntityFogArea(iEntityWrapper* apParent);
+	~cIconEntityFogArea();
 
-    bool Create(const tString &asName);
+	bool Create(const tString& asName);
 };
 
 //---------------------------------------------------------------
 
 #define FogAreaPropIdStart 50
 
-enum eFogAreaBool {
-    eFogAreaBool_ShownBacksideWhenInside = FogAreaPropIdStart,
-    eFogAreaBool_ShownBacksideWhenOutside,
+enum eFogAreaBool
+{
+	eFogAreaBool_ShownBacksideWhenInside = FogAreaPropIdStart,
+	eFogAreaBool_ShownBacksideWhenOutside,
 
-    eFogAreaBool_LastEnum,
+	eFogAreaBool_LastEnum,
 };
 
-enum eFogAreaCol {
-    eFogAreaCol_Color = FogAreaPropIdStart,
-
-    eFogAreaColor_LastEnum,
+enum eFogAreaCol
+{
+	eFogAreaCol_Color = FogAreaPropIdStart,
+	
+	eFogAreaColor_LastEnum,
 };
 
-enum eFogAreaFloat {
-    eFogAreaFloat_Start = FogAreaPropIdStart,
-    eFogAreaFloat_End,
-    eFogAreaFloat_FalloffExp,
-
-    eFogAreaFloat_LastEnum,
-};
-
-//---------------------------------------------------------------
-
-class cEntityWrapperTypeFogArea : public iEntityWrapperType {
-  public:
-    cEntityWrapperTypeFogArea();
-
-  protected:
-    iEntityWrapperData *CreateSpecificData();
+enum eFogAreaFloat
+{
+	eFogAreaFloat_Start = FogAreaPropIdStart,
+	eFogAreaFloat_End, 
+	eFogAreaFloat_FalloffExp,
+	
+	eFogAreaFloat_LastEnum,	
 };
 
 //---------------------------------------------------------------
 
-class cEntityWrapperDataFogArea : public iEntityWrapperData {
-  public:
-    cEntityWrapperDataFogArea(iEntityWrapperType *apType);
+class cEntityWrapperTypeFogArea : public iEntityWrapperType
+{
+public:
+	cEntityWrapperTypeFogArea();
 
-  protected:
-    iEntityWrapper *CreateSpecificEntity();
+protected:
+	iEntityWrapperData* CreateSpecificData();
 };
 
 //---------------------------------------------------------------
 
-class cEntityWrapperFogArea : public iEntityWrapper {
-  public:
-    cEntityWrapperFogArea(iEntityWrapperData *apData);
-    ~cEntityWrapperFogArea();
+class cEntityWrapperDataFogArea : public iEntityWrapperData
+{
+public:
+	cEntityWrapperDataFogArea(iEntityWrapperType* apType);
 
-    bool SetProperty(int, const float &);
-    bool SetProperty(int, const bool &);
-    bool SetProperty(int, const cColor &);
+protected:
+	iEntityWrapper* CreateSpecificEntity();
+};
 
-    bool GetProperty(int, float &);
-    bool GetProperty(int, bool &);
-    bool GetProperty(int, cColor &);
+//---------------------------------------------------------------
 
-    void SetColor(const cColor &aCol);
-    const cColor &GetColor() { return mColor; }
+class cEntityWrapperFogArea : public iEntityWrapper
+{
+public:
+	cEntityWrapperFogArea(iEntityWrapperData* apData);
+	~cEntityWrapperFogArea();
 
-    void SetStart(float afX);
-    float GetStart() { return mfStart; }
+	bool SetProperty(int, const float&);
+	bool SetProperty(int, const bool&);
+	bool SetProperty(int, const cColor&);
 
-    void SetEnd(float afX);
-    float GetEnd() { return mfEnd; }
+	bool GetProperty(int, float&);
+	bool GetProperty(int, bool&);
+	bool GetProperty(int, cColor&);
 
-    void SetFalloffExp(float afX);
-    float GetFalloffExp() { return mfFalloffExp; }
+	void SetColor(const cColor& aCol);
+	const cColor& GetColor() { return mColor; }
 
-    void SetShownBacksideWhenOutside(bool abX);
-    bool GetShownBacksideWhenOutside() { return mbShownBacksideWhenOutside; }
+	void SetStart(float afX);
+	float GetStart() { return mfStart; }
 
-    void SetShownBacksideWhenInside(bool abX);
-    bool GetShownBacksideWhenInside() { return mbShownBacksideWhenInside; }
+	void SetEnd(float afX);
+	float GetEnd() { return mfEnd; }
 
-    // void SetAbsScale(const cVector3f& avScale);
+	void SetFalloffExp(float afX);
+	float GetFalloffExp() { return mfFalloffExp; }
 
-    cEditorWindowEntityEditBox *CreateEditBox(cEditorEditModeSelect *apEditMode);
-    void Draw(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions, iEditorEditMode *apEditMode,
-              bool abIsSelected, const cColor &aHighlightCol, const cColor &aDisabledCol);
-    // void SaveToElement(cXmlElement* apElement);
+	void SetShownBacksideWhenOutside(bool abX);
+	bool GetShownBacksideWhenOutside() { return mbShownBacksideWhenOutside; }
 
-  protected:
-    iEngineEntity *CreateSpecificEngineEntity();
+	void SetShownBacksideWhenInside(bool abX);
+	bool GetShownBacksideWhenInside() { return mbShownBacksideWhenInside; }
 
-    cColor mColor;
-    float mfStart;
-    float mfEnd;
-    float mfFalloffExp;
+	//void SetAbsScale(const cVector3f& avScale);
 
-    bool mbShownBacksideWhenOutside;
-    bool mbShownBacksideWhenInside;
+	cEditorWindowEntityEditBox* CreateEditBox(cEditorEditModeSelect* apEditMode);
+	void Draw(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, iEditorEditMode* apEditMode, bool abIsSelected, const cColor& aHighlightCol, const cColor& aDisabledCol);
+	//void SaveToElement(cXmlElement* apElement);
+
+protected:
+	iEngineEntity* CreateSpecificEngineEntity();
+
+	cColor mColor;
+	float mfStart;
+	float mfEnd;
+	float mfFalloffExp;
+
+	bool mbShownBacksideWhenOutside;
+	bool mbShownBacksideWhenInside;
 };
 
 //---------------------------------------------------------------

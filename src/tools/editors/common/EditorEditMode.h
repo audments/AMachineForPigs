@@ -1,18 +1,18 @@
 /*
  * Copyright © 2011-2020 Frictional Games
- *
+ * 
  * This file is part of Amnesia: A Machine For Pigs.
- *
+ * 
  * Amnesia: A Machine For Pigs is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * (at your option) any later version. 
 
  * Amnesia: A Machine For Pigs is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with Amnesia: A Machine For Pigs.  If not, see <https://www.gnu.org/licenses/>.
  */
@@ -42,128 +42,122 @@ class cEditorWindowViewport;
 
 //////////////////////////////////////////////////////////////
 // iEditorEditMode
-//  Base interface for edit modes. May hold a helper window, and provides means
+//  Base interface for edit modes. May hold a helper window, and provides means 
 //  to work with viewport interactions
-class iEditorEditMode {
-  public:
-    iEditorEditMode(iEditorBase *apEditor, const tString &asName);
-    virtual ~iEditorEditMode();
+class iEditorEditMode
+{
+public:
+	iEditorEditMode(iEditorBase* apEditor, const tString& asName);
+	virtual ~iEditorEditMode();
 
-    virtual void OnAdd() {}
-    virtual void PostEditModesCreation() {}
+	virtual void OnAdd() {}
+	virtual void PostEditModesCreation() {}
 
-    const tString &GetName() { return msName; }
+	const tString& GetName() { return msName; }
 
-    virtual void Reset() {}
+	virtual void Reset(){}
 
-    iEditorBase *GetEditor() { return mpEditor; }
+	iEditorBase* GetEditor() { return mpEditor; }
 
-    iEditorWindow *GetEditorWindow() { return mpWindow; }
+	iEditorWindow* GetEditorWindow() { return mpWindow; }
 
-    void SetCurrent(bool abX);
+	void SetCurrent(bool abX);
 
-    iEditorWindow *CreateWindow();
+	iEditorWindow* CreateWindow();
 
-    virtual void OnViewportMouseDown(int alButtons) {}
-    virtual void OnViewportMouseUp(int alButtons) {}
+	virtual void OnViewportMouseDown(int alButtons){}
+	virtual void OnViewportMouseUp(int alButtons){}
 
-    virtual void OnEditorUpdate(float afTimeStep) {}
+	virtual void OnEditorUpdate(float afTimeStep){}
 
-    virtual void OnSetCurrent(bool abX) {}
+	virtual void OnSetCurrent(bool abX){}
 
-    virtual void DrawPreGrid(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions,
-                             const cVector3f &avPos);
-    virtual void DrawPostGrid(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions,
-                              const cVector3f &avPos);
+	virtual void DrawPreGrid(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, const cVector3f& avPos);
+	virtual void DrawPostGrid(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, const cVector3f& avPos);
 
-  protected:
-    ///////////////////////////////
-    // Data
-    iEditorBase *mpEditor;
-    iEditorWindow *mpWindow;
+protected:
+	///////////////////////////////
+	// Data
+	iEditorBase* mpEditor;
+	iEditorWindow* mpWindow;
 
-    tString msName;
+	tString msName;
 
-    virtual iEditorWindow *CreateSpecificWindow() = 0;
+	virtual iEditorWindow* CreateSpecificWindow()=0;
 };
 
 //------------------------------------------------------
 
 //////////////////////////////////////////////////////////////
 // iEditorEditModeObjectCreator
-//  Interface for edit modes that do create new map objects. May hold a helper window, and provides means
+//  Interface for edit modes that do create new map objects. May hold a helper window, and provides means 
 //  to work with viewport interactions
-class iEditorEditModeObjectCreator : public iEditorEditMode {
-  public:
-    iEditorEditModeObjectCreator(iEditorBase *apEditor, const tString &asName, iEditorWorld *apEditorWorld);
-    virtual ~iEditorEditModeObjectCreator();
+class iEditorEditModeObjectCreator : public iEditorEditMode
+{
+public:
+	iEditorEditModeObjectCreator(iEditorBase* apEditor, const tString& asName, iEditorWorld* apEditorWorld);
+	virtual ~iEditorEditModeObjectCreator();
 
-    void OnAdd();
+	void OnAdd();
 
-    void SetCreateOnSurface(bool abX) { mbCreateOnSurface = abX; }
-    bool GetCreateOnSurface() { return mbCreateOnSurface; }
+	void SetCreateOnSurface(bool abX) { mbCreateOnSurface = abX; }
+	bool GetCreateOnSurface() { return mbCreateOnSurface; }
 
-    void SetAffectSurfaceType(int, bool);
-    bool GetAffectSurfaceType(int);
+	void SetAffectSurfaceType(int, bool);
+	bool GetAffectSurfaceType(int);
 
-    const cVector3f &GetUpVector();
-    const cVector3f &GetRightVector();
+	const cVector3f& GetUpVector();
+	const cVector3f& GetRightVector();
 
-    void OnEditorUpdate(float afTimeStep);
-    virtual void OnViewportMouseDown(int alButtons);
-    virtual void OnViewportMouseUp(int alButtons);
+	void OnEditorUpdate(float afTimeStep);
+	virtual void OnViewportMouseDown(int alButtons);
+	virtual void OnViewportMouseUp(int alButtons);
 
-    virtual iEntityWrapperData *CreateObjectData();
-    virtual iEditorAction *CreateObject(iEntityWrapperData *apData);
+	virtual iEntityWrapperData* CreateObjectData();
+	virtual iEditorAction* CreateObject(iEntityWrapperData* apData);
 
-    virtual void DrawPostGrid(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions,
-                              const cVector3f &avPos);
-    virtual void DrawObjectPreview(cEditorWindowViewport *apViewport, cRendererCallbackFunctions *apFunctions,
-                                   const cMatrixf &amtxTransform, bool abPreCreationActive) {}
+	virtual void DrawPostGrid(cEditorWindowViewport* apViewport, cRendererCallbackFunctions* apFunctions, const cVector3f& avPos);
+	virtual void DrawObjectPreview(cEditorWindowViewport* apViewport, cRendererCallbackFunctions *apFunctions, const cMatrixf& amtxTransform, bool abPreCreationActive){}
 
-    void SetSubType(int alX) {
-        mlSubType = alX;
-        OnSetSubType(alX);
-    }
-    int GetTypeNum();
-    iEntityWrapperType *GetType(int alX);
-    virtual iEntityWrapperType *GetType();
+	void SetSubType(int alX) { mlSubType = alX; OnSetSubType(alX); }
+	int GetTypeNum();
+	iEntityWrapperType* GetType(int alX);
+	virtual iEntityWrapperType* GetType();
 
-    void UpdateCreatorScale();
-    void UpdateCreatorRotation();
+	void UpdateCreatorScale();
+	void UpdateCreatorRotation();
 
-    void UpdateLocalRotation();
+	void UpdateLocalRotation();
+protected:
+	void OnSetCurrent(bool abX);
 
-  protected:
-    void OnSetCurrent(bool abX);
+	const cVector3f& GetCreatorPosition();
+	const cVector3f& GetCreatorRotation();
+	const cVector3f& GetCreatorScale();
 
-    const cVector3f &GetCreatorPosition();
-    const cVector3f &GetCreatorRotation();
-    const cVector3f &GetCreatorScale();
+	virtual bool SetUpCreationData(iEntityWrapperData* apData);
+	virtual void SetUpTypes();
+	virtual void CreateTypes()=0;
+	virtual void OnSetSubType(int alX) {}
 
-    virtual bool SetUpCreationData(iEntityWrapperData *apData);
-    virtual void SetUpTypes();
-    virtual void CreateTypes() = 0;
-    virtual void OnSetSubType(int alX) {}
+	iEditorWorld* mpEditorWorld;
+	std::vector<iEntityWrapperType*> mvTypes;
 
-    iEditorWorld *mpEditorWorld;
-    std::vector<iEntityWrapperType *> mvTypes;
+	bool mbPreCreationActive;
 
-    bool mbPreCreationActive;
+	int mlSubType;
 
-    int mlSubType;
+	bool mbCreateOnSurface;
+	tBoolVec mvAffectedSurfaceTypes;
 
-    bool mbCreateOnSurface;
-    tBoolVec mvAffectedSurfaceTypes;
+	cVector3f mvUpVector;
+	cVector3f mvRightVector;
 
-    cVector3f mvUpVector;
-    cVector3f mvRightVector;
+	cVector3f mvCreatorPosition;
+	cVector3f mvCreatorScale;
 
-    cVector3f mvCreatorPosition;
-    cVector3f mvCreatorScale;
-
-    cVector3f mvCreatorLocalRotation;
-    cVector3f mvCreatorWorldRotation;
+	cVector3f mvCreatorLocalRotation;
+	cVector3f mvCreatorWorldRotation;
 };
 
 //------------------------------------------------------
